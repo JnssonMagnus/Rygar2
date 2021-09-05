@@ -1,0 +1,17 @@
+#pragma once
+#include "ResourceManager.h"
+#include "settings.h"
+#include <CommonUtils.h>
+#include <map>
+#include <string>
+#include <iostream>
+#include <GrowingArray.h>
+#include <StaticArray.h>
+#include <vectoronstack.h>
+#include <Vector2.h>
+#include <unordered_map>
+#include <XMLWrapper/XMLWrapper.h>
+#include <Debugger/DL_Debug.h>
+#include <PostMaster/PostMaster.h>
+#include <PostMaster/Message.h>
+#include <PostMaster/observer.h>

@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{91bf7582-acfb-44c5-9632-10a0e6346b36}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WWiseSoundManager.h" />
+    <ClInclude Include="AK\AkBuddyBlockPool.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AK\AkDeviceBase.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AK\AkDeviceBlocking.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AK\AkDeviceDeferredLinedUp.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AK\AkIOMemMgr.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AK\AkStmDeferredLinedUpBase.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AK\AkStmMemView.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AK\AkStreamingDefaults.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AK\AkStreamMgr.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AK\AkTransferDeferred.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="akdefaultiohookblocking.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AK\AkIOThread.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\AkDefaultLowLevelIODispatcher.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\AkFileLocationBase.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\AkFilePackage.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\AkFilePackageLowLevelIO.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\AkFilePackageLUT.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\AkMultipleFileLocation.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundTasksBuffer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WWiseSoundManager.cpp" />
+    <ClCompile Include="AK\AkDeviceBase.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="AK\AkDeviceBlocking.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="AK\AkDeviceDeferredLinedUp.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="AK\AkIOMemMgr.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="AK\AkStreamMgr.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="AK\AkTransferDeferred.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="AkDefaultIOHookBlocking.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AK\AkIOThread.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\AkFileLocationBase.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\AkFilePackage.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\AkFilePackageLUT.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\AkDefaultLowLevelIODispatcher.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WWiseSoundMan.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="WWiseSoundMan.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AK\AkStmDeferredLinedUpBase.inl">
+      <Filter>Common</Filter>
+    </None>
+    <None Include="..\Common\AkFilePackageLowLevelIO.inl">
+      <Filter>Common</Filter>
+    </None>
+    <None Include="..\Common\AkMultipleFileLocation.inl">
+      <Filter>Common</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,15 @@
+C:\eget\Programmering\C++\Plattform2\build\PlatformEditor.exe.config
+C:\eget\Programmering\C++\Plattform2\build\PlatformEditor.exe
+C:\eget\Programmering\C++\Plattform2\build\PlatformEditor.pdb
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.csprojAssemblyReference.cache
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.AutoTile.resources
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.GameObjectEditor.resources
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.MapEditor.resources
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.MapSettings.resources
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.Properties.Resources.resources
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.TilesetEditor.resources
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.csproj.GenerateResource.cache
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.csproj.CoreCompileInputs.cache
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.csproj.CopyComplete
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.exe
+C:\eget\Programmering\C++\Plattform2\Plattform2\PlatformEditor\obj\Debug\PlatformEditor.pdb

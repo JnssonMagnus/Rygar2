@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Macros">
+      <UniqueIdentifier>{ae3a3887-ab73-430e-85c0-0b6965857044}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Precompiled">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Data Structures">
+      <UniqueIdentifier>{7d6766b7-30c1-45a5-bedd-b7ec4a396293}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{d32908f9-4be8-4aba-a734-5326b12d0fbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debugger">
+      <UniqueIdentifier>{064f6f2c-3ab1-4cca-af86-308de2cbb4ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debugger\Stackwalker">
+      <UniqueIdentifier>{4edc7c35-c304-4048-a93e-5567b0900bd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{30e0c6bb-b9a9-4d1c-b506-129a3fd2750d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostMaster">
+      <UniqueIdentifier>{ae34db1b-6a9c-41b0-8e26-bd2a9250fd76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThreadPool">
+      <UniqueIdentifier>{83672b66-9b48-463f-890d-392dc4881bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{594f7391-45bb-4cc4-80b3-20cac420271b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XMLWrapper">
+      <UniqueIdentifier>{82148862-e9c0-449d-84f3-b5b30b4d7332}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XMLWrapper\TinyXML">
+      <UniqueIdentifier>{aaca21d8-7070-41b4-8998-79585b0cabc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input\XInput">
+      <UniqueIdentifier>{aaf7133d-e4b3-4e26-b57c-94476d05ee48}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CommonMacros.h">
+      <Filter>Macros</Filter>
+    </ClInclude>
+    <ClInclude Include="LoopMacros.h">
+      <Filter>Macros</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Precompiled</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Precompiled</Filter>
+    </ClInclude>
+    <ClInclude Include="GrowingArray.h">
+      <Filter>Data Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="HybridArray.h">
+      <Filter>Data Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticArray.h">
+      <Filter>Data Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="CU_Vector.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Debugger\DL_Assert.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="Debugger\DL_Debug.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="Debugger\DL_StackWalker.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="Debugger\ExceptionHandler.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="Debugger\ReleaseAssert.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="Debugger\StackWalker\StackWalker.h">
+      <Filter>Debugger\Stackwalker</Filter>
+    </ClInclude>
+    <ClInclude Include="Time\Timer.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Time\TimerManager.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Time\TimeUnit.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="PostMaster\MessageTypes.h">
+      <Filter>PostMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="PostMaster\Observer.h">
+      <Filter>PostMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="PostMaster\PostMaster.h">
+      <Filter>PostMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="PostMaster\Subject.h">
+      <Filter>PostMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="PostMaster\Message.h">
+      <Filter>PostMaster</Filter>
+    </ClInclude>
+    <ClInclude Include="Work.h">
+      <Filter>ThreadPool</Filter>
+    </ClInclude>
+    <ClInclude Include="Worker.h">
+      <Filter>ThreadPool</Filter>
+    </ClInclude>
+    <ClInclude Include="TemplatedWork.h">
+      <Filter>ThreadPool</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadPool.h">
+      <Filter>ThreadPool</Filter>
+    </ClInclude>
+    <ClInclude Include="NameThread.h" />
+    <ClInclude Include="InputWrapper.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMapper.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMapperEvents.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputObserver.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLWrapper\XMLWrapper.h">
+      <Filter>XMLWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLWrapper\XMLWrapperNode.h">
+      <Filter>XMLWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLWrapper\tinyxml2\tinyxml2.h">
+      <Filter>XMLWrapper\TinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandLineManager.h" />
+    <ClInclude Include="MathUtils.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix33.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix33decl.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix44.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix44decl.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="vectoronstack.h">
+      <Filter>Data Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="VirtualSmartContainer.h">
+      <Filter>Data Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Stack.h">
+      <Filter>Data Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="heap.h">
+      <Filter>Data Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="GrowingArrayPtr.h">
+      <Filter>Data Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonUtils.h" />
+    <ClInclude Include="FileWatcher.h">
+      <Filter>Precompiled</Filter>
+    </ClInclude>
+    <ClInclude Include="XInputWrapper.h">
+      <Filter>Input\XInput</Filter>
+    </ClInclude>
+    <ClInclude Include="XController.h">
+      <Filter>Input\XInput</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Precompiled</Filter>
+    </ClCompile>
+    <ClCompile Include="Debugger\DL_Debug.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="Debugger\DL_StackWalker.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="Debugger\ExceptionHandler.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="Debugger\StackWalker\StackWalker.cpp">
+      <Filter>Debugger\Stackwalker</Filter>
+    </ClCompile>
+    <ClCompile Include="Time\Timer.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Time\TimerManager.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Time\TimeUnit.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="PostMaster\PostMaster.cpp">
+      <Filter>PostMaster</Filter>
+    </ClCompile>
+    <ClCompile Include="PostMaster\Subject.cpp">
+      <Filter>PostMaster</Filter>
+    </ClCompile>
+    <ClCompile Include="Work.cpp">
+      <Filter>ThreadPool</Filter>
+    </ClCompile>
+    <ClCompile Include="Worker.cpp">
+      <Filter>ThreadPool</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadPool.cpp">
+      <Filter>ThreadPool</Filter>
+    </ClCompile>
+    <ClCompile Include="NameThread.cpp" />
+    <ClCompile Include="InputWrapper.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputMapper.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLWrapper\XMLWrapper.cpp">
+      <Filter>XMLWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLWrapper\XMLWrapperNode.cpp">
+      <Filter>XMLWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLWrapper\tinyxml2\tinyxml2.cpp">
+      <Filter>XMLWrapper\TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandLineManager.cpp" />
+    <ClCompile Include="CommonUtils.cpp" />
+    <ClCompile Include="FileWatcher.cpp" />
+    <ClCompile Include="XInputWrapper.cpp">
+      <Filter>Input\XInput</Filter>
+    </ClCompile>
+    <ClCompile Include="XController.cpp">
+      <Filter>Input\XInput</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

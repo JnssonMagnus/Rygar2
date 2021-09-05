@@ -1,0 +1,30 @@
+Game loop:
+
+- Enter hub
+- Build base
+	- Get water
+	- Fire
+	- Food
+	- Roof?
+
+- Plant resources
+- Get water
+	- Regn
+	- "döda" fiender?
+	- Finns på banan redan ibland
+
+- Move water
+	- Rör
+	- Hink
+	- Skvätt
+	- Bygga
+
+- Explore
+	- For resources
+	- For new "skills?"
+		- Skills = new seeds med träd = ny "frukt"
+	- For new areas
+
+- Träd för ammos/upgrades/weapons
+- Trigga fight för nästa level/bossar/nytt stuff att göra saker med
+- Vatten/blod för att nå nya ställen (simma dit)

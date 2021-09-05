@@ -1,0 +1,479 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{817066bf-8b8a-4661-ac2d-7b0ccefe8ceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{6c1a1828-a51e-4d7f-89a4-28dee66f3dbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Map">
+      <UniqueIdentifier>{63866b95-ad02-48cb-b16c-c68609fc6145}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering">
+      <UniqueIdentifier>{063afc6c-1966-477f-bf65-23ad9ad5abe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering\Resources">
+      <UniqueIdentifier>{e0364119-87fe-4803-9fd1-eda3c514ece1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics">
+      <UniqueIdentifier>{531b57a9-f94e-431b-aff9-1128347dfaf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameObjects">
+      <UniqueIdentifier>{94a55295-e66d-45da-9480-1d6334b8cc62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameObjects\Vegetable">
+      <UniqueIdentifier>{273a0861-fc0d-456f-ac20-5a96b99add28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObjects">
+      <UniqueIdentifier>{bf2dbe32-9fd7-4cf7-a052-1e3fe0f4abf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameObjects\Actors">
+      <UniqueIdentifier>{ca5a689d-8386-43b4-8009-6301c3f3707e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameObjects\Actors\Player">
+      <UniqueIdentifier>{14a32087-63c4-4fbf-8b04-6296ab79ab4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameObjects\Actors\Enemies">
+      <UniqueIdentifier>{85948fa1-7b32-4037-bf81-042db405db6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\State">
+      <UniqueIdentifier>{7fbfe22d-b3ac-4980-a03d-c5e0c6c8d8b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\States">
+      <UniqueIdentifier>{26d6dca6-6726-47fb-85f7-c1a78365293f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameObjects\Actors\Player\Weapons">
+      <UniqueIdentifier>{b1bc761e-a0e3-41c8-aabd-445acc8a25db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering\ParticleSystem">
+      <UniqueIdentifier>{4f393e01-8bcd-476a-92a8-626c432c5279}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{ecc548fa-d2e3-4934-af43-3c017909682c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Lua">
+      <UniqueIdentifier>{14ace3ba-1adf-4994-8c02-b5e0ccb6abd1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="SDL_Init.cpp" />
+    <ClCompile Include="Engine.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicBody.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerCamera.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Tileset.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="ParallaxBackground.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="ParallaxLayer.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Stats.cpp">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="StatsViewer.cpp">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GUISprite.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedResource.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicManager.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineDebugInfo.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterMap.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Boulder.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Megaton.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectFactory.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Apple.cpp">
+      <Filter>Game\GameObjects\Vegetable</Filter>
+    </ClCompile>
+    <ClCompile Include="Seed.cpp">
+      <Filter>Game\GameObjects\Vegetable</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree.cpp">
+      <Filter>Game\GameObjects\Vegetable</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeType.cpp">
+      <Filter>Game\GameObjects\Vegetable</Filter>
+    </ClCompile>
+    <ClCompile Include="Hammer.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="RainCloud.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Bucket.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="FireFlower.cpp">
+      <Filter>Game\GameObjects\Vegetable</Filter>
+    </ClCompile>
+    <ClCompile Include="Hook.cpp">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Game\GameObjects\Actors\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Sink.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Engine\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp">
+      <Filter>Engine\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectType.cpp">
+      <Filter>Engine\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationController.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>Game\GameObjects\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Aim.cpp">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySpawner.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="StateStack.cpp">
+      <Filter>Engine\State</Filter>
+    </ClCompile>
+    <ClCompile Include="StateStackProxy.cpp">
+      <Filter>Engine\State</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>Engine\State</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverState.cpp">
+      <Filter>Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprayer.cpp">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Shotgun.cpp">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="GrenadeLauncher.cpp">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Grenade.cpp">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="BigEnemy.cpp">
+      <Filter>Game\GameObjects\Actors\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="BloodPortal.cpp">
+      <Filter>Game\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitter.cpp">
+      <Filter>Engine\Rendering\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Engine\Rendering\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitterBlueprint.cpp">
+      <Filter>Engine\Rendering\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaManager.cpp">
+      <Filter>Engine\Lua</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SDL_Init.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Engine.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicBody.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicStates.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCamera.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Tileset.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="ParallaxBackground.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="ParallaxLayer.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Stats.h">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="StatsViewer.h">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Engine\Rendering\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Engine\Rendering\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GUISprite.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedResource.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="typedefs.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicManager.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineDebugInfo.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="WaterMap.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Boulder.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Megaton.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectFactory.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectTypes.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Apple.h">
+      <Filter>Game\GameObjects\Vegetable</Filter>
+    </ClInclude>
+    <ClInclude Include="Seed.h">
+      <Filter>Game\GameObjects\Vegetable</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.h">
+      <Filter>Game\GameObjects\Vegetable</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeType.h">
+      <Filter>Game\GameObjects\Vegetable</Filter>
+    </ClInclude>
+    <ClInclude Include="Hammer.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="RainCloud.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bucket.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="FireFlower.h">
+      <Filter>Game\GameObjects\Vegetable</Filter>
+    </ClInclude>
+    <ClInclude Include="Hook.h">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Game\GameObjects\Actors\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Sink.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Engine\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager.h">
+      <Filter>Engine\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectType.h">
+      <Filter>Engine\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationController.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Game\GameObjects\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Aim.h">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySpawner.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="StateStack.h">
+      <Filter>Engine\State</Filter>
+    </ClInclude>
+    <ClInclude Include="StateStackProxy.h">
+      <Filter>Engine\State</Filter>
+    </ClInclude>
+    <ClInclude Include="StateStatus.h">
+      <Filter>Engine\State</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Engine\State</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverState.h">
+      <Filter>Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprayer.h">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Shotgun.h">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="GrenadeLauncher.h">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Grenade.h">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="BigEnemy.h">
+      <Filter>Game\GameObjects\Actors\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BloodPortal.h">
+      <Filter>Game\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Engine\Rendering\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEmitter.h">
+      <Filter>Engine\Rendering\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Engine\Rendering\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEmitterBlueprint.h">
+      <Filter>Engine\Rendering\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionPoint.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaManager.h">
+      <Filter>Engine\Lua</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="DD.txt" />
+  </ItemGroup>
+</Project>
