@@ -17,15 +17,15 @@ void GameState::InitState()
 	PostMaster::GetInstance()->Register(this, eMessageTypes::eCreateObject);
 
 	myParallaxBackground.AddLayer("data/gfx/background.png", { 0.f, 0.f });
-	myParallaxBackground.AddLayer("data/gfx/background2.png", { 0.2f, 0.1f });
+	myParallaxBackground.AddLayer("data/gfx/background2.png", { 0.1f, 0.0f });
 
-	LoadTilesets("data/tilesets/tilesets.dat");
+	LoadTilesets(std::string(gDataPath) + "data/tilesets/tilesets.dat");
 
 	GameObjectManager::Create();
 	myGameObjectFactory.Init();
 
 	myMap = new Map();
-	myMap->LoadFromFile("data/testLevel.lvl");
+	myMap->LoadFromFile(std::string(gDataPath) + "data/testLevel.lvl");
 	myMap->Init(myTilesets);
 		
 	Megaton::GetInstance().SetMap(myMap);
@@ -126,10 +126,10 @@ void GameState::InitKeybindings()
 		
 }
 
-void GameState::LoadTilesets(const char* aTilesetDatafile)
+void GameState::LoadTilesets(const std::string_view aTilesetDatafile)
 {
 	std::ifstream tilesetLoader;
-	tilesetLoader.open(aTilesetDatafile, std::fstream::in | std::fstream::binary);
+	tilesetLoader.open(aTilesetDatafile.data(), std::fstream::in | std::fstream::binary);
 	if (tilesetLoader.is_open() == false)
 	{
 		DL_DEBUG("Failed to open tileset data file: %s", aTilesetDatafile);

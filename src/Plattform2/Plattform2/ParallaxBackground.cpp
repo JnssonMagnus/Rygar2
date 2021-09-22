@@ -9,9 +9,9 @@ void ParallaxBackground::Render(const Vector2f& aCameraPosition)
 	}
 }
 
-void ParallaxBackground::AddLayer(const char* aFilename, const Vector2f& aMovePercent)
+void ParallaxBackground::AddLayer(const std::string_view aFilename, const Vector2f& aMovePercent)
 {
 	ParallaxLayer newLayer;
-	newLayer.Init(aFilename, aMovePercent);
+	newLayer.Init(aFilename.data(), aMovePercent);
 	myLayers.Add(newLayer);
 }

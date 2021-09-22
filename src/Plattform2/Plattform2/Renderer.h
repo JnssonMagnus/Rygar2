@@ -9,6 +9,7 @@
 
 struct TextureResource;
 struct FontResource;
+struct SDL_Texture;
 
 class Camera;
 struct Particle;
@@ -79,6 +80,8 @@ private:
 	void													DrawParticleSystems();
 
 	SDL::SDL_Pointers										mySDL_Pointers;
+
+	SDL_Texture*											myRenderTarget = nullptr;
 
 	CU::StaticArray<CU::GrowingArray<RenderCommand>, 2>		myRenderCommands;
 	CU::StaticArray<CU::GrowingArray<RenderCommand>, 2>		myGUIRenderCommands;

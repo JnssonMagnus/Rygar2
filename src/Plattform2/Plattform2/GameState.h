@@ -20,7 +20,7 @@ public:
 
 private:
 	void							InitKeybindings();
-	void							LoadTilesets(const char* aTilesetDatafile);
+	void							LoadTilesets(const std::string_view aTilesetDatafile);
 
 	ParallaxBackground				myParallaxBackground;
 	GameObjectFactory				myGameObjectFactory;

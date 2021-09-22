@@ -19,7 +19,10 @@ Renderer::~Renderer()
 
 void Renderer::Init()
 {
-	mySDL_Pointers = SDL::Init(SCREEN_WIDTH, SCREEN_HEIGHT);
+	mySDL_Pointers = SDL::Init(WINDOW_WIDTH, WINDOW_HEIGHT);
+	myRenderTarget = SDL_CreateTexture(mySDL_Pointers.myRenderer, SDL_PIXELFORMAT_RGBA8888, 
+		SDL_TextureAccess::SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
+	SDL_SetRenderTarget(mySDL_Pointers.myRenderer, myRenderTarget);
 	Sprite::SetRenderer(this);
 	Text::SetRenderer(this);
 	PostMaster::GetInstance()->Register(this, eMessageTypes::ePushCamera);
@@ -65,7 +68,12 @@ void Renderer::Draw()
 	DrawGUISprites();
 	DrawText();
 
+	SDL_SetRenderTarget(mySDL_Pointers.myRenderer, nullptr);
+	SDL_RenderCopy(mySDL_Pointers.myRenderer, myRenderTarget, nullptr, nullptr);
+
 	SDL_RenderPresent(mySDL_Pointers.myRenderer);
+
+	SDL_SetRenderTarget(mySDL_Pointers.myRenderer, myRenderTarget);
 }
 
 void Renderer::SwapRenderBuffer()

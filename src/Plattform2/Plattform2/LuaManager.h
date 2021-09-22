@@ -27,7 +27,7 @@ private:
 template<class T>
 inline void LuaManager::RegisterFunction(const char* aLuaName, T aFunction)
 {
-	lua_pushlightuserdata(myLuaState, this);
-	lua_pushcclosure(myLuaState, &LuaManager::SelfCall, 1);
+	//lua_pushlightuserdata(myLuaState, this);
+	//lua_pushcclosure(myLuaState, &LuaManager::SelfCall, 1);
 	//lua_register(myLuaState, aLuaName, aFunction);
 }

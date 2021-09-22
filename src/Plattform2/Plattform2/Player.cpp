@@ -18,7 +18,7 @@ Player::Player()
 	myDashStrength = 400.f;
 	myJumpStrength = 10.f;
 	myDashReloadTimer = 60;
-	myDashTime = 0;
+	myDashTime = 0;	
 }
 
 Player::~Player()
@@ -36,7 +36,7 @@ void Player::Update(const float aDeltaTime)
 
 	myHook.Shorten();
 
-	myPhysicBody->AddForce( (positionByHook - myPhysicBody->GetPosition()) * Vector2f(60.f, 10.8f));
+	myPhysicBody->AddForce( (positionByHook - myPhysicBody->GetPosition()) * Vector2f(30.f, 5.8f));
 	myPhysicBody->SetPosition(positionByHook);
 
 	if (myPickedUpObject != nullptr)
@@ -77,16 +77,16 @@ void Player::Draw()
 void Player::Init(GameObjectType& aGameObjectType)
 {
 	Actor::Init(aGameObjectType);
-
+	myPhysicBody->SetPosition({ 150, 50 });
 	myHook.Init();
 
 	myAim.Init();
 
 	myAnimationSet.Init("data/gfx/player.png");
 
-	const Vector2<int> frameSize(20, 34);
+	const Vector2<int> frameSize(24, 32);
 	myAnimationSet.AddAnimation(eAnimationID::eWalk, 3, frameSize, 10);
-	myAnimationSet.AddAnimation(eAnimationID::eIdle, 1, frameSize, 5);
+	myAnimationSet.AddAnimation(eAnimationID::eIdle, 1, frameSize, 5, { frameSize.myX * 2, frameSize.myY * 2 });
 	myAnimationSet.AddAnimation(eAnimationID::eFall, 1, frameSize, 5, { 0, frameSize.myY * 3 });
 	myAnimationSet.AddAnimation(eAnimationID::eJump, 1, frameSize, 5, { 0, frameSize.myY * 2 });
 	myAnimationSet.PushAnimation(eAnimationID::eIdle);

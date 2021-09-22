@@ -90,7 +90,7 @@ namespace PlatformEditor
                 myTileImage = value;
                 if (myTileImage != null && myTileImage != "")
                 {
-                    myImage = Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\data\\gfx\\tilesets\\" + myTileImage);
+                    myImage = Image.FromFile(Settings.GetDataPath() + "\\data\\gfx\\tilesets\\" + myTileImage);
                     UpdateTileCount();
                 }
             }

@@ -22,7 +22,8 @@ Map::~Map()
 
 void Map::Update(Player& aPlayer)
 {
-	myWaterMap->Update(aPlayer);
+	if (IsOutsideMap(aPlayer.GetPhysicBody()) == false)
+		myWaterMap->Update(aPlayer);
 }
 
 void Map::Draw(const Vector2f& aCameraPosition, const float aCameraZoom)
@@ -88,10 +89,10 @@ void Map::Init(std::map<std::string, Tileset>& aTilesets)
 	PostMaster::GetInstance()->SendMessage(newLevelMsg);
 }
 
-void Map::LoadFromFile(const char* aFilename)
+void Map::LoadFromFile(const std::string_view aFilename)
 {
 	std::ifstream loadFile;
-	loadFile.open(aFilename, std::fstream::in | std::fstream::binary);
+	loadFile.open(aFilename.data(), std::fstream::in | std::fstream::binary);
 	if (loadFile.is_open() == false)
 	{
 		DL_DEBUG("Failed to map-file: %s /n", aFilename);
@@ -155,6 +156,9 @@ eCollisionPoint Map::Collided(PhysicBody& aPhysicBody)
 	{
 		return eCollisionPoint::eNoCollision;
 	}
+
+	if (IsOutsideMap(aPhysicBody) == true)
+		return eCollisionPoint::eNoCollision;
 
 	eCollisionPoint collision = eCollisionPoint::eNoCollision;
 
@@ -310,6 +314,13 @@ bool Map::Collided(const int aNodeIndexX, const int aNodeIndexY, PhysicBody& aPh
 	}
 
 	return false;
+}
+
+bool Map::IsOutsideMap(const PhysicBody& aPhysicBody) const
+{
+	return aPhysicBody.GetLeftTop().x < 0 || aPhysicBody.GetLeftTop().y < 0 ||
+		aPhysicBody.GetRightBottom().x > myMapWidth * myTileWidth || 
+		aPhysicBody.GetRightBottom().y > myMapHeight * myTileHeight;
 }
 
 inline bool Map::IsValidTileIndex(const int aTileIndex) const

@@ -176,11 +176,9 @@ GameObject* GameObjectFactory::CreateObject(const int aGameObjectTypeID)
 
 void GameObjectFactory::LoadGameObjectTypes()
 {
-	std::ifstream file("data/json/gameObjects.json");
+	std::ifstream file(std::string(gDataPath) + "data/json/gameObjects.json");
 	DL_ASSERT(file.is_open() == true && "Can't open data/json/gameObjects.json!!");
 
-	//std::string text;
-	//std::getline(file, text);
 	std::string text((std::istreambuf_iterator<char>(file)),
 		std::istreambuf_iterator<char>());
 	rapidjson::Document gameObjectTypes;

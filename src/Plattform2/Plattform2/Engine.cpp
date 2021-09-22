@@ -45,11 +45,11 @@ void Engine::Init()
 
 	myParticleSystem = new ParticleSystem();
 	myParticleSystem->Init(&myRenderer);
-	myParticleSystem->LoadParticleEmitterBlueprints("data/json/ParticleEmitterBlueprints.json");
+	myParticleSystem->LoadParticleEmitterBlueprints((std::string(gDataPath) + "data/json/ParticleEmitterBlueprints.json").c_str());
 
 	mySoundManager.Init();
-	mySoundManager.InitBank("data/sound/init.bnk");
-	mySoundManager.LoadBank("data/sound/New_SoundBank.bnk");
+	mySoundManager.InitBank((std::string(gDataPath) + "data/sound/init.bnk").c_str());
+	mySoundManager.LoadBank((std::string(gDataPath) + "data/sound/New_SoundBank.bnk").c_str());
 
 	myEngineDebugInfo = new EngineDebugInfo();
 	myEngineDebugInfo->Init();

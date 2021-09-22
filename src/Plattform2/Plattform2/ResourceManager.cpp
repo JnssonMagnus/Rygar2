@@ -64,7 +64,8 @@ void ResourceManager::Destroy()
 
 Texture ResourceManager::LoadTexture(const char* aTextureName)
 {
-	SDL_Surface* surface = IMG_Load(aTextureName);
+	std::string completePath = std::string(gDataPath) + aTextureName;
+	SDL_Surface* surface = IMG_Load(completePath.c_str());
 	DL_ASSERT(surface != nullptr && "Failed to load image!");
 	DL_ASSERT(mySDL_Renderer != nullptr && "ResourceManager isn't intiated!");
 	SDL_Texture* sdl_texture = SDL_CreateTextureFromSurface(mySDL_Renderer, surface);
@@ -85,10 +86,11 @@ Texture ResourceManager::LoadTexture(const char* aTextureName)
 
 Font ResourceManager::LoadFont(const char* aFontName)
 {
-	TTF_Font* font = TTF_OpenFont(aFontName, 16);
+	std::string completePath = std::string(gDataPath) + aFontName;
+	TTF_Font* font = TTF_OpenFont(completePath.c_str(), 16);
 	if (font == nullptr)
 	{
-		DL_DEBUG("Font not found: %s", aFontName);
+		DL_DEBUG("Font not found: %s", completePath.c_str());
 		DL_ASSERT(false && "Font not found!");
 	}
 	FontResource* newResource = new FontResource{ font };

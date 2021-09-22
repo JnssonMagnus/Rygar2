@@ -7,11 +7,11 @@ Hook::Hook()
 {
 	myState = eState::eUnreleased;
 	myParentPosition = { 0.f, 0.f };
-	myHookInitSpeed = 30.f;
+	myHookInitSpeed = 10.f;
 	myHookAcc = 0.0f;
 	myHookSpeed = 0.f;
-	myHookExtendFreq = 25.f;
-	myHookExtendTime = 0.f;
+	myHookExtendFreq = 10.f;
+	myHookExtendTime = 5.f;
 }
 
 void Hook::Init()

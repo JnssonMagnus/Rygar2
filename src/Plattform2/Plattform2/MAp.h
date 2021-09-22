@@ -17,7 +17,7 @@ public:
 	void				DrawWater(const Vector2f& aCameraPosition);
 	void				DebugDraw(const Vector2f& aCameraPosition);
 	void				Init(std::map<std::string, Tileset>& aTilesets);
-	void				LoadFromFile(const char* aFilename);
+	void				LoadFromFile(const std::string_view aFilename);
 	eCollisionPoint		Collided(PhysicBody& aPhysicBody);
 	bool				Collided(const int aNodeIndex) const;
 	bool				Collided(const Vector2f& aPosition) const;
@@ -37,6 +37,7 @@ private:
 	bool				Collided(const Vector2f& aStartPosition, const Vector2f& aEndPosition, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator) const;
 	bool				Collided(const int aNodeIndexX, const int aNodeIndexY, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator) const;
 
+	[[nodiscard]]bool	IsOutsideMap(const PhysicBody & aPhysicBody) const;
 	inline bool			IsValidTileIndex(const int aTileIndex) const;
 
 	void				ResolveWaterCollision(PhysicBody& aPhysicBody);

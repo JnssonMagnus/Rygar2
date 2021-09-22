@@ -33,14 +33,14 @@ namespace PlatformEditor
             set
             {
                 myTileset = value;
-                myTileSetImage = Image.FromFile("data/gfx/tilesets/" + myTileset.TileImage);
+                myTileSetImage = Image.FromFile(Settings.GetDataPath() + "data/gfx/tilesets/" + myTileset.TileImage);
                 myTilesetName = myTileset.myTilesetName;
             }
         }
 
         public void Save()
         {
-            System.IO.BinaryWriter binaryWriter = new System.IO.BinaryWriter(System.IO.File.Open("data/testLevel.lvl", System.IO.FileMode.OpenOrCreate));
+            System.IO.BinaryWriter binaryWriter = new System.IO.BinaryWriter(System.IO.File.Open(Settings.GetDataPath() + "data/testLevel.lvl", System.IO.FileMode.OpenOrCreate));
             myFilename = "testLevel1.lvl\n";
 
             // Map

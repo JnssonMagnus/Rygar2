@@ -48,7 +48,7 @@ namespace PlatformEditor
             if (aFilename != null)
             {
                 TilesetFilenameText.Text = aFilename;
-                TilesetImage.Image = Image.FromFile(Application.StartupPath + "\\data\\gfx\\tilesets\\" + TilesetFilenameText.Text);
+                TilesetImage.Image = Image.FromFile(Settings.GetDataPath() + "\\data\\gfx\\tilesets\\" + TilesetFilenameText.Text);
                 myTilesets[Tilesets.Text].TileImage = TilesetFilenameText.Text;
             }
             else
