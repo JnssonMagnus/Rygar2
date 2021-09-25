@@ -81,8 +81,18 @@ namespace PlatformEditor
             foreach (GameObjectType gameObjectType in ourGameObjectTypes)
             {
                 GameObjectTypesList.Items.Add(gameObjectType.name);
-                Image image = Image.FromFile(gameObjectType.image);
-                myGameObjectTypeImages[gameObjectType.ID] = image;
+                if (gameObjectType.image != null)
+                {
+                    try
+                    {
+                        Image image = Image.FromFile(gameObjectType.image);
+                        myGameObjectTypeImages[gameObjectType.ID] = image;
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Image not found" + gameObjectType.image);
+                    }
+                }
             }
         }
 

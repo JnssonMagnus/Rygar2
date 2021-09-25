@@ -156,7 +156,14 @@ namespace PlatformEditor
 
                 if (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].image != null)
                 {
-                    GameObjectPic.Image = Image.FromFile(MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].image);
+                    try
+                    {
+                        GameObjectPic.Image = Image.FromFile(MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].image);
+                    }
+                    catch
+                    {
+                        GameObjectPic.Image = null;
+                    }
                 }
                 else
                 {

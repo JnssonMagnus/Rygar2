@@ -40,7 +40,7 @@ public:
 	inline const Vector2f&		GetVelocity() const;
 	inline const Vector2f&		GetForce() const;
 	inline const Vector2f&		GetHalfSize() const;
-	inline const Vector2f		GetDirection() const;
+	inline const Vector2f&		GetDirection() const;
 	inline float				GetBounciness() const;
 	inline float				GetMass() const;
 	float						GetRotation() const;
@@ -60,6 +60,7 @@ public:
 	void						SetBounciness(const float aBounciness);
 	void						SetMass(const float aWeight);
 	void						SetCollisionTags(const char someCollisionTags);
+	void						ChangeDirection();
 
 	void						Release();
 	void						AddForce(const Vector2f& aForce);
@@ -98,6 +99,7 @@ private:
 	Vector2f					myHalfSize;
 	Vector2f					myAirFriction;
 	Vector2f					myGroundFriction;
+	Vector2f					myDirection;
 	CU::StaticArray<char, 4>	myPhysicStates;
 	GameObject*					myGameObject;
 	float						myBounciness;
@@ -132,9 +134,9 @@ inline const Vector2f& PhysicBody::GetHalfSize() const
 	return myHalfSize;
 }
 
-inline const Vector2f PhysicBody::GetDirection() const
+inline const Vector2f& PhysicBody::GetDirection() const
 {
-	return (myPosition - myOldPosition).GetNormalized();
+	return myDirection;
 }
 
 inline float PhysicBody::GetBounciness() const

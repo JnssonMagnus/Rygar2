@@ -77,7 +77,6 @@ void Player::Draw()
 void Player::Init(GameObjectType& aGameObjectType)
 {
 	Actor::Init(aGameObjectType);
-	myPhysicBody->SetPosition({ 150, 50 });
 	myHook.Init();
 
 	myAim.Init();
@@ -97,7 +96,7 @@ void Player::Init(GameObjectType& aGameObjectType)
 
 // ------------------------------
 
-	myPhysicBody->SetPosition({ 300, 200 });
+	myPhysicBody->SetPosition({ 100, 50 });
 	myPhysicBody->SetHalfSize(Vector2f(myAnimationSet.GetSize().x / 2.f,
 		myAnimationSet.GetSize().y / 2.f));
 

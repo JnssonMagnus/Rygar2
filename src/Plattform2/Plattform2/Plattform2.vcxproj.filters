@@ -59,6 +59,9 @@
     <Filter Include="Engine\Lua">
       <UniqueIdentifier>{14ace3ba-1adf-4994-8c02-b5e0ccb6abd1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameObjects\Actors\Enemies\AI">
+      <UniqueIdentifier>{dd7b20df-eb42-46ab-9beb-c53aceffebe7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -251,6 +254,9 @@
     </ClCompile>
     <ClCompile Include="LuaManager.cpp">
       <Filter>Engine\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="AIBehaviour.cpp">
+      <Filter>Game\GameObjects\Actors\Enemies\AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -471,6 +477,9 @@
     </ClInclude>
     <ClInclude Include="LuaManager.h">
       <Filter>Engine\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="AIBehaviour.h">
+      <Filter>Game\GameObjects\Actors\Enemies\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

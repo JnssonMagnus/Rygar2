@@ -68,7 +68,7 @@ Vector2f Hook::Update(const float aDeltaTime, const Vector2f& aParentPosition, c
 	if (myState == eState::eFired)
 	{
 		myHookSpeed -= myHookAcc;
-		if (myMap->Collided(myLinks[0].myPosition) == false)
+		if (myMap->Collided(myLinks[0].myPosition + myFireDirection * myHookSpeed) == false)
 		{
 			myLinks[0].myPosition += myFireDirection * myHookSpeed;
 			while (myLinks.GetLast().myPosition.SqrdDistanceTo(aParentPosition) > myLinkSize * myLinkSize)

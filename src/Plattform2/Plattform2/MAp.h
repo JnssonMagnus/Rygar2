@@ -31,6 +31,7 @@ public:
 	void				DestroyTile(const Vector2f& aWorldPosition);
 
 	bool				IsDestructable(const Vector2f& aWorldPosition) const;
+	bool				PositionHasImpassibleTile(const Vector2f& aWorldPosition) const;
 	int					GetTileIndexFromWorldPosition(const Vector2f& aWorldPosition) const;
 
 private:

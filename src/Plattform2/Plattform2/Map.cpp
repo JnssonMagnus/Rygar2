@@ -277,6 +277,13 @@ bool Map::IsDestructable(const Vector2f& aWorldPosition) const
 	return myTileset->IsDestructable(myTileData[tileIndex]);
 }
 
+bool Map::PositionHasImpassibleTile(const Vector2f& aWorldPosition) const
+{
+	const auto tileIndex = GetTileIndexFromWorldPosition(aWorldPosition);
+	return myTileset->IsObstacle(myTileData[tileIndex]);
+	
+}
+
 int Map::GetTileIndexFromWorldPosition(const Vector2f& aWorldPosition) const
 {
 	return static_cast<int>(aWorldPosition.myX / myTileWidth) +

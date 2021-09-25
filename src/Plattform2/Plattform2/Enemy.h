@@ -1,6 +1,6 @@
 #pragma once
 #include "Actor.h"
-
+#include "AIBehaviour.h"
 
 class Enemy : public Actor
 {
@@ -11,4 +11,5 @@ public:
 
 private:
 	float				myHasBeenDeadTimer = 0.f;
+	AIBehaviour			myAIBehaviour;
 };

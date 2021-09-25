@@ -163,6 +163,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="AIBehaviour.cpp" />
     <ClCompile Include="Aim.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationController.cpp" />
@@ -230,6 +231,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="AIBehaviour.h" />
     <ClInclude Include="Aim.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationController.h" />

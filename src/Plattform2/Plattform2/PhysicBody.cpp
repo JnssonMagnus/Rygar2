@@ -1,19 +1,9 @@
 #include "stdafx.h"
 #include "PhysicBody.h"
 
-PhysicBody::PhysicBody()
+PhysicBody::PhysicBody() : myOptions(0_uc), myGameObject(nullptr), myAirFriction(1.f, 1.f), myGroundFriction(1.f, 1.f), myPosition(0.f, 0.f),
+	myOldPosition(0.f, 0.f), myForce(0.f, 0.f), myVelocity(0.f, 0.f), myHalfSize(0.f, 0.f), myPhysicStates({0, 0, 0, 0}), myBounciness(0.f), myDirection(1.f, 0.f)
 {
-	myOptions = 0_uc;
-	myGameObject = nullptr;
-	myAirFriction.myX = myAirFriction.myY = 1.f;
-	myGroundFriction.myX = myGroundFriction.myY = 1.f;
-	myPosition.myX = myPosition.myY = 0.f;
-	myOldPosition.myX = myOldPosition.myY = 0.f;
-	myForce.myX = myForce.myY = 0.f;
-	myVelocity.myX = myVelocity.myY = 0.f;
-	myHalfSize.myX = myHalfSize.myY = 0.f;
-	myPhysicStates = { 0, 0, 0, 0 };
-	myBounciness = 0.f;
 	SetOption(ePhysicBodyOptions::eEnable, true);
 	SetOption(ePhysicBodyOptions::eGravity, true);
 
@@ -135,6 +125,11 @@ void PhysicBody::SetMass(const float aWeight)
 void PhysicBody::SetCollisionTags(const char someCollisionTags)
 {
 	myTags = someCollisionTags;
+}
+
+void PhysicBody::ChangeDirection()
+{
+	myDirection.myX *= -1.f;
 }
 
 void PhysicBody::SetRotation(const bool aRotateWithSpeed)
