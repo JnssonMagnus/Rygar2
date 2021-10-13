@@ -9,6 +9,7 @@
 #include "Sprayer.h"
 #include "Shotgun.h"
 #include "GrenadeLauncher.h"
+#include "DiskArmor.h"
 #include "ParticleEmitter.h"
 #include <postmaster/postmaster.h>
 
@@ -29,14 +30,12 @@ Player::~Player()
 void Player::Update(const float aDeltaTime)
 {
 	Actor::Update(aDeltaTime);
-	myWeapons[myCurrentWeapon]->Update(aDeltaTime);
+	myWeapons[myCurrentWeapon]->Update(aDeltaTime, myPhysicBody->GetPosition(), GetProperty<bool>(ePropertyValues::eFacingRight) ? 1.f : -1.f);
 	myStats.UpdateStats();
 
 	Vector2f positionByHook = myHook.Update(aDeltaTime, myPhysicBody->GetPosition(), myPhysicBody->GetVelocity());
 
-	myHook.Shorten();
-
-	myPhysicBody->AddForce( (positionByHook - myPhysicBody->GetPosition()) * Vector2f(30.f, 5.8f));
+	myPhysicBody->AddForce((positionByHook - myPhysicBody->GetPosition()) * Vector2f(30.f, 5.8f));
 	myPhysicBody->SetPosition(positionByHook);
 
 	if (myPickedUpObject != nullptr)
@@ -45,6 +44,8 @@ void Player::Update(const float aDeltaTime)
 		newPos -= Vector2f(0, myPhysicBody->GetHalfSize().myY + myPickedUpObject->GetPhysicBody().GetHalfSize().myY);
 		myPickedUpObject->GetPhysicBody().SetPosition(newPos);
 	}
+
+	myProperties.ChangeValue<bool>(ePropertyValues::eIsAttacking) = myWeapons[myCurrentWeapon]->GetWeaponStatus() == eWeaponStatus::eFireing ? true : false;
 
 	Message listenerMessage(eMessageTypes::eUpdateListenerPosition);
 	listenerMessage.myMatrix.SetPosition(Vector4f{ myPhysicBody->GetPosition().myX, myPhysicBody->GetPosition().myY, 0.f, 0.f });
@@ -69,6 +70,8 @@ void Player::Draw()
 	myAnimationSet.Draw(myPhysicBody->GetPosition());
 	myHook.Draw();
 	
+	myWeapons[myCurrentWeapon]->Draw();
+	
 	myStats.SetStat(eStats::eAmmo, myWeapons[myCurrentWeapon]->GetPercentageAmmoLeft() * 100.f);
 	myStatsViewer.Draw({ 10, 10 });
 	myAim.Draw();
@@ -77,7 +80,8 @@ void Player::Draw()
 void Player::Init(GameObjectType& aGameObjectType)
 {
 	Actor::Init(aGameObjectType);
-	myHook.Init();
+	myHook.Init("data/gfx/link.png", "data/gfx/hook.png", 200.f, 5.f, 1);
+	
 
 	myAim.Init();
 
@@ -88,6 +92,8 @@ void Player::Init(GameObjectType& aGameObjectType)
 	myAnimationSet.AddAnimation(eAnimationID::eIdle, 1, frameSize, 5, { frameSize.myX * 2, frameSize.myY * 2 });
 	myAnimationSet.AddAnimation(eAnimationID::eFall, 1, frameSize, 5, { 0, frameSize.myY * 3 });
 	myAnimationSet.AddAnimation(eAnimationID::eJump, 1, frameSize, 5, { 0, frameSize.myY * 2 });
+	myAnimationSet.AddAnimation(eAnimationID::eAttack, 1, frameSize, 5, { 0, frameSize.myY });
+	myAnimationSet.AddAnimation(eAnimationID::eJumpAttack, 1, frameSize, 5, frameSize );
 	myAnimationSet.PushAnimation(eAnimationID::eIdle);
 
 	myAnimationSet.CenterPivot();
@@ -112,14 +118,18 @@ void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputSt
 	switch (aEvent)
 	{
 	case Input::eInputEvent::eFireGun1:
-		if (aState == Input::eInputState::ePressed)
+	{
+		Vector2f direction = myAim.GetPosition() - myPhysicBody->GetPosition();
+		direction.Normalize();
+
+		if (aState == Input::eInputState::eDown)
 		{
 			Vector2f dir = myAim.GetPosition() - myPhysicBody->GetPosition();
 			dir.Normalize();
 			myWeapons[myCurrentWeapon]->Shoot(myPhysicBody->GetPosition(), dir, myAim.GetPosition());
 		}
 		break;
-
+	}
 	case Input::eInputEvent::eCycleWeapons:
 	{
 		const int cycleValue = aValue > 0 ? 1 : -1;
@@ -213,7 +223,7 @@ void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputSt
 
 void Player::CollideWithTile(eCollisionPoint collisionPoint)
 {
-	if (myHook.GetState() == Hook::eState::eStuck)
+	if (myHook.GetState() == Chain::eState::eStuck)
 	{
 		if (myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eTop) == true)
 			myHook.Fire(Vector2f(0.f, 0.f));
@@ -258,6 +268,24 @@ void Player::DropItem()
 	}
 }
 
+bool Player::IsAboveEnemy(const GameObject* const aGameObject) const
+{
+	return myPhysicBody->GetVelocity().myY > 0 && myPhysicBody->GetMiddleBottom().myY < aGameObject->GetPhysicBody().GetMiddleTop().myY + 10;
+}
+
+void Player::Collide(GameObject* aGameObject)
+{
+	if (aGameObject->GetPhysicBody().HasCollisionTag(eCollisionTags::eEnemy))
+	{
+		if (IsAboveEnemy(aGameObject) == true)
+		{
+			myPhysicBody->SetVelocity({ myPhysicBody->GetVelocity().myX, -10.f });
+			Actor* actor = dynamic_cast<Actor*>(aGameObject);
+			actor->Stagger();
+		}
+	}
+}
+
 const Vector2f Player::GetAimLocalPosition() const
 {
 	return myAim.GetLocalPosition();
@@ -284,10 +312,17 @@ void Player::CycleWeapons(int aCycleValue)
 void Player::AddWeapons()
 {
 	Weapon* sprayer = new Sprayer();
+	Weapon* diskArmor = new DiskArmor();
+	diskArmor->SetOffsetPosition({ 10, -7 });
+
 	Weapon* shotgun = new Shotgun();
 	Weapon* grenadeLauncher = new GrenadeLauncher();
+	myWeapons.Add(diskArmor);
 	myWeapons.Add(sprayer);
 	myWeapons.Add(shotgun);
 	myWeapons.Add(grenadeLauncher);
+
+	for (auto& weapon : myWeapons)
+		weapon->Init();
 }
 

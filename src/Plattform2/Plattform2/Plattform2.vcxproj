@@ -174,6 +174,8 @@
     <ClCompile Include="Bucket.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Disk.cpp" />
+    <ClCompile Include="DiskArmor.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Engine.cpp" />
@@ -199,7 +201,7 @@
     <ClCompile Include="State.cpp" />
     <ClCompile Include="GUISprite.cpp" />
     <ClCompile Include="Hammer.cpp" />
-    <ClCompile Include="Hook.cpp" />
+    <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Megaton.cpp" />
@@ -243,6 +245,8 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionPoint.h" />
+    <ClInclude Include="Disk.h" />
+    <ClInclude Include="DiskArmor.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Engine.h" />
@@ -271,7 +275,7 @@
     <ClInclude Include="GUISprite.h" />
     <ClInclude Include="GameObjectTypes.h" />
     <ClInclude Include="Hammer.h" />
-    <ClInclude Include="Hook.h" />
+    <ClInclude Include="Chain.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Megaton.h" />
     <ClInclude Include="ParallaxBackground.h" />

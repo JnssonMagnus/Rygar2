@@ -34,12 +34,12 @@ void Sprayer::Shoot(const Vector2f& aPosition, const Vector2f& aDirection, const
 	}
 }
 
-void Sprayer::Update(const float aDeltaTime) 
+void Sprayer::Update(const float aDeltaTime, const Vector2f& aParentPosition, const float aParentDirX)
 {
 	if (myShotLastFrame == false)
 	{
 		PostMaster::GetInstance()->SendSoundEvent("minigunStop");
 	}
-	Weapon::Update(aDeltaTime);
+	Weapon::Update(aDeltaTime, aParentPosition, aParentDirX);
 	myShotLastFrame = false;
 }

@@ -165,8 +165,11 @@ void PhysicManager::RecieveMessage(const Message& aMessage)
 		myPhysicBodiesToDisable.Add(static_cast<PhysicBody*>(aMessage.myVoidPointer));
 		break;
 	case eMessageTypes::eLevelLoaded:
-		SetGridSize({ aMessage.myIntData / 50, aMessage.mySecondIntData / 50 }, { 50, 50 });
+	{
+		constexpr int splitAmount = 20;
+		SetGridSize({ aMessage.myIntData / splitAmount, aMessage.mySecondIntData / splitAmount }, { splitAmount, splitAmount });
 		break;
+	}
 	}
 }
 

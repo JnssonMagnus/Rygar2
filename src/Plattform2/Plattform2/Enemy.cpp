@@ -9,6 +9,11 @@
 
 void Enemy::Update(const float aDeltaTime)
 {
+	Actor::Update(aDeltaTime);
+
+	if (myStaggeredData.myStaggeredTime > 0.f)
+		return;
+
 	myAIBehaviour.Update(*myPhysicBody);
 	ChangeProperty<bool>(PropertyKey::eFacingRight) = myPhysicBody->GetDirection().myX < 0.f;
 	//const float moveForce = 10.f;
@@ -56,7 +61,6 @@ void Enemy::Update(const float aDeltaTime)
 	//	}
 	//}
 
-	Actor::Update(aDeltaTime);
 }
 
 void Enemy::Init(GameObjectType& aGameObjectType)

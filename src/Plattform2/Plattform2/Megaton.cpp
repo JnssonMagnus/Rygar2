@@ -36,6 +36,18 @@ void Megaton::SetLuaManager(std::weak_ptr<LuaManager> aLuaManager)
 	myLuaManager = aLuaManager;
 }
 
+GameObjectFactory& Megaton::GetGameObjectFactory()
+{
+	DL_ASSERT(myGameObjectFactory != nullptr && "GameObjectFactory not initiated!");
+	return *myGameObjectFactory;
+}
+
+void Megaton::SetGameObjectFactory(GameObjectFactory& aGameObjectFactory)
+{
+	DL_ASSERT(myGameObjectFactory == nullptr && "GameObject Factory aready initiated!");
+	myGameObjectFactory = &aGameObjectFactory;
+}
+
 void Megaton::Create()
 {
 	assert(ourInstance == nullptr && "Megaton already created!");

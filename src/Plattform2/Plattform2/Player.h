@@ -4,8 +4,9 @@
 #include "Stats.h"
 #include "StatsViewer.h"
 #include "Actor.h"
-#include "Hook.h"
+#include "Chain.h"
 #include "Aim.h"
+#include "Disk.h"
 #include <PostMaster/Subject.h>
 #include <InputObserver.h>
 #include <Vector2.h>
@@ -29,6 +30,8 @@ public:
 	bool						PickUp(GameObject* aGameObject);
 	void						DropItem();
 
+	void						Collide(GameObject* aGameObject) override;
+
 	const Vector2f				GetAimLocalPosition() const;
 
 	const Stats&				GetStats() const;
@@ -36,13 +39,16 @@ public:
 private:
 	void						CycleWeapons(int aCycleValue);
 	void						AddWeapons();
+	bool						IsAboveEnemy(const GameObject* const aGameObject) const;
 
 	Aim							myAim;
 	Stats						myStats;
 	StatsViewer					myStatsViewer;
 	bool						myHasDoubleJumped = false;
 	GameObject*					myPickedUpObject;
-	Hook						myHook;
+	Chain						myHook;
+
+	Disk						myDisk;
 	
 	CU::GrowingArray<Weapon*>	myWeapons;
 	int							myCurrentWeapon = 0;

@@ -1,3 +1,20 @@
+Rygar features:
+- crossbow
+- hook
+- få items på kartan
+- level upp
+- levla upp vapen
+- liv ploppar
+- dörrar
+- plattformar som går att gå igenom underifrån
+- drops från fiender
+- ducka
+- rätt animationer när attackerar
+
+
+-------------------------------------------------------------------------
+OLD:
+
 Game loop:
 
 - Enter hub

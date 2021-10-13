@@ -10,13 +10,14 @@ public:
 	virtual void		Update(const float aDeltaTime) override;
 	virtual void		Draw() override;
 	virtual void		Damage(const int aDamage, const Vector2f& aContactPoint);
+	virtual void		Stagger();
 
 
 protected:
 	AnimationController	myAnimationController;
 	AnimationSet		myAnimationSet;
 
-	int					myBloodHitAmount = 5;
+	int					myBloodHitAmount = 10;
 	
 	struct
 	{

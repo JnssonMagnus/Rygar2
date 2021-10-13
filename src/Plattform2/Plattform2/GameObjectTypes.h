@@ -18,5 +18,6 @@ enum class eGameObjectTypes
 	eEnemySpawner,
 	eGrenade,
 	eExplosion,
-	eBloodPortal
+	eBloodPortal,
+	eDisk
 };

@@ -162,7 +162,7 @@
     <ClCompile Include="FireFlower.cpp">
       <Filter>Game\GameObjects\Vegetable</Filter>
     </ClCompile>
-    <ClCompile Include="Hook.cpp">
+    <ClCompile Include="Chain.cpp">
       <Filter>Game\GameObjects\Actors\Player</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
@@ -257,6 +257,12 @@
     </ClCompile>
     <ClCompile Include="AIBehaviour.cpp">
       <Filter>Game\GameObjects\Actors\Enemies\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Disk.cpp">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="DiskArmor.cpp">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -376,7 +382,7 @@
     <ClInclude Include="FireFlower.h">
       <Filter>Game\GameObjects\Vegetable</Filter>
     </ClInclude>
-    <ClInclude Include="Hook.h">
+    <ClInclude Include="Chain.h">
       <Filter>Game\GameObjects\Actors\Player</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
@@ -480,6 +486,12 @@
     </ClInclude>
     <ClInclude Include="AIBehaviour.h">
       <Filter>Game\GameObjects\Actors\Enemies\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Disk.h">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="DiskArmor.h">
+      <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

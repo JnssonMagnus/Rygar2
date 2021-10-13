@@ -11,5 +11,5 @@ public:
 
 private:
 	float				myHasBeenDeadTimer = 0.f;
-	AIBehaviour			myAIBehaviour;
+	AIBehaviour			myAIBehaviour;	
 };

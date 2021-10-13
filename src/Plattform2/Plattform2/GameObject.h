@@ -11,7 +11,8 @@ enum class ePropertyValues
 {
 	eLife,
 	eAlive,
-	eFacingRight
+	eFacingRight,
+	eIsAttacking
 };
 
 typedef ePropertyValues PropertyKey;
@@ -31,6 +32,7 @@ public:
 	virtual void			Collide(GameObject* aGameObject);
 	virtual void			CollideWithTile(eCollisionPoint collisionPoint = eCollisionPoint::eNoCollision);
 	void					Delete();
+	void					SetPosition(const Vector2f& aPosition);
 
 	template<class T>
 	const T&				GetProperty(const PropertyKey) const;

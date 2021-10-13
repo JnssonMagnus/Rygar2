@@ -8,6 +8,8 @@ enum class eAnimationID
 	eIdle,
 	eWalk,
 	eJump,
+	eAttack,
+	eJumpAttack,
 	eFall,
 	eStagger,
 	eDead

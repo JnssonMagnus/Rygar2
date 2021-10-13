@@ -98,6 +98,11 @@ void GameObject::Delete()
 	PostMaster::GetInstance()->SendMessage(deleteMessage);
 }
 
+void GameObject::SetPosition(const Vector2f& aPosition)
+{
+	myPhysicBody->SetPosition(aPosition);
+}
+
 const std::string& GameObject::GetTypeName() const
 {
 	return myGameObjectType->GetName();

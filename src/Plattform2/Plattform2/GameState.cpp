@@ -24,6 +24,8 @@ void GameState::InitState()
 	GameObjectManager::Create();
 	myGameObjectFactory.Init();
 
+	Megaton::GetInstance().SetGameObjectFactory(myGameObjectFactory);
+
 	myMap = new Map();
 	myMap->LoadFromFile(std::string(gDataPath) + "data/testLevel.lvl");
 	myMap->Init(myTilesets);
@@ -103,7 +105,7 @@ void GameState::RecieveMessage(const Message& aMessage)
 void GameState::InitKeybindings()
 {
 	Input::InputMapper::GetInstance()->MapEvent(Input::eInputAction::eKeySPACE, Input::eInputEvent::eFireGun1);
-	Input::InputMapper::GetInstance()->MapEvent(Input::eInputAction::eMouse_LeftButtonPressed, Input::eInputEvent::eFireGun1);
+	Input::InputMapper::GetInstance()->MapEvent(Input::eInputAction::eMouse_LeftButtonDown, Input::eInputEvent::eFireGun1);
 	Input::InputMapper::GetInstance()->MapEvent(Input::eInputAction::eMouse_Scroll, Input::eInputEvent::eCycleWeapons);
 
 	Input::InputMapper::GetInstance()->MapEvent(Input::eInputAction::eKeyLEFT, Input::eInputEvent::eMoveLeft);

@@ -25,7 +25,11 @@ void AnimationController::Update()
 		{
 			if (myParent->GetPhysicBody().HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom) == false)
 			{
-				if (myParent->GetPhysicBody().GetVelocity().myY < 0.f)
+				if (myParent->GetProperty<bool>(PropertyKey::eIsAttacking) == true)
+				{
+					myParentAnimationSet->PushAnimation(eAnimationID::eJumpAttack);
+				}
+				else if (myParent->GetPhysicBody().GetVelocity().myY < 0.f)
 				{
 					myParentAnimationSet->PushAnimation(eAnimationID::eJump);
 				}
@@ -36,7 +40,11 @@ void AnimationController::Update()
 			}
 			else
 			{
-				if (abs(myParent->GetPhysicBody().GetVelocity().myX) < 1.f)
+				if (myParent->GetProperty<bool>(PropertyKey::eIsAttacking) == true)
+				{
+					myParentAnimationSet->PushAnimation(eAnimationID::eAttack);
+				}
+				else if (abs(myParent->GetPhysicBody().GetVelocity().myX) < 1.f)
 				{
 					myParentAnimationSet->PushAnimation(eAnimationID::eIdle);
 				}

@@ -23,6 +23,7 @@
 #include "EnemySpawner.h"
 #include "BigEnemy.h"
 #include "BloodPortal.h"
+#include "Disk.h"
 #include <istream>
 
 GameObjectFactory::GameObjectFactory()
@@ -99,6 +100,8 @@ GameObject* GameObjectFactory::CreateObject(const eGameObjectTypes aGameObjectTy
 		newGameObject = new Explosion(); break;
 	case eGameObjectTypes::eBloodPortal:
 		newGameObject = new BloodPortal(); break;
+	case eGameObjectTypes::eDisk:
+		newGameObject = new Disk(); break;
 	default:
 		DL_ASSERT("Tried to create unknown object in factory!");
 	}
@@ -147,6 +150,8 @@ GameObjectType& GameObjectFactory::GetGameObjectType(const eGameObjectTypes aGam
 		nameToFind = "explosion"; break;
 	case eGameObjectTypes::eBloodPortal:
 		nameToFind = "bloodPortal"; break;
+	case eGameObjectTypes::eDisk:
+		nameToFind = "disk"; break;
 	default:
 		nameToFind = "objectNotFound";
 	}
@@ -283,6 +288,11 @@ void GameObjectFactory::InitTypeIDToEnums()
 		{
 			myGameObjectTypeIDToEnum[gameObjectType.first] = eGameObjectTypes::eBloodPortal;
 			myEnumToGameObjectTypeID[eGameObjectTypes::eBloodPortal] = gameObjectType.first;
+		}
+		else if (gameObjectType.second.GetName() == "disk")
+		{
+			myGameObjectTypeIDToEnum[gameObjectType.first] = eGameObjectTypes::eDisk;
+			myEnumToGameObjectTypeID[eGameObjectTypes::eDisk] = gameObjectType.first;
 		}
 		else
 			DL_ASSERT(false && "game object name has no game object class");

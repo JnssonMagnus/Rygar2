@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ParallaxLayer.h"
+#include "Settings.h"
 
 void ParallaxLayer::Init(const char* aImageFilename, const Vector2f& aMovePercent)
 {
@@ -15,5 +16,8 @@ void ParallaxLayer::Render(const Vector2f& aCameraPosition, const float aCameraZ
 
 	position.myX -= mySprite.GetSize().myX / 2;
 	position.myY -= mySprite.GetSize().myY / 2;
+	mySprite.Draw(position, 0.f, true);
+	
+	position.myX += mySprite.GetSize().myX;
 	mySprite.Draw(position, 0.f, true);
 }
