@@ -11,7 +11,7 @@ public:
 											GameObjectManager();
 	void									AddGameObject(GameObject* aGameObject);
 	void									DeleteGameObject(GameObject* aGameObject);
-	GameObject*								GetClosestWithName(const std::string& aGameObject);
+	GameObject*								GetFirstWithName(const std::string& aGameObject);
 	void									DrawGameObjects(const Camera& aCamera);
 	void									UpdateGameObjects(const float aDeltaTime);
 	void									AddAndRemoveObjects();

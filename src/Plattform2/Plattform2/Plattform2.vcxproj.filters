@@ -72,7 +72,7 @@
     <ClCompile Include="World.cpp">
       <Filter>Game\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
+    <ClCompile Include="MapChunk.cpp">
       <Filter>Game\Map</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
@@ -264,6 +264,12 @@
     <ClCompile Include="DiskArmor.cpp">
       <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionBoxDrawerVisitor.cpp" />
+    <ClCompile Include="DebugDrawer.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="IngameDebugDraw.cpp" />
+    <ClCompile Include="DataLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL_Init.h" />
@@ -277,7 +283,7 @@
     <ClInclude Include="World.h">
       <Filter>Game\Map</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
+    <ClInclude Include="MapChunk.h">
       <Filter>Game\Map</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
@@ -493,6 +499,13 @@
     <ClInclude Include="DiskArmor.h">
       <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionBoxDrawerVisitor.h" />
+    <ClInclude Include="Visitor.h" />
+    <ClInclude Include="DebugDrawer.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="IngameDebugDraw.h" />
+    <ClInclude Include="DataLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="DD.txt" />

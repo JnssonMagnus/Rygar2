@@ -4,7 +4,7 @@
 #include "GameObjectManager.h"
 #include "PhysicBody.h"
 #include "Megaton.h"
-#include "Map.h"
+#include "MapChunk.h"
 
 void BigEnemy::Update(const float aDeltaTime)
 {
@@ -17,7 +17,7 @@ void BigEnemy::Update(const float aDeltaTime)
 
 	if (GetProperty<int>(ePropertyValues::eLife) > 0)
 	{
-		GameObject* player = GameObjectManager::GetInstance()->GetClosestWithName("player");
+		GameObject* player = GameObjectManager::GetInstance()->GetFirstWithName("player");
 		assert(player != nullptr && "Player not found!");
 		ChangeProperty<bool>(PropertyKey::eFacingRight) = player->GetPhysicBody().GetPosition().myX > myPhysicBody->GetPosition().myX;
 		if (player->GetPhysicBody().GetPosition().myX < myPhysicBody->GetPosition().myX)
@@ -40,7 +40,7 @@ void BigEnemy::Update(const float aDeltaTime)
 
 			ChangeProperty<bool>(ePropertyValues::eAlive) = false;
 			GetPhysicBody().SetIsKinetic(true);
-			Map& map = Megaton::GetInstance().GetMap();
+			MapChunk& map = Megaton::GetInstance().GetMap();
 
 			constexpr size_t dropAmounth = 250;
 			for (size_t drop = 0; drop < dropAmounth; drop++)
@@ -57,7 +57,7 @@ void BigEnemy::Update(const float aDeltaTime)
 				Delete();
 			}
 
-			Map& map = Megaton::GetInstance().GetMap();
+			MapChunk& map = Megaton::GetInstance().GetMap();
 			constexpr size_t dropAmounth = 5;
 			for (size_t drop = 0; drop < dropAmounth; drop++)
 			{

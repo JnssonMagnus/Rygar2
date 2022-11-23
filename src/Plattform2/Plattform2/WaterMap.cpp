@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "WaterMap.h"
-#include "Map.h"
+#include "MapChunk.h"
 #include "PhysicBody.h"
 #include "player.h"
+#include "Megaton.h"
 #include <commonUtils.h>
 
 constexpr unsigned char MAX_WATERLEVEL = 255_uc;
@@ -15,12 +16,13 @@ WaterMap::WaterMap()
 	myPlayerWaterHitFreq = 0;
 }
 
-void WaterMap::Init(Map& aMap)
+void WaterMap::Init(MapChunk& aMap)
 {
 	DL_ASSERT(myMap == nullptr && "WaterMap already initiated!");
 	myMap = &aMap;
 	myMapWidth = myMap->GetMapWidth();
 	myMapHeight = myMap->GetMapHeight();
+	myWorldPosition = myMap->GetWorldPosition();
 
 	myWaterSprite.Init("data/gfx/water.png");
 	myDropSprite.Init("data/gfx/waterDrop.png");
@@ -36,9 +38,9 @@ void WaterMap::Draw(const Vector2f& aCameraPosition)
 	DrawDrops(aCameraPosition);
 	const Vector2<int>& tileSize = myMap->GetTileSize();
 
-	int startTileX = (aCameraPosition.myX - (SCREEN_WIDTH / 2.f) + 0.5f) / tileSize.myX;
+	int startTileX = (aCameraPosition.myX - myWorldPosition.x - (SCREEN_WIDTH / 2.f) + 0.5f) / tileSize.myX;
 	int endTileX = startTileX + (SCREEN_WIDTH / tileSize.myX) + 1;
-	int startTileY = (aCameraPosition.myY - (SCREEN_HEIGHT / 2.f) + 0.5f) / tileSize.myY;
+	int startTileY = (aCameraPosition.myY - myWorldPosition.y - (SCREEN_HEIGHT / 2.f) + 0.5f) / tileSize.myY;
 	int endTileY = startTileY + (SCREEN_HEIGHT / tileSize.myY) + 1;
 
 	startTileX = MAX(0, startTileX);
@@ -54,7 +56,8 @@ void WaterMap::Draw(const Vector2f& aCameraPosition)
 			if (waterLevel > 0_uc)
 			{
 				int waterHeight = tileSize.myY * (waterLevel / static_cast<float>(MAX_WATERLEVEL));
-				const Vector2f pos(x * tileSize.myX, y * tileSize.myY + (tileSize.myY - waterHeight));
+				Vector2f pos(x * tileSize.myX, y * tileSize.myY + (tileSize.myY - waterHeight));
+				pos += myWorldPosition;
 				const Vector2<int> size(tileSize.myX, waterHeight);
 				myWaterSprite.Draw(pos, size);
 			}
@@ -62,91 +65,31 @@ void WaterMap::Draw(const Vector2f& aCameraPosition)
 	}
 }
 
-void WaterMap::Update(const Player& aPlayer)
+void WaterMap::Update()
 {
-	//for (int node = myMapWidth * myMapHeight - 1; node >= 0; node--)
 	for (int i = myActiveTiles.Size() - 1; i >= 0; --i)
 	{
 		const int node = myActiveTiles[i];
 		if (myWaterLevel[node] > 0_uc)
 		{
-			// transfer water to node under
-			if (myMap->Collided(node + myMapWidth) == false && myWaterLevel[node + myMapWidth] < MAX_WATERLEVEL && myWaterLevel[node + myMapWidth] > 0_uc)
-			{
-				constexpr int maxDropsToFallFromAbove = 10;
-				int drops = maxDropsToFallFromAbove;
-				drops = MIN(drops, myWaterLevel[node]);
-				while (drops-- > 0 && myWaterLevel[node + myMapWidth] < MAX_WATERLEVEL)
-				{
-					RemoveWaterFromNode(1, node);
-					AddWaterToNode(1, node + myMapWidth);
-				}
+			if ((node / myMapWidth + 0.5f) >= myMapHeight - 1) {
+
 			}
-			// emtpy under, make drops fall down
-			if (myMap->Collided(node + myMapWidth) == false && myWaterLevel[node + myMapWidth] == 0_uc)
-			{
-				constexpr int maxDropsToFallFromAbove = 10;
-				int drops = rand() % maxDropsToFallFromAbove + 1;
-				drops = MIN(drops, myWaterLevel[node]);
-				while (drops-- > 0)
-				{
-					const Vector2<int>& tileSize = myMap->GetTileSize();
-					float x = (node + myMapWidth) % myMapWidth;
-					x *= tileSize.myX;
-					x += rand() % tileSize.myX;
-
-					float y = (node) / myMapWidth;
-					y *= tileSize.myY;
-					y += tileSize.myY;
-
-					RemoveWaterFromNode(1, node);
-
-					AddDrop({ x, y }, { 0.f, 0.f });
-				}
-			}
-			// make drops at sides
-			else if (myWaterLevel[node] > 0_uc)
-			{
-				float amount = static_cast<float>(myWaterLevel[node]) / MAX_WATERLEVEL;
-				int drops = rand() % (static_cast<int>(amount * 20.f) + 1);
-				drops = MIN(drops, myWaterLevel[node]);
-				while (drops-- > 0)
-				{
-					int randDir = (((rand() % 2) * 2) - 1);
-					if (myMap->Collided(node + randDir + myMapWidth) == false &&
-						myMap->Collided(node + randDir) == false &&
-						myWaterLevel[node + randDir + myMapWidth] < MAX_WATERLEVEL)
-					{
-						const Vector2<int>& tileSize = myMap->GetTileSize();
-						float x = (node + randDir + myMapWidth) % myMapWidth;
-						x *= tileSize.myX;
-						if (randDir == 1)
-							x += 1;
-						else
-							x += tileSize.myX - 2.f;
-
-						float y = (node + randDir) / myMapWidth;
-						y *= tileSize.myY;
-						y += myMap->GetTileSize().myY + myDropSprite.GetSize().myY / 2.f;
-
-						y -= rand() % static_cast<int>(tileSize.myY * amount);
-
-						RemoveWaterFromNode(1, node);
-						AddDrop({ x, y }, { static_cast<float>((randDir * 10.f * amount) / (4.f + rand() % 13)), 0 });
-					}
-					else if (myMap->Collided(node + randDir) == false && myWaterLevel[node + randDir] < myWaterLevel[node] && myWaterLevel[node + randDir] < MAX_WATERLEVEL)
-					{
-						RemoveWaterFromNode(1, node);
-						AddWaterToNode(1, node + randDir);
-					}
-				}
+			else {
+				TransferWaterInsideChunk(node);
 			}
 		}
 	}
 
+	UpdateDrops();
+	TranferOutsideDropsToChunk();
+
+}
+
+void WaterMap::UpdatePlayerCollision(const Player& aPlayer)
+{
 	PlayerWading(aPlayer);
 	CollideDropsVsPlayer(aPlayer);
-	UpdateDrops();
 }
 
 void WaterMap::ResolveWaterCollision(PhysicBody& aPhysicBody)
@@ -163,12 +106,112 @@ unsigned char WaterMap::GetWaterLevelAtPoint(const Vector2f& aWorldPosition) con
 	const int nodeX = aWorldPosition.myX / myMap->GetTileSize().myX;
 	const int nodeY = aWorldPosition.myY / myMap->GetTileSize().myY;
 	const int node = nodeX + nodeY * myMapWidth;
-
+	if (node > myWaterLevel.Size()) {
+		return 0;
+	}
 	const unsigned char waterLevel = myWaterLevel[node];
 	const float topTilePos = static_cast<int>(nodeY) * myMap->GetTileSize().myY;
 	const float waterYPos = topTilePos + myMap->GetTileSize().myY - ((waterLevel / static_cast<float>(MAX_WATERLEVEL)) * static_cast<float>(myMap->GetTileSize().myY));
 
 	return myWaterLevel[node] * static_cast<int>(aWorldPosition.myY >= waterYPos);
+}
+
+void WaterMap::TranferOutsideDropsToChunk()
+{
+	Megaton& megaton = Megaton::GetInstance();
+	for (int dropIndex = myDrops.Size() - 1; dropIndex >= 0 ; dropIndex--) {
+
+		if (IsOutsideChunk(myDrops[dropIndex].myPosition)) {
+			MapChunk* chunkToTransferTo = megaton.GetMapChunk(myDrops[dropIndex].myPosition);
+			if (chunkToTransferTo) {
+				chunkToTransferTo->AddWaterDrop(myDrops[dropIndex].myPosition, myDrops[dropIndex].myVelocity);
+			}
+			myDrops.RemoveCyclicAtIndex(dropIndex);
+		}
+	}
+}
+
+bool WaterMap::IsOutsideChunk(const Vector2f& aPosition) const
+{
+	const int nodeIndex = GetNodeIndex(aPosition);
+	return nodeIndex < 0 || nodeIndex >= myWaterLevel.Size();
+}
+
+void WaterMap::TransferWaterInsideChunk(const int aNodeIndex)
+{
+	// transfer water to node under
+	if (myMap->Collided(aNodeIndex + myMapWidth) == false && myWaterLevel[aNodeIndex + myMapWidth] < MAX_WATERLEVEL && myWaterLevel[aNodeIndex + myMapWidth] > 0_uc)
+	{
+		constexpr int maxDropsToFallFromAbove = 10;
+		int drops = maxDropsToFallFromAbove;
+		drops = MIN(drops, myWaterLevel[aNodeIndex]);
+		while (drops-- > 0 && myWaterLevel[aNodeIndex + myMapWidth] < MAX_WATERLEVEL)
+		{
+			RemoveWaterFromNode(1, aNodeIndex);
+			AddWaterToNode(1, aNodeIndex + myMapWidth);
+		}
+	}
+	// emtpy under, make drops fall down
+	if (myMap->Collided(aNodeIndex + myMapWidth) == false && myWaterLevel[aNodeIndex + myMapWidth] == 0_uc)
+	{
+		constexpr int maxDropsToFallFromAbove = 10;
+		int drops = rand() % maxDropsToFallFromAbove + 1;
+		drops = MIN(drops, myWaterLevel[aNodeIndex]);
+		while (drops-- > 0)
+		{
+			const Vector2<int>& tileSize = myMap->GetTileSize();
+			float x = (aNodeIndex + myMapWidth) % myMapWidth;
+			x *= tileSize.myX;
+			x += rand() % tileSize.myX;
+
+			float y = (aNodeIndex) / myMapWidth;
+			y *= tileSize.myY;
+			y += tileSize.myY;
+
+			RemoveWaterFromNode(1, aNodeIndex);
+
+			AddDrop(Vector2f(x, y) + myWorldPosition, { 0.f, 0.f });
+		}
+	}
+	// make drops at sides
+	else if (myWaterLevel[aNodeIndex] > 0_uc)
+	{
+		float amount = static_cast<float>(myWaterLevel[aNodeIndex]) / MAX_WATERLEVEL;
+		int drops = rand() % (static_cast<int>(amount * 20.f) + 1);
+		drops = MIN(drops, myWaterLevel[aNodeIndex]);
+		while (drops-- > 0)
+		{
+			int randDir = (((rand() % 2) * 2) - 1);
+			// down to side is free, create drop
+			if (myMap->Collided(aNodeIndex + randDir + myMapWidth) == false &&
+				myMap->Collided(aNodeIndex + randDir) == false &&
+				myWaterLevel[aNodeIndex + randDir + myMapWidth] < MAX_WATERLEVEL)
+			{
+				const Vector2<int>& tileSize = myMap->GetTileSize();
+				float x = (aNodeIndex + randDir + myMapWidth) % myMapWidth;
+				x *= tileSize.myX;
+				if (randDir == 1)
+					x += 1;
+				else
+					x += tileSize.myX - 2.f;
+
+				float y = (aNodeIndex + randDir) / myMapWidth;
+				y *= tileSize.myY;
+				y += myMap->GetTileSize().myY + myDropSprite.GetSize().myY / 2.f;
+
+				y -= rand() % (static_cast<int>(tileSize.myY * amount) + 1);
+
+				RemoveWaterFromNode(1, aNodeIndex);
+				AddDrop(Vector2f(x, y) + myWorldPosition, { static_cast<float>((randDir * 10.f * amount) / (4.f + rand() % 13)), 0 });
+			}
+			// 
+			else if (myMap->Collided(aNodeIndex + randDir) == false && myWaterLevel[aNodeIndex + randDir] < myWaterLevel[aNodeIndex] && myWaterLevel[aNodeIndex + randDir] < MAX_WATERLEVEL)
+			{
+				RemoveWaterFromNode(1, aNodeIndex);
+				AddWaterToNode(1, aNodeIndex + randDir);
+			}
+		}
+	}
 }
 
 bool WaterMap::TryTakeWater(const unsigned char aAmount, const Vector2f& aWorldPosition)
@@ -181,6 +224,22 @@ bool WaterMap::TryTakeWater(const unsigned char aAmount, const Vector2f& aWorldP
 	if (myWaterLevel[node] >= aAmount)
 	{
 		RemoveWaterFromNode(aAmount, node);
+		return true;
+	}
+
+	return false;
+}
+
+bool WaterMap::AddToWaterLevel(const unsigned char aAmount, const Vector2f& aWorldPosition)
+{
+	const int nodeX = static_cast<int>((aWorldPosition.myX - myWorldPosition.myX) / this->myMap->GetTileSize().myX);
+	const int nodeY = static_cast<int>((aWorldPosition.myY - myWorldPosition.myY) / this->myMap->GetTileSize().myY);
+
+	const int node = nodeX + nodeY * myMapWidth;
+	assert(node < myWaterLevel.Size() && "Tried to take water outside of map!");
+	if (myWaterLevel[node] < MAX_WATERLEVEL)
+	{
+		this->AddWaterToNode(aAmount, node);
 		return true;
 	}
 
@@ -232,7 +291,7 @@ void WaterMap::SplashWater(PhysicBody& aPhysicBody)
 				for (int dropCount = 0; dropCount < bottomWaterLevel / 2; dropCount++)
 				{
 					Vector2f dropCreationPos(middleBottom.myX + CU::RandomF(-8.f, 8.f), waterYPos);
-					AddDrop(dropCreationPos, { CU::RandomF(-1.3f, 1.3f), CU::RandomF(-6.f, -4.f) });
+					AddDrop(dropCreationPos + myWorldPosition, { CU::RandomF(-1.3f, 1.3f), CU::RandomF(-6.f, -4.f) });
 				}
 			}
 		}
@@ -244,7 +303,7 @@ void WaterMap::SplashWater(PhysicBody& aPhysicBody)
 			for (int dropCount = 0; dropCount < drops; dropCount++)
 			{
 				Vector2f dropCreationPos(middleBottom.myX + CU::RandomF(-8.f, 8.f), middleBottom.myY);
-				AddDrop(dropCreationPos, Vector2f(CU::RandomF(-0.5f, 0.5f), CU::RandomF(-2.f, 1.f)) + aPhysicBody.GetVelocity() / 2.f);
+				AddDrop(dropCreationPos + myWorldPosition, Vector2f(CU::RandomF(-0.5f, 0.5f), CU::RandomF(-2.f, 1.f)) + aPhysicBody.GetVelocity() / 2.f);
 			}
 		}
 	}
@@ -321,7 +380,7 @@ void WaterMap::PlayerWading(const Player& aPlayer)
 				if (from > to)
 					std::swap(from, to);
 				int y = GetWaterYFromPosition(point);
-				AddDrop(Vector2f(point.myX, y), { CU::RandomF(from, to), CU::RandomF(-4.f, -1.f) });
+				AddDrop(Vector2f(point.myX, y) + myWorldPosition, { CU::RandomF(from, to), CU::RandomF(-4.f, -1.f) });
 			}
 
 			PostMaster::GetInstance()->SendSoundEvent("waterWade");
@@ -344,34 +403,42 @@ void WaterMap::UpdateDrops()
 
 	for (int dropIndex = myDrops.Size()-1; dropIndex >= 0; dropIndex--)
 	{
-		int nodeIndex = GetNodeIndex(myDrops[dropIndex].myPosition);
+		int nodeIndex = GetNodeIndex(myDrops[dropIndex].myPosition - myWorldPosition);
 
 		// Remove drops outsize of map
 		if (nodeIndex > myWaterLevel.Size() || nodeIndex < 0)
 		{
-			myDrops.RemoveCyclicAtIndex(dropIndex);
+			//myDrops.RemoveCyclicAtIndex(dropIndex);
 		}
 		else if (myWaterLevel[nodeIndex] > 0_uc)
 		{
 			// Check if drop has reached waterlevel at current node
 			const int waterHeight = (myWaterLevel[nodeIndex] / 255.f) * myMap->GetTileSize().myY;
-			if (myDrops[dropIndex].myVelocity.myY + (static_cast<int>(myDrops[dropIndex].myPosition.myY) % myMap->GetTileSize().myY) + waterHeight > myMap->GetTileSize().myY)
+			if (myDrops[dropIndex].myVelocity.myY + (static_cast<int>(myDrops[dropIndex].myPosition.myY - myWorldPosition.myY) % myMap->GetTileSize().myY) + waterHeight > myMap->GetTileSize().myY)
 			{
-				myDrops.RemoveCyclicAtIndex(dropIndex);
 				int levelToFill = nodeIndex;
-				while (myWaterLevel[levelToFill] == MAX_WATERLEVEL)
+				while (levelToFill >= 0 && myWaterLevel[levelToFill] == MAX_WATERLEVEL)
 				{
 					levelToFill -= myMapWidth;
 				}
-				if (levelToFill > myMapWidth)
+				if (levelToFill >= 0) {
 					AddWaterToNode(1, levelToFill);
+				}
+				else {
+					const Vector2f position((levelToFill % myMapWidth) * myMap->GetTileSize().x, (levelToFill / myMapWidth) * myMap->GetTileSize().y);
+					MapChunk* chunkToTransferTo = Megaton::GetInstance().GetMapChunk(position);
+					if (chunkToTransferTo) {
+						chunkToTransferTo->AddToWaterLevel(1, position + myWorldPosition);
+					}
+				}
+				myDrops.RemoveCyclicAtIndex(dropIndex);
 			}
 		}
 		// No water existed at node, check if node was obstacle and land drop there
 		else if (myMap->Collided(nodeIndex) == true && nodeIndex >= myMapWidth)
 		{
 			// Hit was from side?
-			int previousNodeIndex = GetNodeIndex(myDrops[dropIndex].myPosition - Vector2f(myDrops[dropIndex].myVelocity.myX, 0.f));
+			int previousNodeIndex = GetNodeIndex(myDrops[dropIndex].myPosition - Vector2f(myDrops[dropIndex].myVelocity.myX, 0.f) - myWorldPosition);
 			if (abs(nodeIndex - previousNodeIndex) == 1)
 			{
 				myDrops[dropIndex].myPosition.myX -= myDrops[dropIndex].myVelocity.myX;
@@ -408,7 +475,7 @@ void WaterMap::DrawDrops(const Vector2f& aCameraPosition)
 	}
 }
 
-void WaterMap::AddDrop(const Vector2f& aPosition, const Vector2f& aForce)
+void WaterMap::AddDrop(const Vector2f& aWorldPosition, const Vector2f& aForce)
 {
-	myDrops.Add({ aPosition, aForce });
+	myDrops.Add({ aWorldPosition, aForce });
 }

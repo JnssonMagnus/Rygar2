@@ -37,9 +37,18 @@ public:
 	const Stats&				GetStats() const;
 
 private:
+	void						UpdateHook(const float aDeltaTime);
+	void						UpdatePickedUpObject();
+	void						PlayLandOnGroundSound();
+	void						UpdateWeapon(const float aDeltaTime);
+	void						UpdateSoundListenerPosition();
+
 	void						CycleWeapons(int aCycleValue);
 	void						AddWeapons();
 	bool						IsAboveEnemy(const GameObject* const aGameObject) const;
+
+	bool						IsHinderedFromMoving() const;
+	bool						IsAttacking() const;
 
 	Aim							myAim;
 	Stats						myStats;

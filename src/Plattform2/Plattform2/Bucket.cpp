@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Bucket.h"
-#include "Map.h"
+#include "MapChunk.h"
 #include "Megaton.h"
 #include "player.h"
 
@@ -12,7 +12,7 @@ Bucket::Bucket()
 
 bool Bucket::Use(Player& aPlayer)
 {
-	Map& map = Megaton::GetInstance().GetMap();
+	MapChunk& map = Megaton::GetInstance().GetMap();
 
 	if (myWaterAmount < myWaterCapacity)
 	{
@@ -34,7 +34,7 @@ void Bucket::EmptyBucket()
 		Vector2f pos = myPhysicBody->GetMiddleTop();
 		pos.myX += (rand() % static_cast<int>(myPhysicBody->GetHalfSize().myX)) - (rand() % static_cast<int>(myPhysicBody->GetHalfSize().myX));
 		Vector2f force = Vector2f((rand() % 100) / 50.f - (rand() % 100) / 50.f, -5 - (rand() % 100) / 20.f);
-		Map& map = Megaton::GetInstance().GetMap();
+		MapChunk& map = Megaton::GetInstance().GetMap();
 		map.AddWaterDrop(pos, force);
 	}
 }

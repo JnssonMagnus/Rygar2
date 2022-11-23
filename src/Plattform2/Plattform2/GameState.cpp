@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "GameState.h"
 #include "PlayerCamera.h"
-#include "Map.h"
-#include "Tileset.h"
 #include "GameObjectManager.h"
 #include "Megaton.h"
 #include "GameOverState.h"
 #include "StateStackProxy.h"
 #include "player.h"
+#include "CollisionBoxDrawerVisitor.h"
+#include "World.h"
+#include "MapChunk.h"
 #include <InputMapper.h>
 
 void GameState::InitState()
@@ -26,17 +27,20 @@ void GameState::InitState()
 
 	Megaton::GetInstance().SetGameObjectFactory(myGameObjectFactory);
 
-	myMap = new Map();
-	myMap->LoadFromFile(std::string(gDataPath) + "data/testLevel.lvl");
-	myMap->Init(myTilesets);
+	myWorld = new World();
 		
-	Megaton::GetInstance().SetMap(myMap);
+	Megaton::GetInstance().SetWorld(myWorld);
 
 	InitKeybindings();
 
 	myPlayer = dynamic_cast<Player*>(myGameObjectFactory.CreateObject(eGameObjectTypes::ePlayer));
 	myPlayerCamera = new PlayerCamera(myPlayer);
 	GameObjectManager::GetInstance()->AddGameObject(myPlayer);
+	GameObjectManager::GetInstance()->AddAndRemoveObjects();
+
+	myIngameDebugDraw.Init(myPlayerCamera);
+
+	InitPlayerStartPosition();
 
 	Message pushCameraMessage(eMessageTypes::ePushCamera);
 	pushCameraMessage.myVoidPointer = myPlayerCamera;		
@@ -58,18 +62,35 @@ void GameState::InitState()
 eStateStatus GameState::Update(const float aDeltaTime)
 {	
 	// Map collisions
-	myMap->Collided(myPlayer->GetPhysicBody());		
+	auto mapChunksWithPlayer = myWorld->GetMapChunks(myPlayer->GetPhysicBody().GetPosition(), myPlayer->GetPhysicBody().GetHalfSize());
+	for (auto mapChunk : mapChunksWithPlayer)
+	{
+		mapChunk->Collided(myPlayer->GetPhysicBody());
+		mapChunk->UpdatePlayerVsWaterCollisions(*myPlayer);
+	}
+
+	auto mapChunksOnScreen = myWorld->GetMapChunks(myPlayerCamera->GetPosition(), Vector2<int>(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
+	for (auto mapChunk : mapChunksOnScreen)
+	{
+		mapChunk->UpdateWaterMovement();
+	}
+
+
 	const auto& gameObjects = GameObjectManager::GetInstance()->GetGameObjects();
 	for (int gameObjectIndex = 0; gameObjectIndex < gameObjects.Size(); gameObjectIndex++)
 	{
-		eCollisionPoint collisionPoint = eCollisionPoint::eNoCollision;
-		collisionPoint = myMap->Collided(gameObjects[gameObjectIndex]->GetPhysicBody());
-		if (collisionPoint != eCollisionPoint::eNoCollision)	
+		auto mapChunks = myWorld->GetMapChunks(gameObjects[gameObjectIndex]->GetPhysicBody().GetPosition(), gameObjects[gameObjectIndex]->GetPhysicBody().GetHalfSize());
+		for (auto mapChunk : mapChunks)
 		{
-			gameObjects[gameObjectIndex]->CollideWithTile(collisionPoint);
+			eCollisionPoint collisionPoint = eCollisionPoint::eNoCollision;
+			collisionPoint = mapChunk->Collided(gameObjects[gameObjectIndex]->GetPhysicBody());
+			if (collisionPoint != eCollisionPoint::eNoCollision)
+			{
+				gameObjects[gameObjectIndex]->CollideWithTile(collisionPoint);
+			}
 		}
 	}
-	myMap->Update(*myPlayer);
+
 
 	if (myPlayer->GetStats().GetStat(eStats::eHealth) <= 0.f)
 	{
@@ -81,12 +102,21 @@ eStateStatus GameState::Update(const float aDeltaTime)
 
 void GameState::Render(const float aDeltaTime)
 {
+	DebugRender();
 	// Render stuff
 	myParallaxBackground.Render(myPlayerCamera->GetPosition());
 	GameObjectManager::GetInstance()->DrawGameObjects(*myPlayerCamera);
-	myMap->Draw(myPlayerCamera->GetPosition(), myPlayerCamera->GetZoom());
-	myMap->DrawWater(myPlayerCamera->GetPosition());
-	myMap->DebugDraw(myPlayerCamera->GetPosition());
+	auto mapChunks = myWorld->GetMapChunks(myPlayerCamera->GetPosition(), Vector2<int>(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
+	for (auto mapChunk : mapChunks) {
+		mapChunk->Draw(myPlayerCamera->GetPosition(), myPlayerCamera->GetZoom());
+		mapChunk->DrawWater(myPlayerCamera->GetPosition());
+		mapChunk->DebugDraw(myPlayerCamera->GetPosition());
+	}
+}
+
+void GameState::DebugRender()
+{
+	myIngameDebugDraw.DebugDraw();	
 }
 
 void GameState::RecieveMessage(const Message& aMessage)
@@ -151,4 +181,11 @@ void GameState::LoadTilesets(const std::string_view aTilesetDatafile)
 	}
 
 	tilesetLoader.close();
+}
+
+void GameState::InitPlayerStartPosition()
+{
+	auto playerSpawn = GameObjectManager::GetInstance()->GetFirstWithName("playerSpawn");
+	if (playerSpawn != nullptr)
+		myPlayer->SetPosition(playerSpawn->GetPhysicBody().GetPosition());
 }

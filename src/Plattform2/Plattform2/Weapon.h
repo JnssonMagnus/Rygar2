@@ -17,7 +17,7 @@ public:
 	virtual void	Init();
 	float			GetPercentageAmmoLeft() const;
 	void			SetOffsetPosition(const Vector2f& aOffset);
-	const Vector2f& GetOffsetPosition() const;
+	const Vector2f& GetPosition() const;
 	eWeaponStatus	GetWeaponStatus() const;
 
 protected:

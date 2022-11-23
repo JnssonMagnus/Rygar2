@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Sink.h"
 #include "Megaton.h"
-#include "map.h"
+#include "MapChunk.h"
 
 Sink::Sink()
 {

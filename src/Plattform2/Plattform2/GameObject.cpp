@@ -3,6 +3,7 @@
 #include "physicbody.h"
 #include "PhysicManager.h"
 #include "GameObjectType.h"
+#include "Visitor.h""
 
 GameObject::GameObject(const GameObject& aGameObject)
 {

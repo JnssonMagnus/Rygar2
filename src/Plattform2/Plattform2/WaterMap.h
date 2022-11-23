@@ -5,18 +5,20 @@
 
 class PhysicBody;
 
-class Map;
+class MapChunk;
 class Player;
 
 class WaterMap
 {
 public:
 									WaterMap();
-	void							Init(Map& aMap);
+	void							Init(MapChunk& aMap);
 	void							Draw(const Vector2f& aCameraPosition);
-	void							Update(const Player& aPlayer);
+	void							Update();
+	void							UpdatePlayerCollision(const Player& aPlayer);
 	void							ResolveWaterCollision(PhysicBody& aPhysicBody);
 	bool							TryTakeWater(const unsigned char aAmount, const Vector2f& aWorldPosition);
+	bool							AddToWaterLevel(const unsigned char aAmount, const Vector2f& aWorldPosition);
 	void							AddDrop(const Vector2f& aPosition, const Vector2f& aForce);
 
 private:
@@ -37,16 +39,19 @@ private:
 	void							UpdateDrops();
 	void							DrawDrops(const Vector2f& aCameraPosition);
 	unsigned char					GetWaterLevelAtPoint(const Vector2f& aWorldPosition) const;
+	void							TranferOutsideDropsToChunk();
+	bool							IsOutsideChunk(const Vector2f& aPosition) const;
+	void							TransferWaterInsideChunk(const int aNodeIndex);
 
 	CU::GrowingArray<int>			myActiveTiles;
 	CU::GrowingArray<WaterDrop>		myDrops;
 	CU::GrowingArray<unsigned char>	myWaterLevel;
-	Map*							myMap;
+	Vector2f						myWorldPosition;
+	MapChunk*						myMap;
 	Sprite							myWaterSprite;
 	Sprite							myDropSprite;
 	int								myMapWidth;
 	int								myMapHeight;
-
 	int								myPlayerWaterHitFreq;
 };
 

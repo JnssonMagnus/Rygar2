@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Seed.h"
 #include "Megaton.h"
-#include "Map.h"
+#include "MapChunk.h"
 #include "Player.h"
 #include "GameObjectTypes.h"
 #include <postmaster/postmaster.h>

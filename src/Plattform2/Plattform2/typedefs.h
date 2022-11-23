@@ -1,4 +1,9 @@
 #pragma once
+template<class T>
+class Vector3;
+struct FontResource;
+
+
 typedef Vector3<unsigned char> Color;
 
 template<class T>

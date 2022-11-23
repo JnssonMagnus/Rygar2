@@ -252,5 +252,55 @@ namespace PlatformEditor
         {
             UpdateCollisionTags();
         }
+
+        private void AddVaribleBtn_Click(object sender, EventArgs e)
+        {
+            string name = "";
+            DialogResult result = Utilities.InputBox("New custom variable", "Choose a unique variable name", ref name);
+            if (result == DialogResult.OK)
+            {
+                if (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables.Contains(new VariableType(name)) == true)
+                {
+                    MessageBox.Show("Error! A variable with that name already exists!", "Error!", MessageBoxButtons.OK);
+                    return;
+                }
+
+                VariableType variableType = new VariableType(name);
+                variableType.defaultValue = 0.0f;
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables.Add(variableType);
+
+                int index = VariableGrid.Rows.Add(variableType.name);
+                VariableGrid.Rows[index].Cells["value"].Value = variableType.defaultValue;
+
+                //VariableListBox.Items.Add(name);
+                //VariableDefaultValue.Value = 0;
+            }
+        }
+
+        private void RemoveVariableBtn_Click(object sender, EventArgs e)
+        {
+            if (VariableListBox.SelectedItem != null)
+            {
+                int index = VariableListBox.SelectedIndex;
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables.RemoveAt(index);
+                VariableListBox.Items.RemoveAt(index);
+            }
+        }
+
+        private void VariableListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (VariableListBox.SelectedItem != null)
+            {
+                VariableDefaultValue.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables[VariableListBox.SelectedIndex].defaultValue;
+            }
+        }
+
+        private void VariableDefaultValue_ValueChanged(object sender, EventArgs e)
+        {
+            if (VariableListBox.SelectedItem != null)
+            {
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables[VariableListBox.SelectedIndex].defaultValue = (float)VariableDefaultValue.Value;
+            }
+        }
     }
 }

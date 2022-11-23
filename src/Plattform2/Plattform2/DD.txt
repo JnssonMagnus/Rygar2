@@ -1,3 +1,13 @@
+Prio:
+- Sammanhängande (oänlig) karta
+	- Kamera som låser sig
+	+ Map chunks
+		+ Chunk har layers med texture
+		+ Kolla vilka chunk något kolliderar med
+			+ Max chunks: 4
+
+
+
 Rygar features:
 - crossbow
 - hook

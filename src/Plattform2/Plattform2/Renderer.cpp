@@ -6,6 +6,7 @@
 #include "camera.h"
 #include "particle.h"
 #include "ParticleEmitter.h"
+#include "DebugDrawer.h"
 #include <SDL.h>
 #include <SDL_TTF.h>
 
@@ -25,6 +26,7 @@ void Renderer::Init()
 	SDL_SetRenderTarget(mySDL_Pointers.myRenderer, myRenderTarget);
 	Sprite::SetRenderer(this);
 	Text::SetRenderer(this);
+	DebugDrawer::SetRenderer(*this);
 	PostMaster::GetInstance()->Register(this, eMessageTypes::ePushCamera);
 	PostMaster::GetInstance()->Register(this, eMessageTypes::ePopCamera);
 }
@@ -42,6 +44,15 @@ void Renderer::AddGUIRenderCommand(const Vector2f& aDstPos, const Vector2<int>& 
 void Renderer::AddPSRenderCommand(const PSRenderCommand& aPSRenderCommand)
 {
 	myPSRenderCommands[1].Add(aPSRenderCommand);
+}
+
+void Renderer::AddDebugLine(const Vector2<int>& aStart, const Vector2<int>& aEnd)
+{
+	LineRenderCommand debugLineCommand;
+	debugLineCommand.myStart = aStart;
+	debugLineCommand.myEnd = aEnd;
+	debugLineCommand.myColor = { 255, 255, 255 };
+	myDebugLines[1].Add(debugLineCommand);
 }
 
 void Renderer::AddRenderCommand(RenderCommand& aRenderCommand)
@@ -65,6 +76,7 @@ void Renderer::Draw()
 
 	DrawSprites();
 	DrawParticleSystems();
+	DrawDebugLines();
 	DrawGUISprites();
 	DrawText();
 
@@ -82,11 +94,13 @@ void Renderer::SwapRenderBuffer()
 	myTextRenderCommands[0].Clear();
 	myGUIRenderCommands[0].Clear();
 	myPSRenderCommands[0].Clear();
+	myDebugLines[0].Clear();
 
 	std::swap(myRenderCommands[0], myRenderCommands[1]);
 	std::swap(myTextRenderCommands[0], myTextRenderCommands[1]);
 	std::swap(myGUIRenderCommands[0], myGUIRenderCommands[1]);
 	std::swap(myPSRenderCommands[0], myPSRenderCommands[1]);
+	std::swap(myDebugLines[0], myDebugLines[1]);
 
 	myBufferedCameraPosition = myCameraStack.Top()->GetPosition();
 }
@@ -135,17 +149,6 @@ void Renderer::PopCamera()
 
 void Renderer::DrawParticleSystems()
 {
-	Vector2f cameraPos;
-	float cameraZoom = 1.f;
-
-	if (myCameraStack.Empty() == false)
-	{
-		cameraPos = myBufferedCameraPosition;// myCameraStack.Top()->GetPosition();
-		cameraPos.myX -= SCREEN_WIDTH / 2.f + 0.5f;
-		cameraPos.myY -= SCREEN_HEIGHT / 2.f + 0.5f;
-		cameraZoom = myCameraStack.Top()->GetZoom();
-	}
-
 	SDL_Rect dst;
 	SDL_Rect src;
 	src.x = src.y = 0;
@@ -160,13 +163,11 @@ void Renderer::DrawParticleSystems()
 		for (int particleIndex = 0; particleIndex < renderCommand.myParticles->Size(); particleIndex++)
 		{
 			const Particle& particle = (*renderCommand.myParticles)[particleIndex];
-			dst.x = static_cast<int>(particle.myPosition.myX - cameraPos.myX) - particle.mySize.myX / 2;
-			dst.y = static_cast<int>(particle.myPosition.myY - cameraPos.myY) - particle.mySize.myY / 2;
-
-			dst.x = ((dst.x - (SCREEN_WIDTH / 2.f + 0.5f)) * cameraZoom) + 0.5f + (SCREEN_WIDTH / 2.f + 0.5f);
-			dst.y = ((dst.y - (SCREEN_HEIGHT / 2.f + 0.5f)) * cameraZoom) + 0.5f + (SCREEN_HEIGHT / 2.f + 0.5f);
-			dst.w = (particle.mySize.myX * cameraZoom) + 0.5f;
-			dst.h = (particle.mySize.myY * cameraZoom) + 0.5f;
+			dst.x = static_cast<int>(particle.myPosition.myX) - particle.mySize.myX / 2;
+			dst.y = static_cast<int>(particle.myPosition.myY) - particle.mySize.myY / 2;
+			dst.w = particle.mySize.myX;
+			dst.h = particle.mySize.myY;
+			WorldPosToCameraSpace(dst, true);
 
 			SDL_SetTextureAlphaMod(texture, particle.myColor.myA * 255);
 			SDL_SetTextureColorMod(texture, particle.myColor.myR * 255, particle.myColor.myG * 255, particle.myColor.myB * 255);
@@ -175,33 +176,48 @@ void Renderer::DrawParticleSystems()
 	}
 }
 
+void Renderer::DrawDebugLines()
+{
+	for (int renderCommandIndex = 0; renderCommandIndex < myDebugLines[0].Size(); renderCommandIndex++)
+	{
+		LineRenderCommand& renderCommand = myDebugLines[0][renderCommandIndex];
+		SDL_SetRenderDrawColor(mySDL_Pointers.myRenderer, renderCommand.myColor.r, renderCommand.myColor.g, renderCommand.myColor.b, renderCommand.myAlpha);
+		SDL_Rect start = { renderCommand.myStart.x, renderCommand.myStart.y, 0.f, 0.f };
+		SDL_Rect end = { renderCommand.myEnd.x, renderCommand.myEnd.y, 0.f, 0.f };
+		WorldPosToCameraSpace(start, true);
+		WorldPosToCameraSpace(end, true);
+		SDL_RenderDrawLine(mySDL_Pointers.myRenderer, start.x, start.y, end.x, end.y);
+	}
+}
+
+void Renderer::WorldPosToCameraSpace(SDL_Rect& aWorldPos, const bool aUseZoom)
+{
+	const float cameraZoom = aUseZoom ? myCameraStack.Top()->GetZoom() : 1.f;
+	float fx, fy, fw, fh;
+	aWorldPos.x = fx = ((aWorldPos.x - myCameraStack.Top()->GetPosition().myX) * cameraZoom) + 0.5f + (SCREEN_WIDTH / 2.f + 0.5f);
+	aWorldPos.y = fy = ((aWorldPos.y - myCameraStack.Top()->GetPosition().myY) * cameraZoom) + 0.5f + (SCREEN_HEIGHT / 2.f + 0.5f);
+	aWorldPos.w = fw = (aWorldPos.w * cameraZoom) + 0.5f;
+	aWorldPos.h = fh = (aWorldPos.h * cameraZoom) + 0.5f;
+
+	float errorX = fx + fw - aWorldPos.x - aWorldPos.w;
+	float errorY = fy + fh - aWorldPos.y - aWorldPos.h;
+
+	aWorldPos.w += static_cast<int>(errorX > 0.5f);
+	aWorldPos.h += static_cast<int>(errorY > 0.5f);
+}
+
 void Renderer::DrawSprites()
 {
 	SDL_Rect dstRect;
 	SDL_Rect srcRect;
 	SDL_Point pivot;
 
-	Vector2f cameraPos;
-	float cameraZoom = 1.f;
-
-	if (myCameraStack.Empty() == false)
-	{
-		cameraPos = myBufferedCameraPosition;// myCameraStack.Top()->GetPosition();
-		cameraPos.myX -= SCREEN_WIDTH / 2.f + 0.5f;
-		cameraPos.myY -= SCREEN_HEIGHT / 2.f + 0.5f;
-	}
-
 	for (int renderCommandIndex = 0; renderCommandIndex < myRenderCommands[0].Size(); renderCommandIndex++)
 	{
 		const RenderCommand& renderCommand = myRenderCommands[0][renderCommandIndex];
 		
-		if (renderCommand.myOptions & RenderCommand::eRenderOptions::eNoZoom)
-			cameraZoom = 1.f;
-		else
-			cameraZoom = myCameraStack.Top()->GetZoom();
-
-		dstRect.x = static_cast<int>(renderCommand.myDstPos.myX - cameraPos.myX) - renderCommand.myPivot.myX;
-		dstRect.y = static_cast<int>(renderCommand.myDstPos.myY - cameraPos.myY) - renderCommand.myPivot.myY;
+		dstRect.x = static_cast<int>(renderCommand.myDstPos.myX) - renderCommand.myPivot.myX;
+		dstRect.y = static_cast<int>(renderCommand.myDstPos.myY) - renderCommand.myPivot.myY;
 		dstRect.w = renderCommand.myDstSize.myX;
 		dstRect.h = renderCommand.myDstSize.myY;
 
@@ -217,17 +233,7 @@ void Renderer::DrawSprites()
 
 		SDL_SetTextureAlphaMod(texture, renderCommand.myAlpha);
 
-		float fx, fy, fw, fh;
-		dstRect.x = fx = ((dstRect.x - (SCREEN_WIDTH / 2.f + 0.5f)) * cameraZoom) + 0.5f + (SCREEN_WIDTH / 2.f + 0.5f);
-		dstRect.y = fy = ((dstRect.y - (SCREEN_HEIGHT / 2.f + 0.5f)) * cameraZoom) + 0.5f + (SCREEN_HEIGHT / 2.f + 0.5f);
-		dstRect.w = fw = (dstRect.w * cameraZoom) + 0.5f;
-		dstRect.h = fh = (dstRect.h * cameraZoom) + 0.5f;
-
-		float errorX = fx + fw - dstRect.x - dstRect.w;
-		float errorY = fy + fh - dstRect.y - dstRect.h;
-		
-		dstRect.w += static_cast<int>(errorX > 0.5f);
-		dstRect.h += static_cast<int>(errorY > 0.5f);
+		WorldPosToCameraSpace(dstRect, !(renderCommand.myOptions & RenderCommand::eRenderOptions::eNoZoom));
 
 		SDL_RenderCopyEx(mySDL_Pointers.myRenderer, texture, &srcRect, &dstRect, 
 			(renderCommand.myAngle / (PI * 2.0) * 360.0), &pivot, static_cast<SDL_RendererFlip>(renderCommand.myOptions & RenderCommand::eRenderOptions::eFlipped));

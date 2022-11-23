@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Actor.h"
 #include "PhysicBody.h"
-#include "MAp.h"
+#include "MapChunk.h"
 #include "Megaton.h"
 
 void Actor::Init(GameObjectType& aGameObjectType)
@@ -34,7 +34,7 @@ void Actor::Damage(const int aDamage, const Vector2f& aContactPoint)
 	const int life = GetProperty<int>(ePropertyValues::eLife);
 	if (life > 0)
 	{
-		Map& map = Megaton::GetInstance().GetMap();
+		MapChunk& map = Megaton::GetInstance().GetMap();
 		for (size_t drop = 0; drop < myBloodHitAmount; drop++)
 		{
 			Vector2f dropOffset(-rand() % 20 + rand() % 20, -rand() % 20 + rand() % 20);

@@ -4,7 +4,7 @@
 #include "PhysicBody.h"
 #include "GameObjectManager.h"
 #include "Megaton.h"
-#include "map.h"
+#include "MapChunk.h"
 #include "TreeType.h"
 
 static constexpr int ROOT = 0;

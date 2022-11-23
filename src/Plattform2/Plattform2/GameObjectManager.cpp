@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "PhysicBody.h"
 #include "Camera.h"
+#include "Visitor.h"
 
 GameObjectManager* GameObjectManager::ourInstance = nullptr;
 
@@ -29,7 +30,7 @@ void GameObjectManager::DeleteGameObject(GameObject* aGameObject)
 		myGameObjectsToDelete.Add(aGameObject);
 }
 
-GameObject* GameObjectManager::GetClosestWithName(const std::string& aGameObject)
+GameObject* GameObjectManager::GetFirstWithName(const std::string& aGameObject)
 {
 	for (int gameObjectIndex = 0; gameObjectIndex < myGameObjects.Size(); gameObjectIndex++)
 	{

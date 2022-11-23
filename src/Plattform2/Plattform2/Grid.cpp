@@ -46,7 +46,7 @@ void Grid::Update()
 			for (int x = topLeft.myX; x < bottomRight.myX; x += myNodeSize.myX)
 			{
 				int nodeIndex = (x / myNodeSize.myX) + (y / myNodeSize.myY) * myGridSize.myX;
-				if (nodeIndex > 0 && nodeIndex < myNodes.Size())
+				if (nodeIndex >= 0 && nodeIndex < myNodes.Size())
 				{
 					myNodes[nodeIndex].Add(dweller);
 					myActiveNodes.emplace(nodeIndex);

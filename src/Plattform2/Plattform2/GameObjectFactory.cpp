@@ -102,6 +102,8 @@ GameObject* GameObjectFactory::CreateObject(const eGameObjectTypes aGameObjectTy
 		newGameObject = new BloodPortal(); break;
 	case eGameObjectTypes::eDisk:
 		newGameObject = new Disk(); break;
+	case eGameObjectTypes::ePlayerSpawn:
+		newGameObject = new GameObject();
 	default:
 		DL_ASSERT("Tried to create unknown object in factory!");
 	}
@@ -152,6 +154,8 @@ GameObjectType& GameObjectFactory::GetGameObjectType(const eGameObjectTypes aGam
 		nameToFind = "bloodPortal"; break;
 	case eGameObjectTypes::eDisk:
 		nameToFind = "disk"; break;
+	case eGameObjectTypes::ePlayerSpawn:
+		nameToFind = "playerSpawn"; break;
 	default:
 		nameToFind = "objectNotFound";
 	}
@@ -293,6 +297,11 @@ void GameObjectFactory::InitTypeIDToEnums()
 		{
 			myGameObjectTypeIDToEnum[gameObjectType.first] = eGameObjectTypes::eDisk;
 			myEnumToGameObjectTypeID[eGameObjectTypes::eDisk] = gameObjectType.first;
+		}
+		else if (gameObjectType.second.GetName() == "playerSpawn")
+		{
+			myGameObjectTypeIDToEnum[gameObjectType.first] = eGameObjectTypes::ePlayerSpawn;
+			myEnumToGameObjectTypeID[eGameObjectTypes::ePlayerSpawn] = gameObjectType.first;
 		}
 		else
 			DL_ASSERT(false && "game object name has no game object class");

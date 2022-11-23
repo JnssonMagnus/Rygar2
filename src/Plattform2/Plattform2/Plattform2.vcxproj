@@ -83,7 +83,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)..\build\</OutDir>
-    <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)..\temp\$(ProjectName)($Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <IncludePath>$(SolutionDir)external\lua-5.4.3\lua-5.4.3\src\;$(SolutionDir)WWiseSoundManager\WWiseSoundMan\;$(SolutionDir)CommonUtilities\;$(SolutionDir)external\SDL2_ttf-2.0.15\include;$(SolutionDir)external\SDL2_image-2.0.4\include;$(SolutionDir)external\SDL2-2.0.9\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)external\SDL2_ttf-2.0.15\lib\x64;$(SolutionDir)external\SDL2-2.0.9\lib\x64;$(SolutionDir)external\SDL2_image-2.0.4\lib\x64;$(LibraryPath)</LibraryPath>
@@ -174,6 +174,9 @@
     <ClCompile Include="Bucket.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CollisionBoxDrawerVisitor.cpp" />
+    <ClCompile Include="DataLoader.cpp" />
+    <ClCompile Include="DebugDrawer.cpp" />
     <ClCompile Include="Disk.cpp" />
     <ClCompile Include="DiskArmor.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -192,6 +195,7 @@
     <ClCompile Include="GrenadeLauncher.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Helpers.cpp" />
+    <ClCompile Include="IngameDebugDraw.cpp" />
     <ClCompile Include="LuaManager.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="ParticleEmitterBlueprint.cpp" />
@@ -203,7 +207,7 @@
     <ClCompile Include="Hammer.cpp" />
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapChunk.cpp" />
     <ClCompile Include="Megaton.cpp" />
     <ClCompile Include="ParallaxBackground.cpp" />
     <ClCompile Include="ParallaxLayer.cpp" />
@@ -244,7 +248,10 @@
     <ClInclude Include="Bucket.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CollisionBoxDrawerVisitor.h" />
     <ClInclude Include="CollisionPoint.h" />
+    <ClInclude Include="DataLoader.h" />
+    <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="Disk.h" />
     <ClInclude Include="DiskArmor.h" />
     <ClInclude Include="Enemy.h" />
@@ -264,6 +271,7 @@
     <ClInclude Include="GrenadeLauncher.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Helpers.h" />
+    <ClInclude Include="IngameDebugDraw.h" />
     <ClInclude Include="LuaManager.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleEmitter.h" />
@@ -276,7 +284,7 @@
     <ClInclude Include="GameObjectTypes.h" />
     <ClInclude Include="Hammer.h" />
     <ClInclude Include="Chain.h" />
-    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapChunk.h" />
     <ClInclude Include="Megaton.h" />
     <ClInclude Include="ParallaxBackground.h" />
     <ClInclude Include="ParallaxLayer.h" />
@@ -306,6 +314,7 @@
     <ClInclude Include="Tree.h" />
     <ClInclude Include="TreeType.h" />
     <ClInclude Include="typedefs.h" />
+    <ClInclude Include="Visitor.h" />
     <ClInclude Include="WaterMap.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="World.h" />

@@ -39,7 +39,7 @@ namespace SDL
 			{
 				screenSurface = SDL_GetWindowSurface(window);	
 			}
-			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 			assert(renderer != nullptr && "Couldn't create SDL renderer!");
 		}
 

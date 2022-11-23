@@ -15,6 +15,7 @@ namespace PlatformEditor
 {
     public partial class MapEditor : Form
     {
+        private EditorCamera myCamera = new EditorCamera();
         private Dictionary<string, Tileset> myTilesets;
         static public List<GameObjectType> ourGameObjectTypes = new List<GameObjectType>();
         static public MapEditor ourInstance;
@@ -31,7 +32,7 @@ namespace PlatformEditor
 
         private Point myMapMarker = new Point();
 
-        private MapData myMapData;
+        private World myWorld;
 
         private Point myOldMousePosition = new Point();
 
@@ -43,8 +44,8 @@ namespace PlatformEditor
         public MapEditor()
         {
             InitializeComponent();
-            ourInstance = this; 
-            
+            ourInstance = this;
+            myWorld = new World();
         }
 
         private void LoadTilesets()
@@ -107,10 +108,8 @@ namespace PlatformEditor
             Map.DragLeave += Map_DragLeave;
             Map.DragOver += Map_DragOver;
 
-            myMapData = new MapData();
-            myMapData.myMapWidth = 25;
-            myMapData.myMapHeight = 25;
-            myMapData.Init();
+            myCamera.Size.x = (int)Map.Width * 10;
+            myCamera.Size.y = (int)Map.Height * 10;
         }
 
         private void Tileset_MouseEnter(object sender, EventArgs e)
@@ -121,8 +120,8 @@ namespace PlatformEditor
 
         private void Tileset_MouseLeave(object sender, EventArgs e)
         {
-            Tileset.Width = myMapData.Tileset.TileWidth;
-            Tileset.Height = myMapData.Tileset.TileHeight;
+            Tileset.Width = Settings.TileWidth();
+            Tileset.Height = Settings.TileHeight();
         }
 
         private void SelectTileFromTileset(int aX, int aY)
@@ -138,83 +137,88 @@ namespace PlatformEditor
 
         private void Tileset_Click(object sender, EventArgs e)
         {
-            Tileset.Width = myMapData.Tileset.TileWidth;
-            Tileset.Height = myMapData.Tileset.TileHeight;
+            Tileset.Width = Settings.TileWidth();
+            Tileset.Height = Settings.TileHeight();
 
-            int x = (int)(((MouseEventArgs)e).X / myMapData.Tileset.TileWidth) * myMapData.Tileset.TileWidth;
-            int y = (int)(((MouseEventArgs)e).Y / myMapData.Tileset.TileHeight) * myMapData.Tileset.TileHeight;
+            int x = (int)(((MouseEventArgs)e).X / Tileset.Width) * Tileset.Width;
+            int y = (int)(((MouseEventArgs)e).Y / Tileset.Height) * Tileset.Height;
 
             SelectTileFromTileset(x, y);
         }
 
         private void TilePreview_Paint(object sender, PaintEventArgs e)
         {
-            if (myMapData.GetTileSetImage() != null)
+            if (Tilesets.Text.Length != 0)
             {
-                e.Graphics.DrawImage(myMapData.GetTileSetImage(), new Rectangle(0, 0, myMapData.Tileset.TileWidth, myMapData.Tileset.TileHeight),
-                    new Rectangle(myTileSourceX, myTileSourceY, myMapData.Tileset.TileWidth, myMapData.Tileset.TileHeight), GraphicsUnit.Pixel);
+                e.Graphics.DrawImage(myTilesets[Tilesets.Text].GetImage(), new Rectangle(0, 0, Settings.TileWidth(), Settings.TileHeight()),
+                    new Rectangle(myTileSourceX, myTileSourceY, Settings.TileWidth(), Settings.TileHeight()), GraphicsUnit.Pixel);
             }
         }
 
         private void Tileset_MouseMove(object sender, MouseEventArgs e)
         {
-            myTilesetMarker.X = (int)(e.X / myMapData.Tileset.TileWidth) * myMapData.Tileset.TileWidth;
-            myTilesetMarker.Y = (int)(e.Y / myMapData.Tileset.TileHeight) * myMapData.Tileset.TileHeight;
+            myTilesetMarker.X = (int)(e.X / Settings.TileWidth()) * Settings.TileWidth();
+            myTilesetMarker.Y = (int)(e.Y / Settings.TileHeight()) * Settings.TileHeight();
             Tileset.Refresh();
         }
 
         private void Tileset_Paint(object sender, PaintEventArgs e)
         {
-            if (myMapData.Tileset != null)
+            if (Tilesets.Text.Length != 0)
             {
                 Pen redPen = new Pen(Color.Red, 2);
                 Pen yellowPen = new Pen(Color.Yellow, 2);
-                e.Graphics.DrawRectangle(redPen, myTilesetMarker.X, myTilesetMarker.Y, myMapData.Tileset.TileWidth, myMapData.Tileset.TileHeight);
-                e.Graphics.DrawRectangle(yellowPen, myOldTilesetMarker.X, myOldTilesetMarker.Y, myMapData.Tileset.TileWidth, myMapData.Tileset.TileHeight);
+                e.Graphics.DrawRectangle(redPen, myTilesetMarker.X, myTilesetMarker.Y, Settings.TileWidth(), Settings.TileHeight());
+                e.Graphics.DrawRectangle(yellowPen, myOldTilesetMarker.X, myOldTilesetMarker.Y, Settings.TileWidth(), Settings.TileHeight());
             }
         }
 
         private void SetTile(int aTargetNodeX, int aTargetNodeY, int aTileIndex, bool aUpdateNeighbours = false)
         {
-            if (myTilesets[Tilesets.Text].IsAutoTile(aTileIndex) == true)
+            var mapChunk = myWorld.GetMapChunkFromTileIndex(aTargetNodeX, aTargetNodeY);
+            if (mapChunk != null) {
+                mapChunk.Tileset = myTilesets[Tilesets.Text];
+            }            
+
+            if (mapChunk != null && myTilesets[Tilesets.Text].IsAutoTile(aTileIndex) == true)
             {
                 int autoTileValue = 0;
-                int leftTileIndex = myMapData.GetTile(aTargetNodeX - 1, aTargetNodeY);
-                int rightTileIndex = myMapData.GetTile(aTargetNodeX + 1, aTargetNodeY);
-                int upperTileIndex = myMapData.GetTile(aTargetNodeX, aTargetNodeY - 1);
-                int lowerTileIndex = myMapData.GetTile(aTargetNodeX, aTargetNodeY + 1);
+                int leftTileIndex = mapChunk.GetTile(aTargetNodeX - 1, aTargetNodeY);
+                int rightTileIndex = mapChunk.GetTile(aTargetNodeX + 1, aTargetNodeY);
+                int upperTileIndex = mapChunk.GetTile(aTargetNodeX, aTargetNodeY - 1);
+                int lowerTileIndex = mapChunk.GetTile(aTargetNodeX, aTargetNodeY + 1);
 
                 autoTileValue |= Convert.ToInt32(myTilesets[Tilesets.Text].IsAutoTile(upperTileIndex)) * 1;
                 autoTileValue |= Convert.ToInt32(myTilesets[Tilesets.Text].IsAutoTile(lowerTileIndex)) * 4;
                 autoTileValue |= Convert.ToInt32(myTilesets[Tilesets.Text].IsAutoTile(rightTileIndex)) * 2;
                 autoTileValue |= Convert.ToInt32(myTilesets[Tilesets.Text].IsAutoTile(leftTileIndex)) * 8;
 
-                int pickedTile = myMapData.Tileset.GetAutoTile(autoTileValue);
+                int pickedTile = myTilesets[Tilesets.Text].GetAutoTile(autoTileValue);
                 if (pickedTile == -1)
                     pickedTile = aTileIndex;
 
-                char x = Convert.ToChar(pickedTile % myMapData.Tileset.GetTileCols());
-                char y = Convert.ToChar(pickedTile / myMapData.Tileset.GetTileCols());
+                char x = Convert.ToChar(pickedTile % myTilesets[Tilesets.Text].GetTileCols());
+                char y = Convert.ToChar(pickedTile / myTilesets[Tilesets.Text].GetTileCols());
 
                 SetTile(aTargetNodeX, aTargetNodeY, x, y);
             }
             else
             {
-                SetTile(aTargetNodeX, aTargetNodeY, (char)(myTilesetMarker.X / myMapData.Tileset.TileWidth), (char)(myTilesetMarker.Y / myMapData.Tileset.TileHeight));
+                SetTile(aTargetNodeX, aTargetNodeY, (char)(myTilesetMarker.X / Settings.TileWidth()), (char)(myTilesetMarker.Y / Settings.TileHeight()));
             }
             if (aUpdateNeighbours)
             {
-                SetIfAutoTile(aTargetNodeX - 1, aTargetNodeY, myMapData.GetTile(aTargetNodeX - 1, aTargetNodeY));
-                SetIfAutoTile(aTargetNodeX + 1, aTargetNodeY, myMapData.GetTile(aTargetNodeX + 1, aTargetNodeY));
-                SetIfAutoTile(aTargetNodeX, aTargetNodeY - 1, myMapData.GetTile(aTargetNodeX, aTargetNodeY - 1));
-                SetIfAutoTile(aTargetNodeX, aTargetNodeY + 1, myMapData.GetTile(aTargetNodeX, aTargetNodeY + 1));
+                SetIfAutoTile(aTargetNodeX - 1, aTargetNodeY, mapChunk.GetTile(aTargetNodeX - 1, aTargetNodeY));
+                SetIfAutoTile(aTargetNodeX + 1, aTargetNodeY, mapChunk.GetTile(aTargetNodeX + 1, aTargetNodeY));
+                SetIfAutoTile(aTargetNodeX, aTargetNodeY - 1, mapChunk.GetTile(aTargetNodeX, aTargetNodeY - 1));
+                SetIfAutoTile(aTargetNodeX, aTargetNodeY + 1, mapChunk.GetTile(aTargetNodeX, aTargetNodeY + 1));
             }
         }
 
         void SetIfAutoTile(int aTargetNodeX, int aTargetNodeY, int aTileIndex)
         {
             if (aTargetNodeX >= 0 && aTargetNodeY >= 0 &&
-                aTargetNodeX < myMapData.myMapWidth && aTargetNodeY < myMapData.myMapHeight &&
+                aTargetNodeX < Settings.MapWidth() && aTargetNodeY < Settings.MapHeight() &&
                 myTilesets[Tilesets.Text].IsAutoTile(aTileIndex) == true)
             {
                 SetTile(aTargetNodeX, aTargetNodeY, aTileIndex, false);
@@ -228,9 +232,9 @@ namespace PlatformEditor
                 if (mouseEvent.Button == MouseButtons.Left)
                 {
                     myLeftMousePressed = true;
-                    int targetNodeX = (int)(mouseEvent.X / myMapData.Tileset.TileWidth);
-                    int targetNodeY = (int)(mouseEvent.Y / myMapData.Tileset.TileHeight);
-                    int tileIndex = (myTilesetMarker.X / myMapData.Tileset.TileWidth) + (myTilesetMarker.Y / myMapData.Tileset.TileHeight) * myTilesets[Tilesets.Text].GetTileCols();
+                    int targetNodeX = (int)(mouseEvent.X / Settings.TileWidth());
+                    int targetNodeY = (int)(mouseEvent.Y / Settings.TileHeight());
+                    int tileIndex = (myTilesetMarker.X / Settings.TileWidth()) + (myTilesetMarker.Y / Settings.TileHeight()) * myTilesets[Tilesets.Text].GetTileCols();
                     SetTile(targetNodeX, targetNodeY, tileIndex, true);
                 }
                 else if (mouseEvent.Button == MouseButtons.Right)
@@ -247,10 +251,10 @@ namespace PlatformEditor
 
         private GameObject PickObject(MouseEventArgs aMouseEvent)
         {
-            var gameObjects = myMapData.GetGameObjects();
+            var gameObjects = myWorld.GetGameObjectsFromChunk(aMouseEvent.X + (int)myCamera.Position.x, aMouseEvent.Y + (int)myCamera.Position.y);
             foreach (GameObject gameObject in gameObjects)
             {
-                if (gameObject.IsInside(aMouseEvent.X, aMouseEvent.Y) == true)
+                if (gameObject.IsInside(aMouseEvent.X + (int)myCamera.Position.x, aMouseEvent.Y + (int)myCamera.Position.y) == true)
                 {
                     return gameObject;
                 }
@@ -260,13 +264,13 @@ namespace PlatformEditor
 
         private void SetTile(int aXNode, int aYNode, char aXnodeSource, char aYNodeSource)
         {
-            myMapData.SetTile(aXNode, aYNode, aXnodeSource, aYNodeSource);
+            myWorld.SetTile(aXNode, aYNode, aXnodeSource, aYNodeSource, myTilesets[Tilesets.Text]);
         }
 
         private void Map_MouseMove(object sender, MouseEventArgs e)
         {
-            myMapMarker.X = (int)(e.X / myMapData.Tileset.TileWidth) * myMapData.Tileset.TileWidth;
-            myMapMarker.Y = (int)(e.Y / myMapData.Tileset.TileHeight) * myMapData.Tileset.TileHeight;
+            myMapMarker.X = (int)(e.X / Settings.TileWidth()) * Settings.TileWidth();
+            myMapMarker.Y = (int)(e.Y / Settings.TileHeight()) * Settings.TileHeight();
 
             if (myLeftMousePressed)
             {
@@ -275,8 +279,10 @@ namespace PlatformEditor
 
             if (myRightMousePressed == true)
             {
-                Map.Left += e.Location.X - myOldMousePosition.X;
-                Map.Top += e.Location.Y - myOldMousePosition.Y;
+                myCamera.Position.x -= e.Location.X - myOldMousePosition.X;
+                myCamera.Position.y -= e.Location.Y - myOldMousePosition.Y;
+                myOldMousePosition.X = e.Location.X;
+                myOldMousePosition.Y = e.Location.Y;
             }
             else
             {
@@ -305,12 +311,12 @@ namespace PlatformEditor
 
         private void DrawGameObjects(PaintEventArgs e)
         {
-            var gameObjects = myMapData.GetGameObjects();
+            var gameObjects = myWorld.GetGameObjectsFromFrustum(myCamera);
             foreach (GameObject gameObject in gameObjects)
             {
                 int halfWidth = myGameObjectTypeImages[gameObject.myGameObjectType.ID].Width / 2;
                 int halfHeight = myGameObjectTypeImages[gameObject.myGameObjectType.ID].Height / 2;
-                Point position = new Point((int)gameObject.myPosition.x - halfWidth, (int)gameObject.myPosition.y - halfHeight);
+                Point position = new Point((int)gameObject.myPosition.x - halfWidth - (int)myCamera.Position.x, (int)gameObject.myPosition.y - halfHeight - (int)myCamera.Position.y);
                 int ID = gameObject.myGameObjectType.ID;
                 e.Graphics.DrawImage(myGameObjectTypeImages[ID], new Rectangle(position, 
                     new Size(myGameObjectTypeImages[gameObject.myGameObjectType.ID].Width, myGameObjectTypeImages[gameObject.myGameObjectType.ID].Height) ));
@@ -335,35 +341,46 @@ namespace PlatformEditor
                 Pen greenPen = new Pen(Color.Green);
                 int halfWidth = myGameObjectTypeImages[mySelectedGameObject.myGameObjectType.ID].Width / 2;
                 int halfHeight = myGameObjectTypeImages[mySelectedGameObject.myGameObjectType.ID].Height / 2;
-                e.Graphics.DrawRectangle(greenPen, mySelectedGameObject.myPosition.x - halfWidth, mySelectedGameObject.myPosition.y - halfHeight, 
+                e.Graphics.DrawRectangle(greenPen, mySelectedGameObject.myPosition.x - halfWidth - myCamera.Position.x, mySelectedGameObject.myPosition.y - halfHeight - myCamera.Position.y, 
                     halfWidth * 2, halfHeight * 2);
             }
         }
         private void DrawTileEditGizmos(PaintEventArgs e)
         {
-            if (myMapData.GetTileSetImage() != null)
+            var visibleChunks = myWorld.GetChunksInFrustum(myCamera);
+            foreach (var chunk in visibleChunks)
             {
-                Pen greenPen = new Pen(Color.Green, 2);
+                if (chunk.GetTileSetImage() != null)
+                {
+                    Pen greenPen = new Pen(Color.Green, 2);
 
-                e.Graphics.DrawImage(myMapData.GetTileSetImage(), new Rectangle(myMapMarker.X, myMapMarker.Y, myMapData.Tileset.TileWidth, myMapData.Tileset.TileHeight),
-                    new Rectangle(myTileSourceX, myTileSourceY, myMapData.Tileset.TileWidth, myMapData.Tileset.TileHeight), GraphicsUnit.Pixel);
+                    e.Graphics.DrawImage(chunk.GetTileSetImage(), new Rectangle(myMapMarker.X, myMapMarker.Y, Settings.TileWidth(), Settings.TileHeight()),
+                        new Rectangle(myTileSourceX, myTileSourceY, Settings.TileWidth(), Settings.TileHeight()), GraphicsUnit.Pixel);
 
-                e.Graphics.DrawRectangle(greenPen, myMapMarker.X, myMapMarker.Y, myMapData.Tileset.TileWidth, myMapData.Tileset.TileHeight);
+                    e.Graphics.DrawRectangle(greenPen, myMapMarker.X, myMapMarker.Y, Settings.TileWidth(), Settings.TileHeight());
+                }
             }
         }
 
         private void DrawTiles(PaintEventArgs e)
         {
-            if (myMapData.GetTileSetImage() != null)
+            var visibleMapChunks = myWorld.GetChunksInFrustum(myCamera);
+            foreach (var mapChunk in visibleMapChunks)
             {
-                for (int y = 0; y < myMapData.myMapHeight; y++)
+                if (mapChunk != null && mapChunk.GetTileSetImage() != null)
                 {
-                    for (int x = 0; x < myMapData.myMapWidth; x++)
+                    Vector2 chunkWorldPosition = mapChunk.GetChunkWorldPosition();
+                    for (int y = 0; y < mapChunk.myMapHeight; y++)
                     {
-                        Rectangle position = new Rectangle(x * myMapData.Tileset.TileWidth, y * myMapData.Tileset.TileHeight, myMapData.Tileset.TileWidth, myMapData.Tileset.TileHeight);
-                        Point sourcePosition = myMapData.GetTileSource(x, y);
-                        Rectangle source = new Rectangle(sourcePosition, new Size(myMapData.Tileset.TileWidth, myMapData.Tileset.TileHeight));
-                        e.Graphics.DrawImage(myMapData.GetTileSetImage(), position, source, GraphicsUnit.Pixel);
+                        for (int x = 0; x < mapChunk.myMapWidth; x++)
+                        {
+                            int tileXPosition = x * mapChunk.Tileset.TileWidth + (int)chunkWorldPosition.x - (int)myCamera.Position.x;
+                            int tileYPosition = y * mapChunk.Tileset.TileHeight + (int)chunkWorldPosition.y - (int)myCamera.Position.y;
+                            Rectangle position = new Rectangle(tileXPosition, tileYPosition, mapChunk.Tileset.TileWidth, mapChunk.Tileset.TileHeight);
+                            Point sourcePosition = mapChunk.GetTileSource(x, y);
+                            Rectangle source = new Rectangle(sourcePosition, new Size(mapChunk.Tileset.TileWidth, mapChunk.Tileset.TileHeight));
+                            e.Graphics.DrawImage(mapChunk.GetTileSetImage(), position, source, GraphicsUnit.Pixel);
+                        }
                     }
                 }
             }
@@ -406,13 +423,13 @@ namespace PlatformEditor
 
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myMapData.Save();
+            myWorld.SaveAll();
         }
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myMapData.LoadFromFile("data/testLevel.lvl");
-            Tilesets.SelectedItem = myMapData.myTilesetName;
+            myWorld.LoadAll(myTilesets);
+            Tilesets.Items.IndexOf(myWorld.mMapChunk.myTilesetName);
             Map.Refresh();
         }
 
@@ -423,18 +440,14 @@ namespace PlatformEditor
         }
 
         private void Tilesets_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            myMapData.Tileset = myTilesets[Tilesets.Text];
-            Tileset.Image = myMapData.GetTileSetImage();
+        {            
+            Tileset.Image = myTilesets[Tilesets.Text].GetImage();
             Map.Enabled = true;
             Tileset.Enabled = true;
-            TilePreview.Width = myMapData.Tileset.TileWidth;
-            TilePreview.Height = myMapData.Tileset.TileHeight;
-            Tileset.Width = myMapData.Tileset.TileWidth;
-            Tileset.Height = myMapData.Tileset.TileHeight;
-
-            Map.Width = myMapData.myMapWidth * myMapData.Tileset.TileWidth;
-            Map.Height = myMapData.myMapHeight * myMapData.Tileset.TileHeight;
+            TilePreview.Width = myTilesets[Tilesets.Text].TileWidth;
+            TilePreview.Height = myTilesets[Tilesets.Text].TileHeight;
+            Tileset.Width = myTilesets[Tilesets.Text].TileWidth;
+            Tileset.Height = myTilesets[Tilesets.Text].TileHeight;
 
             Map.Refresh();
             Tileset.Refresh();
@@ -449,19 +462,19 @@ namespace PlatformEditor
             switch (keyData)
             {
                 case Keys.Left:
-                    Map.Left += moveSpeed;
+                    myCamera.Position.x -= moveSpeed;
                     Map.Refresh();
                     handled = true; break;
                 case Keys.Right:
-                    Map.Left -= moveSpeed;
+                    myCamera.Position.x += moveSpeed;
                     Map.Refresh();
                     handled = true; break;
                 case Keys.Up:
-                    Map.Top += moveSpeed;
+                    myCamera.Position.y -= moveSpeed;
                     Map.Refresh();
                     handled = true; break;
                 case Keys.Down:
-                    Map.Top -= moveSpeed;
+                    myCamera.Position.y += moveSpeed;
                     Map.Refresh();
                     handled = true; break;
             }
@@ -478,7 +491,7 @@ namespace PlatformEditor
                     switch (keyData)
                     {
                         case Keys.Delete:
-                            myMapData.GetGameObjects().Remove(mySelectedGameObject);
+                            mySelectedGameObject.myChunk.GetGameObjects().Remove(mySelectedGameObject);
                             mySelectedGameObject = null;
                             Map.Refresh();
                             handled = true; break;
@@ -520,12 +533,14 @@ namespace PlatformEditor
 
         private void VMapScroll_Scroll(object sender, ScrollEventArgs e)
         {
-            Map.Top = -(int)((vMapScroll.Value / 100.0f) * Map.Height);
+            myCamera.Position.y =- (int)((vMapScroll.Value / 100.0f) * Map.Height);
+            Map.Refresh();
         }
 
         private void HMapScroll_Scroll(object sender, ScrollEventArgs e)
         {
-            Map.Left = -(int)((hMapScroll.Value / 100.0f) * Map.Width);
+            myCamera.Position.x = -(int)((hMapScroll.Value / 100.0f) * Map.Width);
+            Map.Refresh();
         }
 
         private void GameObjectTypeEditorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -576,7 +591,7 @@ namespace PlatformEditor
             if (GameObjectTypesList.SelectedItem != null)
             {
                 Vector2 position = new Vector2(Map.PointToClient(Cursor.Position).X, Map.PointToClient(Cursor.Position).Y);
-                mySelectedGameObject = myMapData.PlaceObject(position, ourGameObjectTypes[GameObjectTypesList.SelectedIndex]);
+                mySelectedGameObject = myWorld.PlaceObject(position, ourGameObjectTypes[GameObjectTypesList.SelectedIndex]);
             }
         }
 
@@ -587,27 +602,27 @@ namespace PlatformEditor
 
         private void mapSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MapSettings mapSettings = new MapSettings(myMapData.myMapWidth, myMapData.myMapHeight);
+            MapSettings mapSettings = new MapSettings(Settings.MapWidth(), Settings.MapHeight());
             DialogResult result = mapSettings.ShowDialog();
             if (result == DialogResult.OK)
             {
-                myMapData.ResizeMap(mapSettings.GetMapWidth(), mapSettings.GetMapHeight());
+               // myMapData.ResizeMap(mapSettings.GetMapWidth(), mapSettings.GetMapHeight());
                 Map.Refresh();
             }
         }
 
         private void createFrameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int x = 0; x < myMapData.myMapWidth; x++)
+            for (int x = 0; x < Settings.MapWidth(); x++)
             {
                 SetTile(x, 0, 1, true);
-                SetTile(x, myMapData.myMapHeight - 1, 1, true);
+                SetTile(x, Settings.MapHeight() - 1, 1, true);
             }
 
-            for (int y = 0; y < myMapData.myMapHeight; y++)
+            for (int y = 0; y < Settings.MapHeight(); y++)
             {
                 SetTile(0, y, 1, true);
-                SetTile(myMapData.myMapWidth - 1, y, 1, true);
+                SetTile(Settings.MapWidth() - 1, y, 1, true);
             }
         }
     }

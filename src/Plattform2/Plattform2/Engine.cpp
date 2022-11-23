@@ -78,11 +78,11 @@ Engine::~Engine()
 
 void Engine::MainLoop()
 {
-	float timeSinceLastFrame = 0.f;
-	constexpr float fixedFrameRate = (1.f / 60.f) * 1000000.f;
-	constexpr float fixedDeltaTime = 1.f / 60.f;
+	double timeSinceLastFrame = 0.f;
+	constexpr double fixedFrameRate = (1.0 / 60.0) * 1000000.0;
+	constexpr double fixedDeltaTime = 1.0 / 60.0;
 	int fps = 0;
-	float countToOne = 0.f;
+	double countToOne = 0.0;
 
 	Timer::TimerManager::GetInstance()->UpdateTimers();
 	while (myQuit == false)
@@ -129,15 +129,14 @@ void Engine::MainLoop()
 					myEngineDebugInfo->Draw();
 					
 					GameObjectManager::GetInstance()->AddAndRemoveObjects();
-					PhysicManager::GetInstance()->AddAndRemovePhysicBodies();
-					
+					PhysicManager::GetInstance()->AddAndRemovePhysicBodies();					
 				}
 			);
 
 			ThreadPool::GetInstance()->AddWork([&] 
 				{ 
-					myParticleSystem->Draw();
 					myParticleSystem->Update(fixedDeltaTime); 
+					myParticleSystem->Draw();					
 				});
 
 			if (timeSinceLastFrame - fixedFrameRate <= fixedFrameRate)

@@ -2,7 +2,7 @@
 #include "RainCloud.h"
 #include "PhysicBody.h"
 #include "Megaton.h"
-#include "Map.h"
+#include "MapChunk.h"
 #include "gameObjectType.h"
 
 RainCloud::RainCloud()
@@ -17,7 +17,6 @@ void RainCloud::Update(const float aDeltaTime)
 
 	myPhysicBody->SetVelocity(Vector2f(cos(time), 0.f) * 5.f);
 
-	Map& map = Megaton::GetInstance().GetMap();
 	for (size_t i = 0; i < 10; i++)
 	{
 		Vector2f dropOffset;
@@ -26,7 +25,12 @@ void RainCloud::Update(const float aDeltaTime)
 		dropOffset.myY = (rand() % sprite.GetSize().myY) - (rand() % sprite.GetSize().myY);
 		dropOffset.myX *= 0.5f;
 		dropOffset.myY *= 0.25f;
-		map.AddWaterDrop(myPhysicBody->GetPosition() + dropOffset, myPhysicBody->GetVelocity() / 10.f);
+		const Vector2f finalWorldPosition = dropOffset + myPhysicBody->GetPosition();
+		MapChunk* map = Megaton::GetInstance().GetMapChunk(finalWorldPosition);
+		if (!map) {
+			continue;
+		}
+		map->AddWaterDrop(finalWorldPosition, myPhysicBody->GetVelocity() / 10.f);
 	}
 	
 }

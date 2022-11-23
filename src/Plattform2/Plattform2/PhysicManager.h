@@ -4,6 +4,7 @@
 
 class PhysicBody;
 class Grid;
+class PhysicBodyVisitor;
 
 template<class T, int SIZE>
 class ObjectPool;
@@ -18,6 +19,7 @@ public:
 	void							AddAndRemovePhysicBodies();
 	void							ResolveCollisions();
 	void							RecieveMessage(const Message& aMessage) override;
+	void							Visit(PhysicBodyVisitor& aPhysicBodyVisitor);
 	PhysicBody*						CreateNewPhysicBody();
 	static PhysicManager*			GetInstance();
 	static void						Create();

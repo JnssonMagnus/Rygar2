@@ -7,16 +7,17 @@ class WaterMap;
 class HeatMap;
 class Player;
 
-class Map
+class MapChunk
 {
 public:
-						Map();
-						~Map();
-	void				Update(Player& aPlayer);
+						MapChunk();
+						~MapChunk();
+	void				UpdateWaterMovement();
+	void				UpdatePlayerVsWaterCollisions(Player& aPlayer);
 	void				Draw(const Vector2f& aCameraPosition, const float aCameraZoom = 1.f);
 	void				DrawWater(const Vector2f& aCameraPosition);
 	void				DebugDraw(const Vector2f& aCameraPosition);
-	void				Init(std::map<std::string, Tileset>& aTilesets);
+	void				Init(std::map<std::string, Tileset>& aTilesets, const Vector2f& aWorldPosition);
 	void				LoadFromFile(const std::string_view aFilename);
 	eCollisionPoint		Collided(PhysicBody& aPhysicBody);
 	bool				Collided(const int aNodeIndex) const;
@@ -24,9 +25,11 @@ public:
 	int					GetMapWidth() const;
 	int					GetMapHeight() const;
 	const Vector2<int>& GetTileSize() const;
+	const Vector2f&		GetWorldPosition() const;
 
 	void				AddWaterDrop(const Vector2f& aWorldPosition, const Vector2f& aForce);
 	bool				TryTakeWater(const unsigned char aAmount, const Vector2f& aWorldPosition);
+	void				AddToWaterLevel(const unsigned char aAmount, const Vector2f& aWorldPosition);
 
 	void				DestroyTile(const Vector2f& aWorldPosition);
 
@@ -55,4 +58,5 @@ private:
 
 	CU::GrowingArray<char>	myTileData;
 	WaterMap*			myWaterMap;
+	Vector2f			myWorldPosition;
 };

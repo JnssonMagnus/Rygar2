@@ -35,7 +35,7 @@ void Aim::Init()
 
 void Aim::Draw()
 {
-    mySprite.Draw(GetPosition(), (myLocalPosition.myX + myLocalPosition.myY) / 10.f, true);
+    mySprite.Draw(GetPosition(), 0.f, true);
 }
 
 const Vector2f Aim::GetPosition() const

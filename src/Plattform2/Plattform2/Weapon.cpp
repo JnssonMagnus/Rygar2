@@ -34,9 +34,9 @@ void Weapon::SetOffsetPosition(const Vector2f& aOffset)
 	myOffsetPosition = aOffset;
 }
 
-const Vector2f& Weapon::GetOffsetPosition() const
+const Vector2f& Weapon::GetPosition() const
 {
-	return myOffsetPosition;
+	return myPosition;
 }
 
 eWeaponStatus Weapon::GetWeaponStatus() const

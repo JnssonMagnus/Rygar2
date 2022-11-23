@@ -12,5 +12,24 @@ namespace PlatformEditor
         {
             return "C:/Users/Magnus.jonsson/Dropbox/C++/RygarRemake/";
         }
+
+        public static int TileWidth()
+        {
+            return 16;
+        }
+        public static int TileHeight()
+        {
+            return 16;
+        }
+
+        public static int MapWidth()
+        {
+            return 25;
+        }
+
+        public static int MapHeight()
+        {
+            return 25;
+        }
     }
 }

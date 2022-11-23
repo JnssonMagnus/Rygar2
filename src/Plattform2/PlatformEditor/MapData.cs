@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace PlatformEditor
 {
-    class MapData
+    public class MapData
     {
         public string Space = "preserve";
 
@@ -20,9 +20,16 @@ namespace PlatformEditor
         private Image myTileSetImage;
         private string myFilename;
         private char[] myTileData;
+        private int myChunkId;
 
         public string myTilesetName;
+        private Vector2 myChunkWorldPosition;
         private Tileset myTileset;
+
+        public Vector2 GetChunkWorldPosition()
+        {
+            return myChunkWorldPosition;
+        }
         public Tileset Tileset
         {
             get
@@ -40,11 +47,12 @@ namespace PlatformEditor
 
         public void Save()
         {
-            System.IO.BinaryWriter binaryWriter = new System.IO.BinaryWriter(System.IO.File.Open(Settings.GetDataPath() + "data/testLevel.lvl", System.IO.FileMode.OpenOrCreate));
-            myFilename = "testLevel1.lvl\n";
+            myFilename = "chunk_" + myChunkId.ToString();
+            string filePath = Settings.GetDataPath() + "data/levels/";
+            System.IO.BinaryWriter binaryWriter = new System.IO.BinaryWriter(System.IO.File.Open(filePath + myFilename, System.IO.FileMode.OpenOrCreate));
 
             // Map
-            binaryWriter.Write(myFilename);
+            binaryWriter.Write(myFilename + "\n");
             binaryWriter.Write(myTileset.myTilesetName+"\n");
             binaryWriter.Write(myMapWidth);
             binaryWriter.Write(myMapHeight);
@@ -82,11 +90,13 @@ namespace PlatformEditor
         }
         public void SetTile(int aX, int aY, char aTileX, char aTileY)
         {
-            if (aX >= 0 && aX >= 0 && aX < myMapWidth && aY < myMapHeight)
+            int localX = aX - (int)myChunkWorldPosition.x / Settings.TileWidth();
+            int localY = aY - (int)myChunkWorldPosition.y / Settings.TileHeight();
+            if (localX >= 0 && localY >= 0 && localX < myMapWidth && localY < myMapHeight)
             {
                 char tilesOnRow = (char)(myTileSetImage.Width / myTileset.TileWidth);
                 char tileID = (char)(aTileX + (char)(aTileY * tilesOnRow));
-                myTileData[aX + aY * myMapWidth] = tileID;
+                myTileData[localX + localY * myMapWidth] = tileID;
             }
         }
 
@@ -141,9 +151,11 @@ namespace PlatformEditor
             myTileData = newTileData;
         }
 
-        public void Init()
+        public void Init(int aChunkId)
         {
             myTileData = new char[myMapWidth * myMapHeight];
+            myChunkId = aChunkId;
+            myChunkWorldPosition = GetChunkWorldPositionFromID(aChunkId);
         }
 
         private GameObjectType GetGameObjectTypeByID(int aID)
@@ -184,10 +196,21 @@ namespace PlatformEditor
                 gameObject.myGameObjectType = GetGameObjectTypeByID(ID);
                 gameObject.myPosition.x = binaryReader.ReadSingle();
                 gameObject.myPosition.y = binaryReader.ReadSingle();
+                gameObject.myChunk = this;
                 myGameObjects.Add(gameObject);
             }
 
             binaryReader.Close();
+
+            myChunkWorldPosition = GetChunkWorldPositionFromID(myChunkId);
+        }
+
+        private Vector2 GetChunkWorldPositionFromID(int chunkId)
+        {
+            int HIGH_VALUE = 10000000;
+            int x = (chunkId / HIGH_VALUE) * Settings.MapWidth() * Settings.TileWidth();
+            int y = (chunkId - (((x / Settings.TileWidth()) / Settings.MapWidth()) * HIGH_VALUE)) * Settings.TileHeight() * Settings.MapHeight();
+            return new Vector2(x, y);
         }
     }
 }

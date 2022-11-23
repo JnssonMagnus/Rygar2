@@ -4,7 +4,7 @@
 #include "GameObjectType.h"
 #include "GameObjectTypes.h"
 #include "Megaton.h"
-#include "Map.h"
+#include "MapChunk.h"
 #include "Weapon.h"
 #include "Sprayer.h"
 #include "Shotgun.h"
@@ -17,7 +17,7 @@ Player::Player()
 {
 	myPickedUpObject = nullptr;
 	myDashStrength = 400.f;
-	myJumpStrength = 10.f;
+	myJumpStrength = 8.f;
 	myDashReloadTimer = 60;
 	myDashTime = 0;	
 }
@@ -30,32 +30,13 @@ Player::~Player()
 void Player::Update(const float aDeltaTime)
 {
 	Actor::Update(aDeltaTime);
-	myWeapons[myCurrentWeapon]->Update(aDeltaTime, myPhysicBody->GetPosition(), GetProperty<bool>(ePropertyValues::eFacingRight) ? 1.f : -1.f);
 	myStats.UpdateStats();
 
-	Vector2f positionByHook = myHook.Update(aDeltaTime, myPhysicBody->GetPosition(), myPhysicBody->GetVelocity());
-
-	myPhysicBody->AddForce((positionByHook - myPhysicBody->GetPosition()) * Vector2f(30.f, 5.8f));
-	myPhysicBody->SetPosition(positionByHook);
-
-	if (myPickedUpObject != nullptr)
-	{
-		Vector2f newPos = myPhysicBody->GetPosition();
-		newPos -= Vector2f(0, myPhysicBody->GetHalfSize().myY + myPickedUpObject->GetPhysicBody().GetHalfSize().myY);
-		myPickedUpObject->GetPhysicBody().SetPosition(newPos);
-	}
-
-	myProperties.ChangeValue<bool>(ePropertyValues::eIsAttacking) = myWeapons[myCurrentWeapon]->GetWeaponStatus() == eWeaponStatus::eFireing ? true : false;
-
-	Message listenerMessage(eMessageTypes::eUpdateListenerPosition);
-	listenerMessage.myMatrix.SetPosition(Vector4f{ myPhysicBody->GetPosition().myX, myPhysicBody->GetPosition().myY, 0.f, 0.f });
-	PostMaster::GetInstance()->SendMessage(listenerMessage);
-
-	static bool last = true; 
-	if (myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom) == true && last == false)
-		PostMaster::GetInstance()->SendSoundEvent("land");
-
-	last = myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom);
+	UpdateHook(aDeltaTime);
+	UpdatePickedUpObject();
+	UpdateWeapon(aDeltaTime);
+	PlayLandOnGroundSound();
+	UpdateSoundListenerPosition();
 
 	if (myStats.GetStat(eStats::eHealth) <= 0.f)
 		PostMaster::GetInstance()->SendDelayedMessage(Message(eMessageTypes::ePlayerDied));
@@ -119,14 +100,11 @@ void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputSt
 	{
 	case Input::eInputEvent::eFireGun1:
 	{
-		Vector2f direction = myAim.GetPosition() - myPhysicBody->GetPosition();
-		direction.Normalize();
-
 		if (aState == Input::eInputState::eDown)
 		{
-			Vector2f dir = myAim.GetPosition() - myPhysicBody->GetPosition();
-			dir.Normalize();
-			myWeapons[myCurrentWeapon]->Shoot(myPhysicBody->GetPosition(), dir, myAim.GetPosition());
+			Vector2f direction = myAim.GetPosition() - myWeapons[myCurrentWeapon]->GetPosition();
+			direction.Normalize();
+			myWeapons[myCurrentWeapon]->Shoot(myPhysicBody->GetPosition(), direction, myAim.GetPosition());
 		}
 		break;
 	}
@@ -176,10 +154,12 @@ void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputSt
 		break;
 	}
 	case Input::eInputEvent::eMoveRight:
-		myPhysicBody->AddForce({ 90.f, 0.f });
+		if (IsHinderedFromMoving() == false)
+			myPhysicBody->AddForce({ 300.f, 0.f });
 		break;
 	case Input::eInputEvent::eMoveLeft:
-		myPhysicBody->AddForce({ -90.f, 0.f });
+		if (IsHinderedFromMoving() == false)
+			myPhysicBody->AddForce({ -300.f, 0.f });
 		break;
 	case Input::eInputEvent::eDown:
 		myHook.Extend();
@@ -273,6 +253,16 @@ bool Player::IsAboveEnemy(const GameObject* const aGameObject) const
 	return myPhysicBody->GetVelocity().myY > 0 && myPhysicBody->GetMiddleBottom().myY < aGameObject->GetPhysicBody().GetMiddleTop().myY + 10;
 }
 
+bool Player::IsHinderedFromMoving() const
+{
+	return IsAttacking() && myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom) == true;
+}
+
+bool Player::IsAttacking() const
+{
+	return myProperties.GetValue<bool>(ePropertyValues::eIsAttacking);
+}
+
 void Player::Collide(GameObject* aGameObject)
 {
 	if (aGameObject->GetPhysicBody().HasCollisionTag(eCollisionTags::eEnemy))
@@ -294,6 +284,47 @@ const Vector2f Player::GetAimLocalPosition() const
 const Stats& Player::GetStats() const
 {
 	return myStats;
+}
+
+void Player::UpdateHook(const float aDeltaTime)
+{
+	Vector2f positionByHook = myHook.Update(aDeltaTime, myPhysicBody->GetPosition(), myPhysicBody->GetVelocity());
+
+	myPhysicBody->AddForce((positionByHook - myPhysicBody->GetPosition()) * Vector2f(30.f, 5.8f));
+	myPhysicBody->SetPosition(positionByHook);
+
+}
+
+void Player::UpdatePickedUpObject()
+{
+	if (myPickedUpObject != nullptr)
+	{
+		Vector2f newPos = myPhysicBody->GetPosition();
+		newPos -= Vector2f(0, myPhysicBody->GetHalfSize().myY + myPickedUpObject->GetPhysicBody().GetHalfSize().myY);
+		myPickedUpObject->GetPhysicBody().SetPosition(newPos);
+	}
+}
+
+void Player::PlayLandOnGroundSound()
+{
+	static bool last = true;
+	if (myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom) == true && last == false)
+		PostMaster::GetInstance()->SendSoundEvent("land");
+
+	last = myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom);
+}
+
+void Player::UpdateWeapon(const float aDeltaTime)
+{
+	myWeapons[myCurrentWeapon]->Update(aDeltaTime, myPhysicBody->GetPosition(), GetProperty<bool>(ePropertyValues::eFacingRight) ? 1.f : -1.f);
+	myProperties.ChangeValue<bool>(ePropertyValues::eIsAttacking) = myWeapons[myCurrentWeapon]->GetWeaponStatus() == eWeaponStatus::eFireing ? true : false;
+}
+
+void Player::UpdateSoundListenerPosition()
+{
+	Message listenerMessage(eMessageTypes::eUpdateListenerPosition);
+	listenerMessage.myMatrix.SetPosition(Vector4f{ myPhysicBody->GetPosition().myX, myPhysicBody->GetPosition().myY, 0.f, 0.f });
+	PostMaster::GetInstance()->SendMessage(listenerMessage);
 }
 
 void Player::CycleWeapons(int aCycleValue)

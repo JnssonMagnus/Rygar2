@@ -4,7 +4,7 @@
 #include "GameObjectManager.h"
 #include "PhysicBody.h"
 #include "Megaton.h"
-#include "Map.h"
+#include "MapChunk.h"
 #include "AIBehaviour.h"
 
 void Enemy::Update(const float aDeltaTime)

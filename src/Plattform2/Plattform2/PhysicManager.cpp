@@ -3,6 +3,7 @@
 #include "PhysicBody.h"
 #include "gameObject.h"
 #include "Grid.h"
+#include "Visitor.h"
 #include <ObjectPool.h>
 
 PhysicManager* PhysicManager::ourInstance = nullptr;
@@ -44,7 +45,7 @@ void PhysicManager::UpdatePhysicBodies()
 		myPhysicBodies[physicBodyIndex]->Update();
 	}	
 
-	myGrid->Update();
+	//myGrid->Update();
 }
 
 void PhysicManager::AddAndRemovePhysicBodies()
@@ -54,27 +55,27 @@ void PhysicManager::AddAndRemovePhysicBodies()
 	{
 		assert(myPhysicBodies.Find(myPhysicBodiesToAdd[newBodyIndex]) == -1 && "Body already added!");
 		myPhysicBodies.Add(myPhysicBodiesToAdd[newBodyIndex]);
-		myGrid->AddBody(myPhysicBodiesToAdd[newBodyIndex]);
+//		myGrid->AddBody(myPhysicBodiesToAdd[newBodyIndex]);
 	}
 
 	// remove disabled bodies
 	for (int disableIndex = 0; disableIndex < myPhysicBodiesToDisable.Size(); disableIndex++)
 	{
 		myPhysicBodies.Remove(myPhysicBodiesToDisable[disableIndex]);
-		myGrid->RemoveBody(myPhysicBodiesToDisable[disableIndex]);
+		//myGrid->RemoveBody(myPhysicBodiesToDisable[disableIndex]);
 	}
 
 	// Remove bodies
 	for (int removeIndex = 0; removeIndex < myPhysicBodiesToRemove.Size(); removeIndex++)
 	{
 		int index = myPhysicBodies.Find(myPhysicBodiesToRemove[removeIndex]);
-		//	assert(index != -1 && "Body to remove not found!");
+		//assert(index != -1 && "Body to remove not found!");
 		if (index != -1)
 		{
 			myPhysicBodies.RemoveCyclicAtIndex(index);
+			//myGrid->RemoveBody(myPhysicBodiesToRemove[removeIndex]);
 		}
 		myObjectPool->ReturnItem(myPhysicBodiesToRemove[removeIndex]);
-		myGrid->RemoveBody(myPhysicBodiesToRemove[removeIndex]);
 	}
 
 	myPhysicBodiesToDisable.Clear();
@@ -84,25 +85,25 @@ void PhysicManager::AddAndRemovePhysicBodies()
 
 void PhysicManager::ResolveCollisions()
 {
-	auto& nodes = myGrid->GetSpatialListsWithBodies();
+	const auto nodes = myGrid->GetSpatialListsWithBodies();
 
 	std::unordered_map<long long, std::pair<PhysicBody*, PhysicBody*>> collisionsToTest;
 
 	// Find unique collisions
-	for (const auto& gridCell : nodes)
-	{
-		for (int physicBodyToTest = 0; physicBodyToTest < gridCell.Size(); physicBodyToTest++)
+	//for (const auto& gridCell : nodes)
+	//{
+		for (int physicBodyToTest = 0; physicBodyToTest < myPhysicBodies.Size(); physicBodyToTest++)
 		{
-			for (int physicBodyToTestAgainst = physicBodyToTest + 1; physicBodyToTestAgainst < gridCell.Size(); physicBodyToTestAgainst++)
+			for (int physicBodyToTestAgainst = physicBodyToTest + 1; physicBodyToTestAgainst < myPhysicBodies.Size(); physicBodyToTestAgainst++)
 			{
-				PhysicBody* toTest = gridCell[physicBodyToTest];
-				PhysicBody* toTestAgainst = gridCell[physicBodyToTestAgainst];
+				PhysicBody* toTest = myPhysicBodies[physicBodyToTest];
+				PhysicBody* toTestAgainst = myPhysicBodies[physicBodyToTestAgainst];
 
 				long long hashKey = reinterpret_cast<long long>(toTest) * reinterpret_cast<long long>(toTestAgainst);
 				collisionsToTest[hashKey] = std::make_pair(toTest, toTestAgainst);
 			}
 		}
-	}
+//	}
 
 	// Resolve found unique collision
 	for (auto& collisionPair : collisionsToTest)
@@ -166,11 +167,19 @@ void PhysicManager::RecieveMessage(const Message& aMessage)
 		break;
 	case eMessageTypes::eLevelLoaded:
 	{
-		constexpr int splitAmount = 20;
-		SetGridSize({ aMessage.myIntData / splitAmount, aMessage.mySecondIntData / splitAmount }, { splitAmount, splitAmount });
+		//constexpr int splitAmount = 20;
+		//SetGridSize({ aMessage.myIntData / splitAmount, aMessage.mySecondIntData / splitAmount }, { splitAmount, splitAmount });
+		//SetGridSize({ 1, 1 }, { aMessage.myIntData, aMessage.mySecondIntData });
+		SetGridSize({ 1, 1 }, { 99999, 99999 });
 		break;
 	}
 	}
+}
+
+void PhysicManager::Visit(PhysicBodyVisitor& aPhysicBodyVisitor)
+{
+	for (auto& physicBody : myPhysicBodies)
+		aPhysicBodyVisitor.Accept(*physicBody);
 }
 
 PhysicBody* PhysicManager::CreateNewPhysicBody()

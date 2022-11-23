@@ -1,7 +1,8 @@
 #pragma once
 #include <memory>
 
-class Map;
+class World;
+class MapChunk;
 class WaterMap;
 class LuaManager;
 class GameObjectFactory;
@@ -9,8 +10,11 @@ class GameObjectFactory;
 class Megaton
 {
 public:
-	Map&								GetMap() const;
-	void								SetMap(Map* aMap);
+	MapChunk&							GetMap() const;
+	World&								GetWorld() const;
+	std::vector<MapChunk*>				GetMapChunks(const Vector2f& aWorldPosition, const Vector2<int>& aHalfSize) const;
+	MapChunk*							GetMapChunk(const Vector2f& aWorldPosition) const;
+	void								SetWorld(World* aWorld);
 
 	std::shared_ptr<LuaManager>			GetLuaManager();
 	void								SetLuaManager(std::weak_ptr<LuaManager> aLuaManager);
@@ -28,7 +32,7 @@ private:
 										~Megaton();
 	static Megaton*						ourInstance;
 
-	Map*								myMap;
+	World*								myWorld;
 	GameObjectFactory*					myGameObjectFactory = nullptr;
 	std::weak_ptr<LuaManager>			myLuaManager;
 

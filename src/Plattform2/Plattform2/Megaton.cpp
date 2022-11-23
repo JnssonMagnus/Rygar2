@@ -1,28 +1,45 @@
 #include "stdafx.h"
 #include "Megaton.h"
+#include "World.h"
 
 Megaton* Megaton::ourInstance = nullptr;
 
 Megaton::Megaton()
 {
-	myMap = nullptr;
+	myWorld = nullptr;
 }
 
 Megaton::~Megaton()
-{
-	myMap = nullptr;
+{	
+	myWorld = nullptr;
 }
 
-Map& Megaton::GetMap() const
+MapChunk& Megaton::GetMap() const
 {
-	assert(myMap != nullptr && "Map not initiated in megaton!");
-	return *myMap;
+	assert(myWorld != nullptr && "MapChunk not initiated in megaton!");
+	return *myWorld->GetMapChunk({ 0.f, 0.f });
 }
 
-void Megaton::SetMap(Map* aMap)
+World& Megaton::GetWorld() const
 {
-	assert(aMap != nullptr && "Map is nullptr!");
-	myMap = aMap;
+	DL_ASSERT(myWorld != nullptr && "World is nullptr!");
+	return *myWorld;
+}
+
+std::vector<MapChunk*> Megaton::GetMapChunks(const Vector2f& aWorldPosition, const Vector2<int>& aHalfSize) const
+{
+	return myWorld->GetMapChunks(aWorldPosition, aHalfSize);
+}
+
+MapChunk* Megaton::GetMapChunk(const Vector2f& aWorldPosition) const
+{
+	return myWorld->GetMapChunk(aWorldPosition);
+}
+
+void Megaton::SetWorld(World* aWorld)
+{
+	assert(aWorld != nullptr && "World is nullptr!");
+	myWorld = aWorld;
 }
 
 std::shared_ptr<LuaManager> Megaton::GetLuaManager()
