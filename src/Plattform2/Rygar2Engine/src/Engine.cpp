@@ -3,14 +3,13 @@
 #include "PhysicManager.h"
 #include "EngineDebugInfo.h"
 #include "gameObjectManager.h"
-#include "GameState.h"
 #include "ParticleSystem.h"
 #include "LuaManager.h"
-#include "Megaton.h"
 #include <ThreadPool.h>
 #include <InputWrapper.h>
 #include <InputMapper.h>
 #include <Time/TimerManager.h>
+#include <WWiseSoundManager.h>
 #include <SDL.h>
 
 
@@ -23,11 +22,9 @@ Engine::Engine()
 void Engine::Init()
 {
 	DL_Debug::Debug::Create();
-	Megaton::Create();
-
+	
 	myLuaManager = std::make_shared<LuaManager>();
 	myLuaManager->Init();
-	Megaton::GetInstance().SetLuaManager(myLuaManager);
 
 	myRenderer.Init();
 
@@ -47,14 +44,13 @@ void Engine::Init()
 	myParticleSystem->Init(&myRenderer);
 	myParticleSystem->LoadParticleEmitterBlueprints((std::string(gDataPath) + "data/json/ParticleEmitterBlueprints.json").c_str());
 
-	mySoundManager.Init();
-	mySoundManager.InitBank((std::string(gDataPath) + "data/sound/init.bnk").c_str());
-	mySoundManager.LoadBank((std::string(gDataPath) + "data/sound/New_SoundBank.bnk").c_str());
+	mySoundManager = new SoundManager::WWiseSoundManager();
+	mySoundManager->Init();
+	mySoundManager->InitBank((std::string(gDataPath) + "data/sound/init.bnk").c_str());
+	mySoundManager->LoadBank((std::string(gDataPath) + "data/sound/New_SoundBank.bnk").c_str());
 
 	myEngineDebugInfo = new EngineDebugInfo();
-	myEngineDebugInfo->Init();
-	
-	myStateStack.PushMainState(new GameState(myStateStack.GetProxyObject()));
+	myEngineDebugInfo->Init();	
 
 	Input::InputMapper::GetInstance()->MapEvent(Input::eInputAction::eKeyF10, Input::eInputEvent::eCaptureMouse);
 	Input::InputMapper::GetInstance()->MapEvent(Input::eInputAction::eKeyESCAPE, Input::eInputEvent::eExit);
@@ -73,7 +69,7 @@ Engine::~Engine()
 	Timer::TimerManager::Destroy();
 	PostMaster::GetInstance()->Destroy();
 	DL_Debug::Debug::Destroy();
-	mySoundManager.Unload();
+	mySoundManager->Unload();
 }
 
 void Engine::MainLoop()
@@ -123,8 +119,7 @@ void Engine::MainLoop()
 
 					GameObjectManager::GetInstance()->UpdateGameObjects(fixedDeltaTime);
 
-					mySoundManager.Update();
-					mySoundManager.SwapBuffer();
+					mySoundManager->Update();
 
 					myEngineDebugInfo->Draw();
 					
@@ -135,7 +130,7 @@ void Engine::MainLoop()
 
 			ThreadPool::GetInstance()->AddWork([&] 
 				{ 
-					myParticleSystem->Update(fixedDeltaTime); 
+					myParticleSystem->Update(static_cast<float>(fixedDeltaTime)); 
 					myParticleSystem->Draw();					
 				});
 
