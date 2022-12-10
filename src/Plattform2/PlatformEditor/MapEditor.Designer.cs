@@ -123,39 +123,39 @@
             this.saveAsToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 32);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(176, 34);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.newToolStripMenuItem.Text = "&New";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(176, 34);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(176, 34);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(176, 34);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.saveAsToolStripMenuItem.Text = "Save &As";
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(176, 34);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.quitToolStripMenuItem.Text = "&Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.QuitToolStripMenuItem_Click);
             // 
@@ -166,7 +166,7 @@
             this.gameObjectTypeEditorToolStripMenuItem,
             this.mapSettingsToolStripMenuItem});
             this.editorsToolStripMenuItem.Name = "editorsToolStripMenuItem";
-            this.editorsToolStripMenuItem.Size = new System.Drawing.Size(83, 32);
+            this.editorsToolStripMenuItem.Size = new System.Drawing.Size(83, 29);
             this.editorsToolStripMenuItem.Text = "Editors";
             // 
             // tilesetEditorToolStripMenuItem
@@ -195,7 +195,7 @@
             this.specialToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createFrameToolStripMenuItem});
             this.specialToolStripMenuItem.Name = "specialToolStripMenuItem";
-            this.specialToolStripMenuItem.Size = new System.Drawing.Size(83, 32);
+            this.specialToolStripMenuItem.Size = new System.Drawing.Size(83, 29);
             this.specialToolStripMenuItem.Text = "&Special";
             // 
             // createFrameToolStripMenuItem
@@ -309,7 +309,7 @@
             this.ObjectsTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ObjectsTab.Name = "ObjectsTab";
             this.ObjectsTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ObjectsTab.Size = new System.Drawing.Size(95, 721);
+            this.ObjectsTab.Size = new System.Drawing.Size(292, 721);
             this.ObjectsTab.TabIndex = 1;
             this.ObjectsTab.Text = "Objects";
             this.ObjectsTab.UseVisualStyleBackColor = true;
@@ -353,7 +353,7 @@
             this.tabPage1.Controls.Add(this.VariableListBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(95, 721);
+            this.tabPage1.Size = new System.Drawing.Size(292, 721);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Object Data";
             this.tabPage1.UseVisualStyleBackColor = true;

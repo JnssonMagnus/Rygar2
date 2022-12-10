@@ -22,10 +22,25 @@ namespace PlatformEditor
             mapChunk.SetTile(aTileX, aTileY, aSourceTileX, aSourceTileY);
         }
 
+        public int GetTile(int aWorldTileX, int aWorldTileY) 
+        {
+            var mapChunk = GetMapChunkFromTileIndex(aWorldTileX, aWorldTileY);
+            var chunkWorldPosition = mapChunk.GetChunkWorldPosition();
+            int localTileX = aWorldTileX - (int)chunkWorldPosition.x / Settings.TileWidth();
+            int localTileY = aWorldTileY - (int)chunkWorldPosition.y / Settings.TileHeight();
+            return mapChunk.GetTile(localTileX, localTileY);
+        }
+
         public GameObject PlaceObject(Vector2 aPosition, GameObjectType aGameObjectType)
         {
             var mapChunk = GetMapChunk((int)aPosition.x, (int)aPosition.y);
             return mapChunk.PlaceObject(aPosition, aGameObjectType);
+        }
+
+        public GameObject PlaceObject(GameObject gameObject)
+        {
+            var mapChunk = GetMapChunk((int)gameObject.myPosition.x, (int)gameObject.myPosition.y);
+            return mapChunk.PlaceObject(gameObject);
         }
 
         public List<GameObject> GetGameObjectsFromChunk(int aWorldPositionX, int aWorldPositionY)

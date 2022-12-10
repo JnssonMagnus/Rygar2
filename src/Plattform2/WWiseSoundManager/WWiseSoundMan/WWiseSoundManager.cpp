@@ -112,6 +112,8 @@ namespace SoundManager
 		}
 
 		AK::SoundEngine::RenderAudio();
+
+		SwapBuffer();
 	}
 
 	void WWiseSoundManager::Unload()

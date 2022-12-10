@@ -29,12 +29,12 @@ namespace SoundManager
 		void	UpdateListenerPosition(const CU::Matrix44<float>& aSoundPosition);
 		void	RegisterSoundObjectID(const GameObjectID aGameObjectID);
 		void	UnregisterSoundObjectID(const GameObjectID aGameObjectID);
-		void	SwapBuffer();
 		void	SetRTPC(const char* aName, float aValue);
 
 		void	RecieveMessage(const Message& aMessage) override;
 
 	private:
+		void	SwapBuffer();
 		void	PlayEvent(const char* aEventName, const AkSoundPosition& aSoundPosition);
 		void	PlayEvent(const char* aEventName, const GameObjectID aGameObjectID = 0);
 		void	PlayEvent(const unsigned long aEventID, const GameObjectID aGameObjectID = 0);

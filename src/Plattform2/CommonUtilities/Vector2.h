@@ -8,6 +8,9 @@ public:
 	Vector2(const ObjectType aX, const ObjectType aY);
 	~Vector2(void);
 
+	template<class toType>
+	Vector2(const Vector2<toType>& aAnotherType);
+
 	Vector2 operator+(const Vector2& aVector) const;
 	Vector2 operator-(const Vector2& aVector) const;
 	Vector2 operator*(const Vector2& aVector) const;
@@ -250,7 +253,7 @@ bool Vector2<ObjectType>::operator!=(const Vector2 &aVector) const
 }
 
 template <typename ObjectType>
-float Vector2<ObjectType>::DistanceTo(const Vector2 &aVector) const
+inline float Vector2<ObjectType>::DistanceTo(const Vector2 &aVector) const
 {
 	return sqrt(pow(myX - aVector.myX, 2) + pow(myY - aVector.myY, 2));
 }
@@ -258,8 +261,15 @@ float Vector2<ObjectType>::DistanceTo(const Vector2 &aVector) const
 template <typename ObjectType>
 float Vector2<ObjectType>::SqrdDistanceTo(const Vector2& aVector) const
 {
-	return pow(myX - aVector.myX, 2) + pow(myY - aVector.myY, 2);
+	return static_cast<float>(pow(myX - aVector.myX, 2) + pow(myY - aVector.myY, 2));
 }
 
+template<class T>
+template<class toType>
+Vector2<T>::Vector2(const Vector2<toType>& aAnotherType)
+{
+	myX = static_cast<T>(aAnotherType.myX);
+	myY = static_cast<T>(aAnotherType.myY);
+}
 
 typedef Vector2<float> Vector2f;

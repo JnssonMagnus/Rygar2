@@ -300,7 +300,6 @@
       <Filter>Game\GameObjects\Actors\Player\Weapons</Filter>
     </ClInclude>
     <ClInclude Include="CollisionBoxDrawerVisitor.h" />
-    <ClInclude Include="Visitor.h" />
     <ClInclude Include="IngameDebugDraw.h" />
     <ClInclude Include="DataLoader.h" />
   </ItemGroup>

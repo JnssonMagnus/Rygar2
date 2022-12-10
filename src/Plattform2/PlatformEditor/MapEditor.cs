@@ -36,8 +36,18 @@ namespace PlatformEditor
 
         private Point myOldMousePosition = new Point();
 
-        private bool myLeftMousePressed = false;
-        private bool myRightMousePressed = false;
+        private struct MouseStatus
+        {
+            public bool myLeftMousePressed;
+            public bool myRightMousePressed;
+            public bool myLeftMouseDown;
+            public bool myRightMouseDown;
+            public bool myLeftMouseUp;
+            public bool myRightMouseUp;
+        };
+
+        MouseStatus myMouseStatus;
+
 
         private bool myIsDraggingObject = false;
 
@@ -110,6 +120,10 @@ namespace PlatformEditor
 
             myCamera.Size.x = (int)Map.Width * 10;
             myCamera.Size.y = (int)Map.Height * 10;
+
+            myWorld.LoadAll(myTilesets);
+            Tilesets.SelectedIndex = Tilesets.Items.IndexOf(myWorld.GetMapChunkFromTileIndex(0, 0).myTilesetName);
+            Map.Refresh();
         }
 
         private void Tileset_MouseEnter(object sender, EventArgs e)
@@ -176,17 +190,15 @@ namespace PlatformEditor
         private void SetTile(int aTargetNodeX, int aTargetNodeY, int aTileIndex, bool aUpdateNeighbours = false)
         {
             var mapChunk = myWorld.GetMapChunkFromTileIndex(aTargetNodeX, aTargetNodeY);
-            if (mapChunk != null) {
-                mapChunk.Tileset = myTilesets[Tilesets.Text];
-            }            
+            mapChunk.Tileset = myTilesets[Tilesets.Text];
 
-            if (mapChunk != null && myTilesets[Tilesets.Text].IsAutoTile(aTileIndex) == true)
+            if (myTilesets[Tilesets.Text].IsAutoTile(aTileIndex) == true)
             {
                 int autoTileValue = 0;
-                int leftTileIndex = mapChunk.GetTile(aTargetNodeX - 1, aTargetNodeY);
-                int rightTileIndex = mapChunk.GetTile(aTargetNodeX + 1, aTargetNodeY);
-                int upperTileIndex = mapChunk.GetTile(aTargetNodeX, aTargetNodeY - 1);
-                int lowerTileIndex = mapChunk.GetTile(aTargetNodeX, aTargetNodeY + 1);
+                int leftTileIndex = myWorld.GetTile(aTargetNodeX - 1, aTargetNodeY);
+                int rightTileIndex = myWorld.GetTile(aTargetNodeX + 1, aTargetNodeY);
+                int upperTileIndex = myWorld.GetTile(aTargetNodeX, aTargetNodeY - 1);
+                int lowerTileIndex = myWorld.GetTile(aTargetNodeX, aTargetNodeY + 1);
 
                 autoTileValue |= Convert.ToInt32(myTilesets[Tilesets.Text].IsAutoTile(upperTileIndex)) * 1;
                 autoTileValue |= Convert.ToInt32(myTilesets[Tilesets.Text].IsAutoTile(lowerTileIndex)) * 4;
@@ -208,45 +220,23 @@ namespace PlatformEditor
             }
             if (aUpdateNeighbours)
             {
-                SetIfAutoTile(aTargetNodeX - 1, aTargetNodeY, mapChunk.GetTile(aTargetNodeX - 1, aTargetNodeY));
-                SetIfAutoTile(aTargetNodeX + 1, aTargetNodeY, mapChunk.GetTile(aTargetNodeX + 1, aTargetNodeY));
-                SetIfAutoTile(aTargetNodeX, aTargetNodeY - 1, mapChunk.GetTile(aTargetNodeX, aTargetNodeY - 1));
-                SetIfAutoTile(aTargetNodeX, aTargetNodeY + 1, mapChunk.GetTile(aTargetNodeX, aTargetNodeY + 1));
+                SetIfAutoTile(aTargetNodeX - 1, aTargetNodeY, myWorld.GetTile(aTargetNodeX - 1, aTargetNodeY));
+                SetIfAutoTile(aTargetNodeX + 1, aTargetNodeY, myWorld.GetTile(aTargetNodeX + 1, aTargetNodeY));
+                SetIfAutoTile(aTargetNodeX, aTargetNodeY - 1, myWorld.GetTile(aTargetNodeX, aTargetNodeY - 1));
+                SetIfAutoTile(aTargetNodeX, aTargetNodeY + 1, myWorld.GetTile(aTargetNodeX, aTargetNodeY + 1));
             }
         }
 
         void SetIfAutoTile(int aTargetNodeX, int aTargetNodeY, int aTileIndex)
         {
-            if (aTargetNodeX >= 0 && aTargetNodeY >= 0 &&
-                aTargetNodeX < Settings.MapWidth() && aTargetNodeY < Settings.MapHeight() &&
-                myTilesets[Tilesets.Text].IsAutoTile(aTileIndex) == true)
+            if (aTargetNodeX >= 0 && aTargetNodeY >= 0 && myTilesets[Tilesets.Text].IsAutoTile(aTileIndex) == true)
             {
                 SetTile(aTargetNodeX, aTargetNodeY, aTileIndex, false);
             }
         }
         private void Map_Click(object sender, EventArgs e)
         {
-            MouseEventArgs mouseEvent = (MouseEventArgs)e;
-            if (EditTab.SelectedTab.Text == "Tileset")
-            {
-                if (mouseEvent.Button == MouseButtons.Left)
-                {
-                    myLeftMousePressed = true;
-                    int targetNodeX = (int)(mouseEvent.X / Settings.TileWidth());
-                    int targetNodeY = (int)(mouseEvent.Y / Settings.TileHeight());
-                    int tileIndex = (myTilesetMarker.X / Settings.TileWidth()) + (myTilesetMarker.Y / Settings.TileHeight()) * myTilesets[Tilesets.Text].GetTileCols();
-                    SetTile(targetNodeX, targetNodeY, tileIndex, true);
-                }
-                else if (mouseEvent.Button == MouseButtons.Right)
-                {
-                    myRightMousePressed = true;
-                }
-            }
-            else if (EditTab.SelectedTab.Text == "Objects")
-            {
-                mySelectedGameObject = PickObject(mouseEvent);
-                Map.Refresh();
-            }
+
         }
 
         private GameObject PickObject(MouseEventArgs aMouseEvent)
@@ -256,9 +246,18 @@ namespace PlatformEditor
             {
                 if (gameObject.IsInside(aMouseEvent.X + (int)myCamera.Position.x, aMouseEvent.Y + (int)myCamera.Position.y) == true)
                 {
-                    return gameObject;
+                    if (mySelectedGameObject != gameObject)
+                    {
+                        return gameObject;
+                    }
                 }
             }
+
+            if (mySelectedGameObject != null && mySelectedGameObject.IsInside(aMouseEvent.X + (int)myCamera.Position.x, aMouseEvent.Y + (int)myCamera.Position.y) == true)
+            {
+                return mySelectedGameObject;
+            }
+
             return null;
         }
 
@@ -272,12 +271,24 @@ namespace PlatformEditor
             myMapMarker.X = (int)(e.X / Settings.TileWidth()) * Settings.TileWidth();
             myMapMarker.Y = (int)(e.Y / Settings.TileHeight()) * Settings.TileHeight();
 
-            if (myLeftMousePressed)
+
+            if (EditTab.SelectedTab.Text == "Tileset")
             {
-                Map_Click(sender, e);
+                if (myMouseStatus.myLeftMousePressed)
+                {
+                    SetTile(e);
+                }
+            }
+            else if (EditTab.SelectedTab.Text == "Objects")
+            {
+                if (myMouseStatus.myLeftMousePressed && mySelectedGameObject != null)
+                {
+                    mySelectedGameObject.myPosition = new Vector2(e.X + myCamera.Position.x, e.Y + myCamera.Position.y);
+                }
             }
 
-            if (myRightMousePressed == true)
+            // Drag camera
+            if (myMouseStatus.myRightMousePressed == true)
             {
                 myCamera.Position.x -= e.Location.X - myOldMousePosition.X;
                 myCamera.Position.y -= e.Location.Y - myOldMousePosition.Y;
@@ -388,32 +399,69 @@ namespace PlatformEditor
 
         private void Map_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            switch (e.Button)
             {
-                myLeftMousePressed = false;
+                case MouseButtons.Left:
+                    myMouseStatus.myLeftMousePressed = false;
+                    myMouseStatus.myLeftMouseDown = false;
+                    myMouseStatus.myLeftMouseUp = true;
+                    break;
+                case MouseButtons.Right:
+                    myMouseStatus.myRightMousePressed = false;
+                    myMouseStatus.myRightMouseDown = false;
+                    myMouseStatus.myRightMouseUp = true;
+                    break;
             }
-            else if (e.Button == MouseButtons.Right)
+
+            if (EditTab.SelectedTab.Text == "Objects" && myMouseStatus.myLeftMouseUp && mySelectedGameObject != null)
             {
-                myRightMousePressed = false;
+                mySelectedGameObject.myChunk.GetGameObjects().Remove(mySelectedGameObject);
+                myWorld.PlaceObject(mySelectedGameObject);
             }
         }
 
         private void Map_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            switch (e.Button)
             {
-                myLeftMousePressed = true;
+                case MouseButtons.Left:
+                    myMouseStatus.myLeftMousePressed = true;
+                    myMouseStatus.myLeftMouseDown = true;
+                    break;
+                case MouseButtons.Right:
+                    myMouseStatus.myRightMousePressed = true;
+                    myMouseStatus.myRightMouseDown = true;
+                    break;
             }
-            else if (e.Button == MouseButtons.Right)
+
+            MouseEventArgs mouseEvent = (MouseEventArgs)e;
+
+            if (EditTab.SelectedTab.Text == "Tileset")
             {
-                myRightMousePressed = true;
+                if (mouseEvent.Button == MouseButtons.Left)
+                {
+                    SetTile(mouseEvent);
+                }
             }
+            else if (EditTab.SelectedTab.Text == "Objects")
+            {
+                mySelectedGameObject = PickObject(mouseEvent);
+                Map.Refresh();
+            }
+        }
+
+        private void SetTile(MouseEventArgs mouseEventArgs)
+        {
+            int targetNodeX = (int)((mouseEventArgs.X + myCamera.Position.x) / Settings.TileWidth());
+            int targetNodeY = (int)((mouseEventArgs.Y + myCamera.Position.y) / Settings.TileHeight());
+            int tileIndex = (myTilesetMarker.X / Settings.TileWidth()) + (myTilesetMarker.Y / Settings.TileHeight()) * myTilesets[Tilesets.Text].GetTileCols();
+            SetTile(targetNodeX, targetNodeY, tileIndex, true);
         }
 
         private void Map_MouseLeave(object sender, EventArgs e)
         {
-            myLeftMousePressed = false;
-            myRightMousePressed = false;
+            myMouseStatus.myLeftMousePressed = false;
+            myMouseStatus.myRightMousePressed = false;
         }
 
         private void QuitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -428,9 +476,6 @@ namespace PlatformEditor
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myWorld.LoadAll(myTilesets);
-            Tilesets.Items.IndexOf(myWorld.mMapChunk.myTilesetName);
-            Map.Refresh();
         }
 
         private void TilesetEditorToolStripMenuItem_Click(object sender, EventArgs e)

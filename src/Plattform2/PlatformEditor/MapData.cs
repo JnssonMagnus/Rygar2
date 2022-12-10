@@ -84,6 +84,13 @@ namespace PlatformEditor
             return gameObject;
         }
 
+        public GameObject PlaceObject(GameObject gameObject)
+        {
+            gameObject.myChunk = this;
+            myGameObjects.Add(gameObject);
+            return gameObject;
+        }
+
         public Image GetTileSetImage()
         {
             return myTileSetImage;
