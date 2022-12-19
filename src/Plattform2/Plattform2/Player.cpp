@@ -61,8 +61,7 @@ void Player::Draw()
 void Player::Init(GameObjectType& aGameObjectType)
 {
 	Actor::Init(aGameObjectType);
-	myHook.Init("data/gfx/link.png", "data/gfx/hook.png", 200.f, 5.f, 1);
-	
+	myHook.Init("data/gfx/link.png", "data/gfx/hook.png", 200.f, 5.f, 1);	
 
 	myAim.Init();
 

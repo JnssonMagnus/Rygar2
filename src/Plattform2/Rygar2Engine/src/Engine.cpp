@@ -112,6 +112,7 @@ void Engine::MainLoop()
 
 					PhysicManager::GetInstance()->UpdatePhysicBodies();
 					PhysicManager::GetInstance()->ResolveCollisions();
+					
 					myRenderer.UpdateCamera();
 
 					myStateStack.UpdateCurrentState(fixedDeltaTime);

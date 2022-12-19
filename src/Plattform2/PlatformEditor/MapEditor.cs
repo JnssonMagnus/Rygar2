@@ -268,8 +268,10 @@ namespace PlatformEditor
 
         private void Map_MouseMove(object sender, MouseEventArgs e)
         {
-            myMapMarker.X = (int)(e.X / Settings.TileWidth()) * Settings.TileWidth();
-            myMapMarker.Y = (int)(e.Y / Settings.TileHeight()) * Settings.TileHeight();
+            int offSetX = (int)myCamera.Position.x % Settings.TileWidth() - 1;
+            int offSetY = (int)myCamera.Position.y % Settings.TileHeight() - 1;
+            myMapMarker.X = (int)((e.X + offSetX) / Settings.TileWidth()) * Settings.TileWidth() - offSetX;
+            myMapMarker.Y = (int)((e.Y + offSetY) / Settings.TileHeight()) * Settings.TileHeight() - offSetY;
 
 
             if (EditTab.SelectedTab.Text == "Tileset")

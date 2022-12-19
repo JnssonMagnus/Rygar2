@@ -74,6 +74,7 @@ void Renderer::Draw()
 {
 	SDL_RenderClear(mySDL_Pointers.myRenderer);
 
+	CopyCurrentCameraData();
 	DrawSprites();
 	DrawParticleSystems();
 	DrawDebugLines();
@@ -101,8 +102,6 @@ void Renderer::SwapRenderBuffer()
 	std::swap(myGUIRenderCommands[0], myGUIRenderCommands[1]);
 	std::swap(myPSRenderCommands[0], myPSRenderCommands[1]);
 	std::swap(myDebugLines[0], myDebugLines[1]);
-
-	myBufferedCameraPosition = myCameraStack.Top()->GetPosition();
 }
 
 void Renderer::UpdateCamera()
@@ -190,12 +189,19 @@ void Renderer::DrawDebugLines()
 	}
 }
 
+void Renderer::CopyCurrentCameraData()
+{
+	myCopiedCameraData.myPosition = myCameraStack.Top()->GetPosition();
+	myCopiedCameraData.myZoom = myCameraStack.Top()->GetZoom();
+
+}
+
 void Renderer::WorldPosToCameraSpace(SDL_Rect& aWorldPos, const bool aUseZoom)
 {
-	const float cameraZoom = aUseZoom ? myCameraStack.Top()->GetZoom() : 1.f;
+	const float cameraZoom = aUseZoom ? myCopiedCameraData.myZoom : 1.f;
 	float fx, fy, fw, fh;
-	aWorldPos.x = fx = ((aWorldPos.x - myCameraStack.Top()->GetPosition().myX) * cameraZoom) + 0.5f + (SCREEN_WIDTH / 2.f + 0.5f);
-	aWorldPos.y = fy = ((aWorldPos.y - myCameraStack.Top()->GetPosition().myY) * cameraZoom) + 0.5f + (SCREEN_HEIGHT / 2.f + 0.5f);
+	aWorldPos.x = fx = ((aWorldPos.x - myCopiedCameraData.myPosition.myX) * cameraZoom) + 0.5f + (SCREEN_WIDTH / 2.f + 0.5f);
+	aWorldPos.y = fy = ((aWorldPos.y - myCopiedCameraData.myPosition.myY) * cameraZoom) + 0.5f + (SCREEN_HEIGHT / 2.f + 0.5f);
 	aWorldPos.w = fw = (aWorldPos.w * cameraZoom) + 0.5f;
 	aWorldPos.h = fh = (aWorldPos.h * cameraZoom) + 0.5f;
 

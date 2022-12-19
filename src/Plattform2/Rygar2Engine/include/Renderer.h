@@ -88,6 +88,7 @@ private:
 	void													DrawGUISprites();
 	void													DrawParticleSystems();
 	void													DrawDebugLines();
+	void													CopyCurrentCameraData();
 	
 	void													WorldPosToCameraSpace(SDL_Rect& aWorldPos, const bool aUseZoom);
 
@@ -101,7 +102,12 @@ private:
 	CU::StaticArray<CU::GrowingArray<PSRenderCommand>, 2>	myPSRenderCommands;
 	CU::StaticArray<CU::GrowingArray<LineRenderCommand>, 2>	myDebugLines;
 
-	Vector2f												myBufferedCameraPosition;
-	CommonUtilities::Stack<Camera*>							myCameraStack;	
+	struct {
+		Vector2f												myPosition;
+		float													myZoom;
+	} myCopiedCameraData;
+
+	CommonUtilities::Stack<Camera*>							myCameraStack;
+
 };
 
