@@ -37,6 +37,7 @@ void GameState::InitState()
 	myPlayerCamera = new PlayerCamera(myPlayer);
 	GameObjectManager::GetInstance()->AddGameObject(myPlayer);
 	GameObjectManager::GetInstance()->AddAndRemoveObjects();
+	myPlayer->SetStartPosition({ 100, 100 });
 
 	myIngameDebugDraw.Init(myPlayerCamera);
 
@@ -66,7 +67,7 @@ eStateStatus GameState::Update(const float aDeltaTime)
 	for (auto mapChunk : mapChunksWithPlayer)
 	{
 		mapChunk->Collided(myPlayer->GetPhysicBody());
-		mapChunk->UpdatePlayerVsWaterCollisions(*myPlayer);
+	//	mapChunk->UpdatePlayerVsWaterCollisions(*myPlayer);
 	}
 
 	auto mapChunksOnScreen = myWorld->GetMapChunks(myPlayerCamera->GetPosition(), Vector2<int>(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
@@ -125,7 +126,7 @@ void GameState::RecieveMessage(const Message& aMessage)
 	{
 	case eMessageTypes::eCreateObject:
 		GameObject* newObject = myGameObjectFactory.CreateObject(aMessage.myIntData);
-		newObject->GetPhysicBody().SetPosition(aMessage.myPosition);
+		newObject->GetPhysicBody().SetStartPosition(aMessage.myPosition);
 		newObject->GetPhysicBody().SetVelocity(aMessage.myDirection);
 		GameObjectManager::GetInstance()->AddGameObject(newObject);
 		break;

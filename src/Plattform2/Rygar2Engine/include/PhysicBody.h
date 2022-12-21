@@ -54,6 +54,7 @@ public:
 
 	void						SetFriction(const Vector2f& aAirFriction, const Vector2f& aGroundFriction);
 	void						SetPosition(const Vector2f& aPosition);
+	void						SetStartPosition(const Vector2f& aPosition);
 	void						SetForce(const Vector2f& aForce);
 	void						SetVelocity(const Vector2f& aVelocity);
 	void						SetHalfSize(const Vector2f& aHalfSize);

@@ -33,6 +33,9 @@ public:
 	virtual void			CollideWithTile(eCollisionPoint collisionPoint = eCollisionPoint::eNoCollision);
 	void					Delete();
 	void					SetPosition(const Vector2f& aPosition);
+	
+	// Also moves the "old position" so it appears as if the character got teleported
+	void					SetStartPosition(const Vector2f& aPosition);
 
 	template<class T>
 	const T&				GetProperty(const PropertyKey) const;

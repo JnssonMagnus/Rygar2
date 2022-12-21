@@ -96,6 +96,12 @@ void PhysicBody::SetPosition(const Vector2f& aPosition)
 	myPosition = aPosition;
 }
 
+void PhysicBody::SetStartPosition(const Vector2f& aPosition)
+{
+	SetPosition(aPosition);
+	myOldPosition = aPosition;
+}
+
 void PhysicBody::SetForce(const Vector2f& aForce)
 {
 	myForce = aForce;

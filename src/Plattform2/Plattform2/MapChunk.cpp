@@ -198,7 +198,7 @@ eCollisionPoint MapChunk::Collided(PhysicBody& aPhysicBody)
 		bottomPosition = bottomPosition * myTileHeight - halfSize.myY;
 		aPhysicBody.SetPosition({ aPhysicBody.GetPosition().myX, bottomPosition });
 		aPhysicBody.SetVelocity({ aPhysicBody.GetVelocity().myX, -aPhysicBody.GetVelocity().myY * aPhysicBody.GetBounciness() });
-		collision = eCollisionPoint::eBottom;
+		collision = eCollisionPoint::eBottom;		
 	}
 
 	// collided top
@@ -312,10 +312,10 @@ int MapChunk::GetTileIndexFromWorldPosition(const Vector2f& aWorldPosition) cons
 
 bool MapChunk::Collided(const Vector2f& aStartPosition, const Vector2f& aEndPosition, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator) const
 {
-	Vector2<int> startNode = { static_cast<int>((aStartPosition.myX - myWorldPosition.myX) / myTileWidth),
-								static_cast<int>((aStartPosition.myY - myWorldPosition.myY) / myTileWidth) };
-	Vector2<int> endNode = { static_cast<int>((aEndPosition.myX - myWorldPosition.myX) / myTileWidth),
-								static_cast<int>((aEndPosition.myY - myWorldPosition.myY) / myTileWidth) };
+	Vector2<int> startNode = { static_cast<int>(floor((aStartPosition.myX - myWorldPosition.myX) / myTileWidth)),
+								static_cast<int>(floor((aStartPosition.myY - myWorldPosition.myY) / myTileHeight)) };
+	Vector2<int> endNode = { static_cast<int>(floor((aEndPosition.myX - myWorldPosition.myX) / myTileWidth)),
+								static_cast<int>(floor((aEndPosition.myY - myWorldPosition.myY) / myTileHeight)) };
 	
 	startNode.x = std::max(0, startNode.x);
 	startNode.y = std::max(0, startNode.y);

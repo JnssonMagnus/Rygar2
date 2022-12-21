@@ -230,9 +230,10 @@ Vector2f Chain::Update(const float aDeltaTime, const Vector2f& aParentPosition, 
 	//	}
 	//}
 
-	if (myEndObject)
+	if (myEndObject && myState != eState::eUnreleased)
 	{		
-		myEndObject->GetPhysicBody().SetVelocity(myLinks[0].myPosition - myEndObject->GetPhysicBody().GetPosition());
+		myEndObject->GetPhysicBody().SetVelocity(myLinks[0].myPosition - myEndObject->GetPhysicBody().GetPosition());				
+		//myEndObject->GetPhysicBody().SetPosition(myLinks[0].myPosition);
 	}
 
 

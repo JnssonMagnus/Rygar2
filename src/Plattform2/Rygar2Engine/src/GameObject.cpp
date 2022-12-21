@@ -104,6 +104,11 @@ void GameObject::SetPosition(const Vector2f& aPosition)
 	myPhysicBody->SetPosition(aPosition);
 }
 
+void GameObject::SetStartPosition(const Vector2f& aPosition)
+{
+	myPhysicBody->SetStartPosition(aPosition);
+}
+
 const std::string& GameObject::GetTypeName() const
 {
 	return myGameObjectType->GetName();
