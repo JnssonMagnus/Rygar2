@@ -11,6 +11,7 @@
 #include "GrenadeLauncher.h"
 #include "DiskArmor.h"
 #include "ParticleEmitter.h"
+#include "PlayerAnimationController.h"
 #include <postmaster/postmaster.h>
 
 Player::Player()
@@ -20,6 +21,8 @@ Player::Player()
 	myJumpStrength = 8.f;
 	myDashReloadTimer = 60;
 	myDashTime = 0;	
+
+	myProperties.SetValue(PropertyKey::eDucking, false);
 }
 
 Player::~Player()
@@ -60,7 +63,7 @@ void Player::Draw()
 
 void Player::Init(GameObjectType& aGameObjectType)
 {
-	Actor::Init(aGameObjectType);
+	Actor::Init<PlayerAnimationController>(aGameObjectType, *this, myAnimationSet);
 	myHook.Init("data/gfx/link.png", "data/gfx/hook.png", 200.f, 5.f, 1);	
 
 	myAim.Init();
@@ -71,9 +74,12 @@ void Player::Init(GameObjectType& aGameObjectType)
 	myAnimationSet.AddAnimation(eAnimationID::eWalk, 3, frameSize, 10);
 	myAnimationSet.AddAnimation(eAnimationID::eIdle, 1, frameSize, 5, { frameSize.myX * 2, frameSize.myY * 2 });
 	myAnimationSet.AddAnimation(eAnimationID::eFall, 1, frameSize, 5, { 0, frameSize.myY * 3 });
-	myAnimationSet.AddAnimation(eAnimationID::eJump, 1, frameSize, 5, { 0, frameSize.myY * 2 });
+	myAnimationSet.AddAnimation(eAnimationID::eJump, 1, frameSize, 5, { 0, frameSize.myY * 3 });
 	myAnimationSet.AddAnimation(eAnimationID::eAttack, 1, frameSize, 5, { 0, frameSize.myY });
 	myAnimationSet.AddAnimation(eAnimationID::eJumpAttack, 1, frameSize, 5, frameSize );
+	myAnimationSet.AddAnimation(eAnimationID::eDuckIdle, 1, frameSize, 5, { 0, frameSize.myY * 2 });
+	myAnimationSet.AddAnimation(eAnimationID::eDuckAttack, 1, frameSize, 5, { frameSize.myX * 2, frameSize.myY});
+	myAnimationSet.AddAnimation(eAnimationID::eThrowHook, 1, frameSize, 5, { frameSize.myX * 1, frameSize.myY * 2 });
 	myAnimationSet.PushAnimation(eAnimationID::eIdle);
 
 	myAnimationSet.CenterPivot();
@@ -161,6 +167,12 @@ void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputSt
 			myPhysicBody->AddForce({ -300.f, 0.f });
 		break;
 	case Input::eInputEvent::eDown:
+		if (myHook.GetState() == Chain::eState::eUnreleased && aState == Input::eInputState::ePressed && myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom) == true) {
+			ChangeProperty<bool>(PropertyKey::eDucking) = true;
+		}
+		else if (myHook.GetState() == Chain::eState::eUnreleased && aState == Input::eInputState::eUp) {
+			ChangeProperty<bool>(PropertyKey::eDucking) = false;
+		}
 		myHook.Extend();
 		break;
 	case Input::eInputEvent::eDash:
@@ -254,7 +266,7 @@ bool Player::IsAboveEnemy(const GameObject* const aGameObject) const
 
 bool Player::IsHinderedFromMoving() const
 {
-	return IsAttacking() && myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom) == true;
+	return IsAttacking() && myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom) == true || GetProperty<bool>(PropertyKey::eDucking) == true;
 }
 
 bool Player::IsAttacking() const

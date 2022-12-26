@@ -6,6 +6,7 @@
 #include "Megaton.h"
 #include "MapChunk.h"
 #include "AIBehaviour.h"
+#include "AnimationController.h"
 
 void Enemy::Update(const float aDeltaTime)
 {
@@ -65,7 +66,7 @@ void Enemy::Update(const float aDeltaTime)
 
 void Enemy::Init(GameObjectType& aGameObjectType)
 {
-	Actor::Init(aGameObjectType);
+	Actor::Init<AnimationController>(aGameObjectType, *this, myAnimationSet);
 	myProperties.SetValue(ePropertyValues::eLife, 3);
 	myProperties.SetValue(ePropertyValues::eAlive, true);
 	myProperties.SetValue(ePropertyValues::eFacingRight, true);

@@ -188,6 +188,7 @@
     <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="GrenadeLauncher.cpp" />
     <ClCompile Include="IngameDebugDraw.cpp" />
+    <ClCompile Include="PlayerAnimationController.cpp" />
     <ClCompile Include="Shotgun.cpp" />
     <ClCompile Include="Sprayer.cpp" />
     <ClCompile Include="Hammer.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="GrenadeLauncher.h" />
     <ClInclude Include="IngameDebugDraw.h" />
+    <ClInclude Include="PlayerAnimationController.h" />
     <ClInclude Include="Shotgun.h" />
     <ClInclude Include="Sprayer.h" />
     <ClInclude Include="Hammer.h" />

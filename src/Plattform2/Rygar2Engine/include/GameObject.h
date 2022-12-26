@@ -12,7 +12,8 @@ enum class ePropertyValues
 	eLife,
 	eAlive,
 	eFacingRight,
-	eIsAttacking
+	eIsAttacking,
+	eDucking
 };
 
 typedef ePropertyValues PropertyKey;

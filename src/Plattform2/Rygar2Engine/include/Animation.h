@@ -9,10 +9,13 @@ enum class eAnimationID
 	eWalk,
 	eJump,
 	eAttack,
+	eDuckAttack,
 	eJumpAttack,
 	eFall,
 	eStagger,
-	eDead
+	eDead,
+	eDuckIdle,
+	eThrowHook
 };
 
 class AnimationSet : public Sprite

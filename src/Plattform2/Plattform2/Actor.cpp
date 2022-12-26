@@ -3,19 +3,17 @@
 #include "PhysicBody.h"
 #include "MapChunk.h"
 #include "Megaton.h"
+#include "AnimationController.h"
 
-void Actor::Init(GameObjectType& aGameObjectType)
+Actor::~Actor()
 {
-	myProperties.SetValue(ePropertyValues::eFacingRight, true);
-	myProperties.SetValue(ePropertyValues::eIsAttacking, false);
-	GameObject::Init(aGameObjectType);
-	myAnimationController.Init(*this, myAnimationSet);
+	SAFE_DELETE(myAnimationController);
 }
 
 void Actor::Update(const float aDeltaTime)
 {
 	myAnimationSet.Update(aDeltaTime);
-	myAnimationController.Update();
+	myAnimationController->Update();
 	GameObject::Update(aDeltaTime);
 
 	if (myStaggeredData.myStaggeredTime > 0.f)

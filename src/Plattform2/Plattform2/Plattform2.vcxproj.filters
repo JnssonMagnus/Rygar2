@@ -167,6 +167,9 @@
     <ClCompile Include="CollisionBoxDrawerVisitor.cpp" />
     <ClCompile Include="IngameDebugDraw.cpp" />
     <ClCompile Include="DataLoader.cpp" />
+    <ClCompile Include="PlayerAnimationController.cpp">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -302,6 +305,9 @@
     <ClInclude Include="CollisionBoxDrawerVisitor.h" />
     <ClInclude Include="IngameDebugDraw.h" />
     <ClInclude Include="DataLoader.h" />
+    <ClInclude Include="PlayerAnimationController.h">
+      <Filter>Game\GameObjects\Actors\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="DD.txt" />

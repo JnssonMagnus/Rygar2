@@ -5,6 +5,7 @@
 #include "PhysicBody.h"
 #include "Megaton.h"
 #include "MapChunk.h"
+#include "AnimationController.h"
 
 void BigEnemy::Update(const float aDeltaTime)
 {
@@ -72,7 +73,7 @@ void BigEnemy::Update(const float aDeltaTime)
 
 void BigEnemy::Init(GameObjectType& aGameObjectType)
 {
-	Actor::Init(aGameObjectType);
+	Actor::Init<AnimationController>(aGameObjectType, *this, myAnimationSet);
 	myProperties.SetValue(ePropertyValues::eLife, 1000);
 	myProperties.SetValue(ePropertyValues::eAlive, true);
 	myProperties.SetValue(ePropertyValues::eFacingRight, true);

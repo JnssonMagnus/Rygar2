@@ -6,11 +6,14 @@ class AnimationSet;
 class AnimationController
 {
 public:
-	void					Init(const GameObject& aParent, AnimationSet& aAnimationSet);
-	void					Update();
+	virtual					~AnimationController() = default;
+							AnimationController(const GameObject& aParent, AnimationSet& aAnimationSet);
+	virtual void			Update();
 
-private:
+protected:
 	const GameObject*		myParent = nullptr;
 	AnimationSet*			myParentAnimationSet = nullptr;
+
+	bool					IsOnGround() const;
 };
 

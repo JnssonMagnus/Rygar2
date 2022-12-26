@@ -50,12 +50,12 @@ void StatGUI::Init(const std::string& aText, const Vector2<int>& aPosition, cons
 
 void StatGUI::Draw()
 {
-	static Color red(255_uc, 0_uc, 0_uc);
-	static Color green(100_uc, 255_uc, 0_uc);
-	static Color yellow(255_uc, 255_uc, 0_uc);
+	static const Color red(255_uc, 0_uc, 0_uc);
+	static const Color green(100_uc, 255_uc, 0_uc);
+	static const Color yellow(255_uc, 255_uc, 0_uc);
 
 	myTypeText.Draw();	
-	Color color{ static_cast <unsigned char>(255.f * ((100.f-myValue) / 100.f)), static_cast < unsigned char>(255 * (myValue / 100.f)), 0 };
+	const Color color{ static_cast <unsigned char>(255.f * ((100.f-myValue) / 100.f)), static_cast < unsigned char>(255 * (myValue / 100.f)), 0 };
 	myBarSprite.Draw({ myTypeText.GetPosition().myX + 70.f, static_cast<float>(myTypeText.GetPosition().myY) }, Vector2<int>(myValue, 16), color, 128_uc);
 }
 

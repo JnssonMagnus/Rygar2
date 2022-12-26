@@ -4,7 +4,7 @@
 #include "Animation.h"
 #include "GameObject.h"
 
-void AnimationController::Init(const GameObject& aParent, AnimationSet& aAnimationSet)
+AnimationController::AnimationController(const GameObject& aParent, AnimationSet& aAnimationSet)
 {
 	DL_ASSERT(myParentAnimationSet == nullptr && "Character animationController already set up!");
 	myParent = &aParent;
@@ -23,7 +23,7 @@ void AnimationController::Update()
 		myParentAnimationSet->FlipImage(!myParent->GetProperty<bool>(PropertyKey::eFacingRight));
 		if (myParent->GetPhysicBody().GetOption(ePhysicBodyOptions::eGravity) == true)
 		{
-			if (myParent->GetPhysicBody().HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom) == false)
+			if (IsOnGround() == false)
 			{
 				if (myParent->GetProperty<bool>(PropertyKey::eIsAttacking) == true)
 				{
@@ -55,4 +55,9 @@ void AnimationController::Update()
 			}
 		}
 	}
+}
+
+bool AnimationController::IsOnGround() const
+{
+	return myParent->GetPhysicBody().HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom);
 }
