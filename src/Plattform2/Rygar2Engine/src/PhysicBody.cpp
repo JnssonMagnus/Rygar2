@@ -58,6 +58,8 @@ void PhysicBody::Update()
 		myVelocity.myY = -17.f;
 
 	myPosition += myVelocity;
+	myPosition += myTranslationToAdd;
+	myTranslationToAdd.x = myTranslationToAdd.y = 0.f;
 	myForce.myX = myForce.myY = 0.f;	
 }
 
@@ -83,6 +85,11 @@ bool PhysicBody::Collides(const Vector2f& aPoint) const
 			aPoint.myX > myPosition.myX + myHalfSize.myX ||
 			aPoint.myY > myPosition.myY + myHalfSize.myY);
 
+}
+
+void PhysicBody::TranslatePosition(const Vector2f& aOffset)
+{
+	myTranslationToAdd += aOffset;
 }
 
 void PhysicBody::SetFriction(const Vector2f& aAirFriction, const Vector2f& aGroundFriction)

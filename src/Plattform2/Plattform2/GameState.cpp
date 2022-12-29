@@ -76,6 +76,16 @@ eStateStatus GameState::Update(const float aDeltaTime)
 		mapChunk->UpdateWaterMovement();
 	}
 
+	//PhysicBody apa;
+	//apa.SetHalfSize({ 12, 12 });
+	//apa.SetStartPosition({ 48 + 13, 100 });
+	//apa.SetPosition({ 15, 100 });
+	//auto apaChunks = myWorld->GetMapChunks(apa.GetPosition(), apa.GetHalfSize());
+	//for (auto mapChunk : apaChunks)
+	//{
+	//	mapChunk->Collided(apa);
+	//}
+
 
 	const auto& gameObjects = GameObjectManager::GetInstance()->GetGameObjects();
 	for (int gameObjectIndex = 0; gameObjectIndex < gameObjects.Size(); gameObjectIndex++)

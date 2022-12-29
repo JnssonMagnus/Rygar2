@@ -36,8 +36,8 @@ void DiskArmor::Draw()
 
 void DiskArmor::Init()
 {
-	constexpr float maxLength = 85.f;
-	constexpr float initSpeed = 10.f;
+	constexpr float maxLength = 55.f;
+	constexpr float initSpeed = 13.f;
 	constexpr int returnSpeed = 1;
 	myDisk = dynamic_cast<Disk*>(Megaton::GetInstance().GetGameObjectFactory().CreateObject(eGameObjectTypes::eDisk));
 	myChain.Init("data/gfx/discArmor_link.png", "data/gfx/discArmor.png", maxLength, initSpeed, returnSpeed, myDisk, false);

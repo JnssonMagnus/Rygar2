@@ -3,7 +3,7 @@
 #define SCREEN_HEIGHT 240
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 768
-#define GRAVITY 0.3f
+#define GRAVITY 0.25f
 #define MAP_CHUNK_SIZE 3000
 #define TILE_WIDTH 16
 #define TILE_HEIGHT 16

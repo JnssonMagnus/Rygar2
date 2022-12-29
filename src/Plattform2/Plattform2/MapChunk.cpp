@@ -178,60 +178,73 @@ eCollisionPoint MapChunk::Collided(PhysicBody& aPhysicBody)
 	const Vector2f& newPos = aPhysicBody.GetPosition();
 	const Vector2f& oldPos = aPhysicBody.GetOldPosition();
 
-	const Vector2f newTopOldLeft(oldPos.myX - halfSize.myX + 1, newPos.myY - halfSize.myY);
-	const Vector2f newTopOldRight(oldPos.myX + halfSize.myX - 1, newPos.myY - halfSize.myY);
+	Vector2f newTopOldLeft(oldPos.myX - halfSize.myX + 1, newPos.myY - halfSize.myY);
+	Vector2f newTopOldRight(oldPos.myX + halfSize.myX - 1, newPos.myY - halfSize.myY);
 
-	const Vector2f newBottomOldLeft(oldPos.myX - halfSize.myX + 1, newPos.myY + halfSize.myY);
-	const Vector2f newBottomOldRight(oldPos.myX + halfSize.myX - 1, newPos.myY + halfSize.myY);
+	Vector2f newBottomOldLeft(oldPos.myX - halfSize.myX + 1, newPos.myY + halfSize.myY);
+	Vector2f newBottomOldRight(oldPos.myX + halfSize.myX - 1, newPos.myY + halfSize.myY);
 
-	const Vector2f oldTopNewLeft(newPos.myX - halfSize.myX, oldPos.myY - halfSize.myY + 1);
-	const Vector2f oldBottomNewLeft(newPos.myX - halfSize.myX, oldPos.myY + halfSize.myY - 1);
+	Vector2f oldTopNewLeft(newPos.myX - halfSize.myX, oldPos.myY - halfSize.myY + 1);
+	Vector2f oldBottomNewLeft(newPos.myX - halfSize.myX, oldPos.myY + halfSize.myY - 1);
 
-	const Vector2f oldTopNewRight(newPos.myX + halfSize.myX, oldPos.myY - halfSize.myY + 1);
-	const Vector2f oldBottomNewRight(newPos.myX + halfSize.myX, oldPos.myY + halfSize.myY - 1);
+	Vector2f oldTopNewRight(newPos.myX + halfSize.myX, oldPos.myY - halfSize.myY + 1);
+	Vector2f oldBottomNewRight(newPos.myX + halfSize.myX, oldPos.myY + halfSize.myY - 1);
 
+	int safeGuard = 0;
 	// collided bottom
-	if (Collided(newBottomOldLeft, newBottomOldRight, aPhysicBody, PhysicBody::eLocator::eBottom) == true)
+	while (Collided(newBottomOldLeft, newBottomOldRight, aPhysicBody, PhysicBody::eLocator::eBottom) == true)
 	{
 		float bottomPosition = aPhysicBody.GetLeftBottom().myY;
 		bottomPosition = static_cast<float>(static_cast<int>(bottomPosition / myTileHeight));
 		bottomPosition = bottomPosition * myTileHeight - halfSize.myY;
 		aPhysicBody.SetPosition({ aPhysicBody.GetPosition().myX, bottomPosition });
 		aPhysicBody.SetVelocity({ aPhysicBody.GetVelocity().myX, -aPhysicBody.GetVelocity().myY * aPhysicBody.GetBounciness() });
+		newBottomOldLeft.y = newBottomOldRight.y = bottomPosition;
 		collision = eCollisionPoint::eBottom;		
+		if (safeGuard++ > 20) break;
 	}
 
+	safeGuard = 0;
 	// collided top
-	if (Collided(newTopOldLeft, newTopOldRight, aPhysicBody, PhysicBody::eLocator::eTop) == true)
+	while (Collided(newTopOldLeft, newTopOldRight, aPhysicBody, PhysicBody::eLocator::eTop) == true)
 	{
 		float topPosition = aPhysicBody.GetLeftTop().myY;
-		topPosition = static_cast<float>(static_cast<int>(topPosition / myTileHeight + 0.5f));
-		topPosition = topPosition * myTileHeight + halfSize.myY;
+		topPosition = static_cast<float>(std::ceil(topPosition / myTileHeight));
+		topPosition = topPosition * myTileHeight + halfSize.myY + 1;
 		aPhysicBody.SetPosition({ aPhysicBody.GetPosition().myX, topPosition });
 		aPhysicBody.SetVelocity({ aPhysicBody.GetVelocity().myX, -aPhysicBody.GetVelocity().myY * aPhysicBody.GetBounciness() });
+		newTopOldLeft.y = newTopOldRight.y = topPosition;
 		collision = eCollisionPoint::eTop;
+		if (safeGuard++ > 20) break;
 	}
 
+	safeGuard = 0;
 	// collided to left
-	if (Collided(oldTopNewLeft, oldBottomNewLeft, aPhysicBody, PhysicBody::eLocator::eLeft) == true)
+	while (Collided(oldTopNewLeft, oldBottomNewLeft, aPhysicBody, PhysicBody::eLocator::eLeft) == true)
 	{
 		float leftPosition = aPhysicBody.GetLeftTop().myX;
-		leftPosition = static_cast<float>(static_cast<int>(leftPosition / myTileWidth + 0.5f));
-		leftPosition = (leftPosition * myTileWidth) + halfSize.myX;
+		leftPosition = static_cast<float>(std::ceil(leftPosition / myTileWidth));
+		leftPosition = (leftPosition * myTileWidth) + halfSize.myX + 1;
 		aPhysicBody.SetPosition({ leftPosition, aPhysicBody.GetPosition().myY });
 		aPhysicBody.SetVelocity({ -aPhysicBody.GetVelocity().myX * aPhysicBody.GetBounciness(), aPhysicBody.GetVelocity().myY });
+
+		oldTopNewLeft.x = oldBottomNewLeft.x = leftPosition;
 		collision = eCollisionPoint::eLeft;
+		if (safeGuard++ > 20) break;
 	}
 
+	safeGuard = 0;
 	// collided to right
-	if (Collided(oldTopNewRight, oldBottomNewRight, aPhysicBody, PhysicBody::eLocator::eRight) == true)
+	while (Collided(oldTopNewRight, oldBottomNewRight, aPhysicBody, PhysicBody::eLocator::eRight) == true)
 	{
 		float rightPosition = aPhysicBody.GetRightTop().myX;
-		rightPosition = static_cast<float>(static_cast<int>(rightPosition / myTileWidth + 0.5f));
-		rightPosition = (rightPosition * myTileWidth) - halfSize.myX;
+		rightPosition = static_cast<float>(static_cast<int>(rightPosition / myTileWidth));
+		rightPosition = (rightPosition * myTileWidth) - halfSize.myX - 1;
 		aPhysicBody.SetPosition({ rightPosition, aPhysicBody.GetPosition().myY });
 		aPhysicBody.SetVelocity({ -aPhysicBody.GetVelocity().myX * aPhysicBody.GetBounciness(), aPhysicBody.GetVelocity().myY });
+		oldTopNewRight.x = oldBottomNewRight.x = rightPosition;
 		collision = eCollisionPoint::eRight;
+		if (safeGuard++ > 20) break;
 	}
 
 	return collision;

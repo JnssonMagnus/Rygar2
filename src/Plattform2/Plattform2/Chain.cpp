@@ -11,7 +11,7 @@ Chain::Chain()
 	myHookInitSpeed = 20.f;
 	myHookAcc = 0.0f;
 	myHookSpeed = 0.f;
-	myHookExtendFreq = 10.f;
+	myHookExtendFreq = 0.05f;
 	myHookExtendTime = 5.f;
 }
 
@@ -256,7 +256,7 @@ void Chain::Extend()
 
 void Chain::Shorten()
 {
-	if (myState == eState::eStuck && myLinks.Size() > 2 && myHookExtendTime >= myHookExtendFreq - myHookSpeed)
+	if (myState == eState::eStuck && myLinks.Size() > 2 && myHookExtendTime >= myHookExtendFreq)
 	{
 		myHookSpeed += 0.04f;
 		myLinks.RemoveCyclicAtIndex(myLinks.Size() - 1);

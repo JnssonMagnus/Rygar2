@@ -52,6 +52,7 @@ public:
 	Vector2f					GetMiddleBottom() const;
 	Vector2f					GetMiddleTop() const;
 
+	void						TranslatePosition(const Vector2f& aOffset);
 	void						SetFriction(const Vector2f& aAirFriction, const Vector2f& aGroundFriction);
 	void						SetPosition(const Vector2f& aPosition);
 	void						SetStartPosition(const Vector2f& aPosition);
@@ -101,6 +102,7 @@ private:
 	Vector2f					myAirFriction;
 	Vector2f					myGroundFriction;
 	Vector2f					myDirection;
+	Vector2f					myTranslationToAdd;
 	CU::StaticArray<char, 4>	myPhysicStates;
 	GameObject*					myGameObject;
 	float						myBounciness;

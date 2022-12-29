@@ -64,6 +64,7 @@ private:
 
 	float						myJumpStrength;
 	float						myDashStrength;
+	float						myWalkSpeed;
 	int							myDashReloadTimer;
 	int							myDashTime;
 };

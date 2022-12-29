@@ -74,8 +74,9 @@ void Enemy::Init(GameObjectType& aGameObjectType)
 	myAnimationSet.Init("data/gfx/enemies/turtleEnemy.png");
 
 	const Vector2<int> frameSize(24, 15);
-	myAnimationSet.AddAnimation(eAnimationID::eWalk, 1, frameSize);
-	myAnimationSet.AddAnimation(eAnimationID::eIdle, 1, frameSize);
+	myPhysicBody->SetHalfSize(frameSize / 2.f);
+	myAnimationSet.AddAnimation(eAnimationID::eWalk, 2, frameSize, 6);
+	myAnimationSet.AddAnimation(eAnimationID::eIdle, 2, frameSize, 6);
 	myAnimationSet.AddAnimation(eAnimationID::eFall, 1, frameSize);
 	myAnimationSet.AddAnimation(eAnimationID::eJump, 1, frameSize);
 	myAnimationSet.AddAnimation(eAnimationID::eDead, 1, frameSize);

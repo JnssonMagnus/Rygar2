@@ -18,9 +18,10 @@ Player::Player()
 {
 	myPickedUpObject = nullptr;
 	myDashStrength = 400.f;
-	myJumpStrength = 8.f;
+	myJumpStrength = 7.f;
 	myDashReloadTimer = 60;
 	myDashTime = 0;	
+	myWalkSpeed = 280.f;
 
 	myProperties.SetValue(PropertyKey::eDucking, false);
 }
@@ -71,7 +72,7 @@ void Player::Init(GameObjectType& aGameObjectType)
 	myAnimationSet.Init("data/gfx/player.png");
 
 	const Vector2<int> frameSize(24, 32);
-	myAnimationSet.AddAnimation(eAnimationID::eWalk, 3, frameSize, 10);
+	myAnimationSet.AddAnimation(eAnimationID::eWalk, 4, frameSize, 7);
 	myAnimationSet.AddAnimation(eAnimationID::eIdle, 1, frameSize, 5, { frameSize.myX * 2, frameSize.myY * 2 });
 	myAnimationSet.AddAnimation(eAnimationID::eFall, 1, frameSize, 5, { 0, frameSize.myY * 3 });
 	myAnimationSet.AddAnimation(eAnimationID::eJump, 1, frameSize, 5, { 0, frameSize.myY * 3 });
@@ -160,11 +161,11 @@ void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputSt
 	}
 	case Input::eInputEvent::eMoveRight:
 		if (IsHinderedFromMoving() == false)
-			myPhysicBody->AddForce({ 300.f, 0.f });
+			myPhysicBody->AddForce({ myWalkSpeed, 0.f });
 		break;
 	case Input::eInputEvent::eMoveLeft:
 		if (IsHinderedFromMoving() == false)
-			myPhysicBody->AddForce({ -300.f, 0.f });
+			myPhysicBody->AddForce({ -myWalkSpeed, 0.f });
 		break;
 	case Input::eInputEvent::eDown:
 		if (myHook.GetState() == Chain::eState::eUnreleased && aState == Input::eInputState::ePressed && myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom) == true) {
@@ -173,7 +174,10 @@ void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputSt
 		else if (myHook.GetState() == Chain::eState::eUnreleased && aState == Input::eInputState::eUp) {
 			ChangeProperty<bool>(PropertyKey::eDucking) = false;
 		}
-		myHook.Extend();
+
+		if (!myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom)) {
+			myHook.Extend();
+		}
 		break;
 	case Input::eInputEvent::eDash:
 		if (myDashTime <= 0)
@@ -184,7 +188,9 @@ void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputSt
 		}
 		break;
 	case Input::eInputEvent::eJump:
-		myHook.Shorten();
+		if (!myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eTop)) {
+			myHook.Shorten();
+		}
 		if (aState == Input::eInputState::eDown &&
 			myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom) == true)
 		{
@@ -280,7 +286,7 @@ void Player::Collide(GameObject* aGameObject)
 	{
 		if (IsAboveEnemy(aGameObject) == true)
 		{
-			myPhysicBody->SetVelocity({ myPhysicBody->GetVelocity().myX, -10.f });
+			myPhysicBody->SetVelocity({ myPhysicBody->GetVelocity().myX, -6.f });
 			Actor* actor = dynamic_cast<Actor*>(aGameObject);
 			actor->Stagger();
 		}
@@ -302,7 +308,7 @@ void Player::UpdateHook(const float aDeltaTime)
 	Vector2f positionByHook = myHook.Update(aDeltaTime, myPhysicBody->GetPosition(), myPhysicBody->GetVelocity());
 
 	myPhysicBody->AddForce((positionByHook - myPhysicBody->GetPosition()) * Vector2f(30.f, 5.8f));
-	myPhysicBody->SetPosition(positionByHook);
+	myPhysicBody->TranslatePosition(positionByHook - myPhysicBody->GetPosition());
 
 }
 
@@ -327,7 +333,8 @@ void Player::PlayLandOnGroundSound()
 
 void Player::UpdateWeapon(const float aDeltaTime)
 {
-	myWeapons[myCurrentWeapon]->Update(aDeltaTime, myPhysicBody->GetPosition(), GetProperty<bool>(ePropertyValues::eFacingRight) ? 1.f : -1.f);
+	const Vector2<int> duckingModifier = GetProperty<bool>(ePropertyValues::eDucking) ? Vector2<int>(0, 8) : Vector2<int>(0, 0);
+	myWeapons[myCurrentWeapon]->Update(aDeltaTime, myPhysicBody->GetPosition() + duckingModifier, GetProperty<bool>(ePropertyValues::eFacingRight) ? 1.f : -1.f);
 	myProperties.ChangeValue<bool>(ePropertyValues::eIsAttacking) = myWeapons[myCurrentWeapon]->GetWeaponStatus() == eWeaponStatus::eFireing ? true : false;
 }
 

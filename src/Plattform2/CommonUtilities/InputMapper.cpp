@@ -73,14 +73,18 @@ namespace Input
 		{
 			if (Input::InputWrapper::GetInstance()->GetKeyDown(keyCode) == true)
 				TranslateActionToEvent(static_cast<eInputAction>(keyCode), eInputState::eDown, 1.f);
-
 		}
 
 		for (int keyCode = 0; keyCode < eInputAction::eLastKeyCode; keyCode++)
 		{
 			if (Input::InputWrapper::GetInstance()->GetKeyPressed(keyCode) == true)
 				TranslateActionToEvent(static_cast<eInputAction>(keyCode), eInputState::ePressed, 1.f);
+		}
 
+		for (int keyCode = 0; keyCode < eInputAction::eLastKeyCode; keyCode++)
+		{
+			if (Input::InputWrapper::GetInstance()->GetKeyReleased(keyCode) == true)
+				TranslateActionToEvent(static_cast<eInputAction>(keyCode), eInputState::eUp, 1.f);
 		}
 	}
 
