@@ -29,7 +29,7 @@ namespace Timer
 		LARGE_INTEGER freq;
 		QueryPerformanceFrequency(&freq);
 
-		myFrequence = static_cast<double>(freq.QuadPart) / 1000000.0;
+		myFrequence = static_cast<double>(freq.QuadPart) / 1000000000.0;
 
 		LARGE_INTEGER time;
 		QueryPerformanceCounter(&time);

@@ -1,13 +1,13 @@
 #pragma once
 
-typedef unsigned int TimeType;
+typedef long long TimeType;
 
 namespace Timer
 {
 	class TimeUnit
 	{
 	public:
-		TimeUnit(const TimeType aTimeInMicroSeconds);
+		TimeUnit(const TimeType aTimeInNanoSeconds);
 		~TimeUnit(void);
 
 		TimeType		GetHours() const;
@@ -15,42 +15,48 @@ namespace Timer
 		TimeType		GetMinutes() const;
 		TimeType		GetMilliseconds() const;
 		TimeType		GetMicroseconds() const;
+		TimeType		GetNanoSeconds() const;
 		TimeType		GetFPS() const;
-		void			UpdateTime(const TimeType aTimeInMicroSeconds);
+		void			UpdateTime(const TimeType aTimeInNanoSeconds);
 
 	private:
-		TimeType		myTimeInMicroSeconds;
+		TimeType		myTimeInNanoSeconds;
 
 	};
 
 	inline TimeType TimeUnit::GetHours() const
 	{
-		return myTimeInMicroSeconds / (6000000 * 60);
+		return myTimeInNanoSeconds / (6000000 * 60);
 	}
 
 	inline TimeType TimeUnit::GetMinutes() const
 	{
-		return myTimeInMicroSeconds / 6000000;
+		return myTimeInNanoSeconds / 6000000000;
 	}
 
 	inline TimeType TimeUnit::GetSeconds() const
 	{
-		return myTimeInMicroSeconds / 1000000;
+		return myTimeInNanoSeconds / 1000000000;
 	}
 
 	inline TimeType TimeUnit::GetMilliseconds() const
 	{
-		return myTimeInMicroSeconds / 1000;
+		return myTimeInNanoSeconds / 1000000;
 	}
 
 	inline TimeType TimeUnit::GetMicroseconds() const
 	{
-		return myTimeInMicroSeconds;
+		return myTimeInNanoSeconds / 1000;
+	}
+
+	inline TimeType TimeUnit::GetNanoSeconds() const
+	{
+		return myTimeInNanoSeconds;
 	}
 
 	inline TimeType TimeUnit::GetFPS() const
 	{
-		return 1000000 / myTimeInMicroSeconds;
+		return 1000000 / GetMicroseconds();
 	}
 
 

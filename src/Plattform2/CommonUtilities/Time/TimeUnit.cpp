@@ -3,14 +3,14 @@
 
 namespace Timer
 {
-	TimeUnit::TimeUnit(const TimeType aTimeInMicroSeconds)
+	TimeUnit::TimeUnit(const TimeType aTimeInNanoSeconds)
 	{
-		UpdateTime(aTimeInMicroSeconds);
+		UpdateTime(aTimeInNanoSeconds);
 	}
 
-	void TimeUnit::UpdateTime(const TimeType aTimeInMicroSeconds)
+	void TimeUnit::UpdateTime(const TimeType aTimeInNanoSeconds)
 	{
-		myTimeInMicroSeconds = aTimeInMicroSeconds;
+		myTimeInNanoSeconds = aTimeInNanoSeconds;
 	}
 
 	TimeUnit::~TimeUnit(void)
