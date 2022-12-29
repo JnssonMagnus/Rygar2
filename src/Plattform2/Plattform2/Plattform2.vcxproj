@@ -86,14 +86,14 @@
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)($Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <IncludePath>$(SolutionDir)CommonUtilities\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)external\SDL2_image-2.0.4\lib\x64;$(SolutionDir)external\SDL2-2.0.9\lib\x64;$(SolutionDir)external\SDL2_ttf-2.0.15\lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)external\SDL2_image-2.6.2\lib\x64;$(SolutionDir)external\SDL2-2.26.1\lib\x64;$(SolutionDir)external\SDL2_ttf-2.0.15\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)..\build\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)($Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <IncludePath>$(SolutionDir)WWiseSoundManager\WWiseSoundMan\;$(SolutionDir)CommonUtilities\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)external\SDL2_image-2.0.4\lib\x64;$(SolutionDir)external\SDL2-2.0.9\lib\x64;$(SolutionDir)external\SDL2_ttf-2.0.15\lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)external\SDL2_image-2.6.2\lib\x64;$(SolutionDir)external\SDL2-2.26.1\lib\x64;$(SolutionDir)external\SDL2_ttf-2.0.15\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -271,9 +271,6 @@
     </ProjectReference>
     <ProjectReference Include="..\Rygar2Engine\Rygar2Engine.vcxproj">
       <Project>{49ee2f5e-3be4-401c-b552-a26d8617c6a6}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\WWiseSoundManager\WWiseSoundMan\WWiseSoundMan.vcxproj">
-      <Project>{d95450a8-2749-4a5b-874b-a5dd8fdb1cc5}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

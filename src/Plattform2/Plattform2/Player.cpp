@@ -98,6 +98,9 @@ void Player::Init(GameObjectType& aGameObjectType)
 	myStats.SetStat(eStats::eAmmo, 1000.f);
 
 	myProperties.SetValue(ePropertyValues::eLife, 1000000);
+
+	myHook.SetHitWallSoundEvent("rygarHookStuck");
+	myHook.SetLaunchSoundEvent("rygarHookThrow");
 }
 
 void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputState aState, const float aValue)

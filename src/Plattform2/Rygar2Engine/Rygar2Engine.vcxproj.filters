@@ -114,6 +114,12 @@
     <ClInclude Include="include\Visitor.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\RenderCommands.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SoundPlayerInterface.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GameObjectManager.cpp">
@@ -192,6 +198,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Helpers.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SoundPlayerInterface.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

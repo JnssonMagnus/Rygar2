@@ -43,9 +43,11 @@ void DiskArmor::Draw()
 
 void DiskArmor::Init()
 {
-	constexpr float maxLength = 45.f;
-	constexpr float initSpeed = 2.f;
-	constexpr int returnSpeed = 1;
+	constexpr float maxLength = 105.f;
+	constexpr float initSpeed = 5.f;
+	constexpr int returnSpeed = 2;
 	myDisk = dynamic_cast<Disk*>(Megaton::GetInstance().GetGameObjectFactory().CreateObject(eGameObjectTypes::eDisk));
 	myChain.Init("data/gfx/discArmor_link.png", "data/gfx/discArmor.png", maxLength, initSpeed, returnSpeed, myDisk, false);
+	myChain.SetLaunchSoundEvent("rygarAttack");
+	myChain.SetHitWallSoundEvent("rygarAttackHitWall");
 }

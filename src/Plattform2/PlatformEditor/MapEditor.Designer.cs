@@ -59,6 +59,7 @@
             this.DefaultValueLabel = new System.Windows.Forms.Label();
             this.VariableDefaultValue = new System.Windows.Forms.NumericUpDown();
             this.VariableListBox = new System.Windows.Forms.ListBox();
+            this.animationEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.Tileset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TilePreview)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -129,33 +130,33 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(176, 34);
             this.newToolStripMenuItem.Text = "&New";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(176, 34);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(176, 34);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(176, 34);
             this.saveAsToolStripMenuItem.Text = "Save &As";
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(176, 34);
             this.quitToolStripMenuItem.Text = "&Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.QuitToolStripMenuItem_Click);
             // 
@@ -164,7 +165,8 @@
             this.editorsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tilesetEditorToolStripMenuItem,
             this.gameObjectTypeEditorToolStripMenuItem,
-            this.mapSettingsToolStripMenuItem});
+            this.mapSettingsToolStripMenuItem,
+            this.animationEditorToolStripMenuItem});
             this.editorsToolStripMenuItem.Name = "editorsToolStripMenuItem";
             this.editorsToolStripMenuItem.Size = new System.Drawing.Size(83, 29);
             this.editorsToolStripMenuItem.Text = "Editors";
@@ -384,6 +386,12 @@
             this.VariableListBox.Size = new System.Drawing.Size(227, 144);
             this.VariableListBox.TabIndex = 6;
             // 
+            // animationEditorToolStripMenuItem
+            // 
+            this.animationEditorToolStripMenuItem.Name = "animationEditorToolStripMenuItem";
+            this.animationEditorToolStripMenuItem.Size = new System.Drawing.Size(311, 34);
+            this.animationEditorToolStripMenuItem.Text = "Animation Editor";
+            // 
             // MapEditor
             // 
             this.AllowDrop = true;
@@ -452,6 +460,7 @@
         private System.Windows.Forms.Label DefaultValueLabel;
         private System.Windows.Forms.NumericUpDown VariableDefaultValue;
         private System.Windows.Forms.ListBox VariableListBox;
+        private System.Windows.Forms.ToolStripMenuItem animationEditorToolStripMenuItem;
     }
 }
 

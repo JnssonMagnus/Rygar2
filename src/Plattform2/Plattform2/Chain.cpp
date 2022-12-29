@@ -40,14 +40,14 @@ void Chain::Fire(const Vector2f& aDirection)
 		//myLinks.Clear();
 		myHookSpeed = 0.f;
 		myState = eState::eReturning;
-		PostMaster::GetInstance()->SendSoundEvent("chainReverse");
+		PostMaster::GetInstance()->SendSoundEvent(myReturnSoundEvent.c_str());
 		break;
 	case eState::eUnreleased:
 		myHookSpeed = myHookInitSpeed;
 		myFireDirection = aDirection;
 		myFireDirection.Normalize();
 		myLinks.Add({ myParentPosition, { 0.f, 0.f }, atan2(myFireDirection.myY, myFireDirection.myX) });
-		PostMaster::GetInstance()->SendSoundEvent("chainFire");
+		PostMaster::GetInstance()->SendSoundEvent(myLaunchSoundEvent.c_str());
 		myState = eState::eFired;
 		if (myEndObject)
 			myEndObject->SetPosition(myLinks[0].myPosition);
@@ -106,16 +106,8 @@ Vector2f Chain::Update(const float aDeltaTime, const Vector2f& aParentPosition, 
 			if (hitWall)
 			{
 				myLinks[0].myPosition = hitWallPosition;
-				if (myStickToGround)
-				{
-					PostMaster::GetInstance()->SendSoundEvent("chainHit", myLinks[0].myPosition);
-					myState = eState::eStuck;
-				}
-				else
-				{
-					PostMaster::GetInstance()->SendSoundEvent("chainHit", myLinks[0].myPosition);
-					myState = eState::eReturning;
-				}
+				PostMaster::GetInstance()->SendSoundEvent(myHitWallSoundEvent.c_str(), myLinks[0].myPosition);
+				myState = myStickToGround ? myState = eState::eStuck : myState = eState::eReturning;
 			}
 		}
 	}
@@ -160,7 +152,7 @@ Vector2f Chain::Update(const float aDeltaTime, const Vector2f& aParentPosition, 
 				if (myLinks.Size() == 0)
 				{
 					myState = eState::eUnreleased;
-					PostMaster::GetInstance()->SendSoundEvent("stopChainReverse");
+					PostMaster::GetInstance()->SendSoundEvent(myReturnSoundEvent.c_str());
 				}
 			}
 		}
@@ -267,6 +259,21 @@ void Chain::Shorten()
 Chain::eState Chain::GetState() const
 {
 	return myState;
+}
+
+void Chain::SetLaunchSoundEvent(const std::string& aSoundEvent)
+{
+	myLaunchSoundEvent = aSoundEvent;
+}
+
+void Chain::SetHitWallSoundEvent(const std::string& aSoundEvent)
+{
+	myHitWallSoundEvent = aSoundEvent;
+}
+
+void Chain::SetReturnSoundEvent(const std::string& aSoundEvent)
+{
+	myReturnSoundEvent = aSoundEvent;
 }
 
 bool Chain::FirstLinkHitWall(Vector2f& finalPosition) const

@@ -27,6 +27,10 @@ public:
 	void		Extend();
 	void		Shorten();
 	eState		GetState() const;
+	
+	void		SetLaunchSoundEvent(const std::string& aSoundEvent);
+	void		SetHitWallSoundEvent(const std::string& aSoundEvent);
+	void		SetReturnSoundEvent(const std::string& aSoundEvent);
 
 private:
 
@@ -46,6 +50,9 @@ private:
 	GameObject*						myEndObject = nullptr;
 	Vector2f						myParentPosition;
 	Vector2f						myFireDirection;
+	std::string						myLaunchSoundEvent;
+	std::string						myHitWallSoundEvent;
+	std::string						myReturnSoundEvent;
 	eState							myState;
 	float							myHookInitSpeed;
 	float							myHookSpeed;

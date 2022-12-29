@@ -41,11 +41,13 @@
     <ClInclude Include="include\PhysicBody.h" />
     <ClInclude Include="include\PhysicManager.h" />
     <ClInclude Include="include\PhysicStates.h" />
+    <ClInclude Include="include\RenderCommands.h" />
     <ClInclude Include="include\Renderer.h" />
     <ClInclude Include="include\ResourceManager.h" />
     <ClInclude Include="include\SDL_Init.h" />
     <ClInclude Include="include\Settings.h" />
     <ClInclude Include="include\SharedResource.h" />
+    <ClInclude Include="include\SoundPlayerInterface.h" />
     <ClInclude Include="include\Sprite.h" />
     <ClInclude Include="include\State.h" />
     <ClInclude Include="include\StateStack.h" />
@@ -77,6 +79,7 @@
     <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\SDL_Init.cpp" />
     <ClCompile Include="src\SharedResource.cpp" />
+    <ClCompile Include="src\SoundPlayerInterface.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\State.cpp" />
     <ClCompile Include="src\StateStack.cpp" />
@@ -90,8 +93,8 @@
     <ProjectReference Include="..\Lua\Lua.vcxproj">
       <Project>{fc90200b-1c19-4c83-9237-730638be8a1b}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\WWiseSoundManager\WWiseSoundMan\WWiseSoundMan.vcxproj">
-      <Project>{d95450a8-2749-4a5b-874b-a5dd8fdb1cc5}</Project>
+    <ProjectReference Include="..\SDLMixer2SoundMan\SDLMixer2SoundMan.vcxproj">
+      <Project>{1df16ee6-deee-4264-bb42-2f17260c16b7}</Project>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -158,22 +161,22 @@
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)($Configuration)\</IntDir>
     <OutDir>$(SolutionDir)..\build\</OutDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <LibraryPath>$(SolutionDir)external\SDL2_image-2.0.4\lib\x64;$(SolutionDir)external\SDL2-2.0.9\lib\x64;$(SolutionDir)external\SDL2_ttf-2.0.15\lib\x64;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)external\lua-5.4.3\lua-5.4.3\src\;$(SolutionDir)external\SDL2-2.0.9\include;$(SolutionDir)external\SDL2_image-2.0.4\include;$(SolutionDir)external\SDL2_ttf-2.0.15\include;$(SolutionDir)WWiseSoundManager\WWiseSoundMan\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(Solutiondir)external\SDL2_mixer-devel-2.6.2-VC\lib\x64;$(SolutionDir)external\SDL2_image-2.6.2\lib\x64;$(SolutionDir)external\SDL2-2.26.1\lib\x64;$(SolutionDir)external\SDL2_ttf-2.0.15\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)SDLMixer2SoundMan\;$(SolutionDir)external\lua-5.4.3\lua-5.4.3\src\;$(SolutionDir)external\SDL2-2.26.1\include;$(SolutionDir)external\SDL2_image-2.6.2\include;$(SolutionDir)external\SDL2_ttf-2.0.15\include;$(SolutionDir)WWiseSoundManager\WWiseSoundMan\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)($Configuration)\</IntDir>
     <OutDir>$(SolutionDir)..\build\</OutDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)external\lua-5.4.3\lua-5.4.3\src\;$(SolutionDir)external\SDL2-2.0.9\include;$(SolutionDir)external\SDL2_image-2.0.4\include;$(SolutionDir)external\SDL2_ttf-2.0.15\include;$(SolutionDir)WWiseSoundManager\WWiseSoundMan\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)external\SDL2_image-2.0.4\lib\x64;$(SolutionDir)external\SDL2-2.0.9\lib\x64;$(SolutionDir)external\SDL2_ttf-2.0.15\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)SDLMixer2SoundMan\;$(SolutionDir)external\lua-5.4.3\lua-5.4.3\src\;$(SolutionDir)external\SDL2-2.26.1\include;$(SolutionDir)external\SDL2_image-2.6.2\include;$(SolutionDir)external\SDL2_ttf-2.0.15\include;$(SolutionDir)WWiseSoundManager\WWiseSoundMan\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(Solutiondir)external\SDL2_mixer-devel-2.6.2-VC\lib\x64;$(SolutionDir)external\SDL2_image-2.6.2\lib\x64;$(SolutionDir)external\SDL2-2.26.1\lib\x64;$(SolutionDir)external\SDL2_ttf-2.0.15\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);USE_SDLMIXER2</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -188,7 +191,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);USE_SDLMIXER2</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -203,7 +206,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>DLLEXPORT; _DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DLLEXPORT; _DEBUG;_CONSOLE;%(PreprocessorDefinitions);USE_SDLMIXER2</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)include/;$(SolutionDir)/CommonUtilities/</AdditionalIncludeDirectories>
@@ -213,7 +216,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL2_ttf.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2_ttf.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -222,7 +225,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>DLLEXPORT; NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DLLEXPORT; NDEBUG;_CONSOLE;%(PreprocessorDefinitions);USE_SDLMIXER2</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)include/;$(SolutionDir)/CommonUtilities/</AdditionalIncludeDirectories>
@@ -234,7 +237,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL2_ttf.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2_ttf.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

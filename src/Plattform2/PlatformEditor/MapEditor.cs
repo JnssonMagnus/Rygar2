@@ -638,6 +638,8 @@ namespace PlatformEditor
             if (GameObjectTypesList.SelectedItem != null)
             {
                 Vector2 position = new Vector2(Map.PointToClient(Cursor.Position).X, Map.PointToClient(Cursor.Position).Y);
+                position.x += myCamera.Position.x;
+                position.y += myCamera.Position.y;
                 mySelectedGameObject = myWorld.PlaceObject(position, ourGameObjectTypes[GameObjectTypesList.SelectedIndex]);
             }
         }

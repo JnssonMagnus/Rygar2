@@ -3,6 +3,7 @@
 #include "Matrix44decl.h"
 #include <algorithm>
 #include <iostream>
+#include <assert.h>
 
 namespace CommonUtilities
 {

@@ -80,6 +80,7 @@ namespace PlatformEditor
             GameObject gameObject = new GameObject();
             gameObject.myPosition = aPosition;
             gameObject.myGameObjectType = aGameObjectType;
+            gameObject.myChunk = this;
             myGameObjects.Add(gameObject);
             return gameObject;
         }

@@ -5,12 +5,13 @@
 #include "gameObjectManager.h"
 #include "ParticleSystem.h"
 #include "LuaManager.h"
+#include "SoundPlayerInterface.h"
 #include <ThreadPool.h>
 #include <InputWrapper.h>
 #include <InputMapper.h>
 #include <Time/TimerManager.h>
-#include <WWiseSoundManager.h>
 #include <SDL.h>
+
 
 
 Engine::Engine()
@@ -44,10 +45,7 @@ void Engine::Init()
 	myParticleSystem->Init(&myRenderer);
 	myParticleSystem->LoadParticleEmitterBlueprints((std::string(gDataPath) + "data/json/ParticleEmitterBlueprints.json").c_str());
 
-	mySoundManager = new SoundManager::WWiseSoundManager();
-	mySoundManager->Init();
-	mySoundManager->InitBank((std::string(gDataPath) + "data/sound/init.bnk").c_str());
-	mySoundManager->LoadBank((std::string(gDataPath) + "data/sound/New_SoundBank.bnk").c_str());
+	mySoundManager = new SoundPlayerInterface();
 
 	myEngineDebugInfo = new EngineDebugInfo();
 	myEngineDebugInfo->Init();	
@@ -75,7 +73,7 @@ Engine::~Engine()
 void Engine::MainLoop()
 {
 	double timeSinceLastFrame = 0.f;
-	constexpr double fixedFrameRate = (1.0 / 60.0) * 1000000.0;
+	constexpr double fixedFrameRate = (1.0 / 60.0) * 1000000000.0;
 	constexpr double fixedDeltaTime = 1.0 / 60.0;
 	int fps = 0;
 	double countToOne = 0.0;
@@ -88,13 +86,13 @@ void Engine::MainLoop()
 
 		Timer::TimerManager::GetInstance()->UpdateTimers();
 
-		timeSinceLastFrame += DELTA_TIME.GetMicroseconds();		
+		timeSinceLastFrame += DELTA_TIME.GetNanoSeconds();
 		
- 		countToOne += DELTA_TIME.GetMicroseconds();
-		if (countToOne >= 1000000)
+ 		countToOne += DELTA_TIME.GetNanoSeconds();
+		if (countToOne >= 1000000000)
 		{
 			myEngineDebugInfo->SetFPS(fps);
-			countToOne -= 1000000;
+			countToOne -= 1000000000;
 			fps = 0;
 		}
 

@@ -24,7 +24,7 @@ namespace SDL
 		SDL_Surface* screenSurface = nullptr;
 		SDL_Renderer* renderer = nullptr;
 
-		if (SDL_Init(SDL_INIT_VIDEO) < 0)
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 		{
 			std::cout << "SDL could not initialize! SDL_Error: " << SDL_GetError();
 		}

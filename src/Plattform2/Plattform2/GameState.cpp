@@ -101,7 +101,7 @@ eStateStatus GameState::Update(const float aDeltaTime)
 
 void GameState::Render(const float aDeltaTime)
 {
-	DebugRender();
+//	DebugRender();
 	// Render stuff
 	myParallaxBackground.Render(myPlayerCamera->GetPosition());
 	auto mapChunks = myWorld->GetMapChunks(myPlayerCamera->GetPosition(), Vector2<int>(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));

@@ -7,10 +7,7 @@
 class EngineDebugInfo;
 class ParticleSystem;
 class LuaManager;
-
-namespace SoundManager {
-	class WWiseSoundManager;
-}
+class SoundPlayerInterface;
 
 class Engine : public Input::InputObserver
 {
@@ -28,7 +25,7 @@ private:
 	StateStack							myStateStack;
 	Renderer							myRenderer;
 	ParticleSystem*						myParticleSystem = nullptr;
-	SoundManager::WWiseSoundManager*	mySoundManager = nullptr;
+	SoundPlayerInterface*				mySoundManager = nullptr;
 	std::shared_ptr<LuaManager>			myLuaManager;
 
 	bool								myQuit;
