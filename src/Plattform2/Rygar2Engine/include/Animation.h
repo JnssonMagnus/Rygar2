@@ -1,5 +1,6 @@
 #pragma once
 #include "Sprite.h"
+#include "RenderCommands.h"
 #include <unordered_map>
 
 enum class eAnimationID
@@ -29,6 +30,7 @@ public:
 	void					PushAnimation(const eAnimationID aAnimationID);
 	void					FlipImage(const bool aFlag);
 	const Vector2<int>&		GetSize() const;
+	void					DamageBlink();
 
 private:
 
@@ -41,12 +43,12 @@ private:
 		bool myLoop = true;
 	};
 
-
-	float			myCurrentTime;
-	eAnimationID	myCurrentAnimationID = eAnimationID::eDefault;
-	std::unordered_map<eAnimationID, Animation>
-					myAnimations;
-	bool			myFlipImage = false;
+	RenderCommand								myRenderCommand;
+	std::unordered_map<eAnimationID, Animation> myAnimations;
+	float										myCurrentTime = 0;
+	float										myDamageBlinkTime = 0;
+	eAnimationID								myCurrentAnimationID = eAnimationID::eDefault;					
+	bool										myFlipImage = false;
 };
 
 inline void AnimationSet::FlipImage(const bool aFlag)

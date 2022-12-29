@@ -49,6 +49,9 @@ void ParticleEmitter::Update(const float aDeltaTime)
 void ParticleEmitter::Draw()
 {
 	DL_ASSERT(myBluePrint != nullptr && "PS not initiated with texture!");
+	if (myBluePrint == nullptr) {
+		return;
+	}
 	ourRenderer->AddPSRenderCommand({ &myParticles[0], myBluePrint->myTexture, static_cast<int>(myBluePrint->myBlendMode) });
 }
 

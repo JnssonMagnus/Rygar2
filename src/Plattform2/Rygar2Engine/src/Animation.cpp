@@ -10,27 +10,30 @@ AnimationSet::AnimationSet()
 void AnimationSet::Update(const float aDeltaTime)
 {
 	myCurrentTime += aDeltaTime;
+	myDamageBlinkTime -= aDeltaTime;
 }
 
 void AnimationSet::Draw(const Vector2f& aPosition, const float aAngle, const bool aNoZoom)
 {	
+	static const Color defaultColor(255_uc, 255_uc, 255_uc);
+	static const Color damageBlinkColor(255_uc, 0, 0);
+
 	const Animation& animation = myAnimations[myCurrentAnimationID];
 	int currentFrame = (static_cast<int>(myCurrentTime / (1.f / animation.myFpsCount)) % animation.myFrameCount);
 	if (animation.myLoop == false && myCurrentTime > ((1.f / animation.myFpsCount) * animation.myFrameCount))
 		currentFrame = animation.myFrameCount - 1;
 		
-	RenderCommand renderCommand;
-	renderCommand.myDstSize = renderCommand.mySrcSize = animation.myRectSize;
-	renderCommand.mySrcPos = { animation.myStartPosition.myX + animation.myRectSize.myX * currentFrame, animation.myStartPosition.myY };
-	renderCommand.myTexture = myTexture;
-	renderCommand.myDstPos = aPosition;
-	renderCommand.myPivot = myPivot;
-	renderCommand.myAngle = aAngle;
-	renderCommand.myColor = { 255_uc, 255_uc, 255_uc };
-	renderCommand.myOptions |= static_cast<unsigned char>(myFlipImage) * RenderCommand::eRenderOptions::eFlipped + 
+	myRenderCommand.myDstSize = myRenderCommand.mySrcSize = animation.myRectSize;
+	myRenderCommand.mySrcPos = { animation.myStartPosition.myX + animation.myRectSize.myX * currentFrame, animation.myStartPosition.myY };	
+	myRenderCommand.myDstPos = aPosition;	
+	myRenderCommand.myAngle = aAngle;
+	myRenderCommand.myColor = myDamageBlinkTime > 0.f ? damageBlinkColor : defaultColor;
+	myRenderCommand.myOptions = static_cast<unsigned char>(myFlipImage) * RenderCommand::eRenderOptions::eFlipped + 
 		static_cast<unsigned char>(aNoZoom) * RenderCommand::eRenderOptions::eNoZoom;
-	
-	ourRenderer->AddRenderCommand(renderCommand);
+	myRenderCommand.myTexture = myTexture;
+	myRenderCommand.myPivot = myPivot;
+
+	ourRenderer->AddRenderCommand(myRenderCommand);
 }
 
 void AnimationSet::AddAnimation(const eAnimationID aAnimationID, const int aFrameCount, const Vector2<int>& aRectSize, 
@@ -61,4 +64,9 @@ const Vector2<int>& AnimationSet::GetSize() const
 	const auto it = myAnimations.find(myCurrentAnimationID);
 	DL_ASSERT(it != myAnimations.end() && "Animation not found!");
 	return it->second.myRectSize;
+}
+
+void AnimationSet::DamageBlink()
+{
+	myDamageBlinkTime = 0.08f;
 }

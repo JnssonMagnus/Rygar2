@@ -238,6 +238,7 @@ void Renderer::DrawSprites()
 		SDL_Texture* texture = renderCommand.myTexture.GetResource()->myTexture;
 
 		SDL_SetTextureAlphaMod(texture, renderCommand.myAlpha);
+		SDL_SetTextureColorMod(texture, renderCommand.myColor.r, renderCommand.myColor.g, renderCommand.myColor.b);
 
 		WorldPosToCameraSpace(dstRect, !(renderCommand.myOptions & RenderCommand::eRenderOptions::eNoZoom));
 

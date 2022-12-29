@@ -53,6 +53,7 @@ void Actor::Damage(const int aDamage, const Vector2f& aContactPoint)
 		}
 
 		ChangeProperty<int>(ePropertyValues::eLife) -= aDamage;
+		myAnimationSet.DamageBlink();
 
 		if (GetProperty<int>(ePropertyValues::eLife) <= 0)
 			Delete();

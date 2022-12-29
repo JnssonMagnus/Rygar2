@@ -76,17 +76,6 @@ eStateStatus GameState::Update(const float aDeltaTime)
 		mapChunk->UpdateWaterMovement();
 	}
 
-	//PhysicBody apa;
-	//apa.SetHalfSize({ 12, 12 });
-	//apa.SetStartPosition({ 48 + 13, 100 });
-	//apa.SetPosition({ 15, 100 });
-	//auto apaChunks = myWorld->GetMapChunks(apa.GetPosition(), apa.GetHalfSize());
-	//for (auto mapChunk : apaChunks)
-	//{
-	//	mapChunk->Collided(apa);
-	//}
-
-
 	const auto& gameObjects = GameObjectManager::GetInstance()->GetGameObjects();
 	for (int gameObjectIndex = 0; gameObjectIndex < gameObjects.Size(); gameObjectIndex++)
 	{
@@ -102,7 +91,6 @@ eStateStatus GameState::Update(const float aDeltaTime)
 		}
 	}
 
-
 	if (myPlayer->GetStats().GetStat(eStats::eHealth) <= 0.f)
 	{
 		myStateStackProxy.PushState(new GameOverState(myStateStackProxy, true));
@@ -116,13 +104,13 @@ void GameState::Render(const float aDeltaTime)
 	DebugRender();
 	// Render stuff
 	myParallaxBackground.Render(myPlayerCamera->GetPosition());
-	GameObjectManager::GetInstance()->DrawGameObjects(*myPlayerCamera);
 	auto mapChunks = myWorld->GetMapChunks(myPlayerCamera->GetPosition(), Vector2<int>(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
 	for (auto mapChunk : mapChunks) {
 		mapChunk->Draw(myPlayerCamera->GetPosition(), myPlayerCamera->GetZoom());
 		mapChunk->DrawWater(myPlayerCamera->GetPosition());
 		mapChunk->DebugDraw(myPlayerCamera->GetPosition());
 	}
+	GameObjectManager::GetInstance()->DrawGameObjects(*myPlayerCamera);
 }
 
 void GameState::DebugRender()

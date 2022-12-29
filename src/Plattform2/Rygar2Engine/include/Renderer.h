@@ -1,9 +1,8 @@
 #pragma once
 
 #include "SDL_Init.h"
-#include "typedefs.h"
+#include "RenderCommands.h"
 #include <StaticArray.h>
-#include <Vector2.h>
 #include <Stack.h>
 #include <PostMaster/Observer.h>
 
@@ -14,49 +13,6 @@ struct SDL_Texture;
 class Camera;
 struct Particle;
 struct SDL_Rect;
-
-struct TextRenderCommand
-{
-	Vector3<unsigned char>	myColor;
-	Vector2<int>			myPosition;
-	std::string				myText;
-	Font					myFont;
-};
-
-struct PSRenderCommand
-{
-	CU::GrowingArray<Particle>* myParticles;
-	Texture						myTexture;
-	int							myBlendMode = 1;
-};
-
-struct LineRenderCommand
-{
-	Vector2<int>			myStart;
-	Vector2<int>			myEnd;
-	Vector3<unsigned char>	myColor;
-	unsigned char			myAlpha = 255_uc;
-};
-
-struct RenderCommand
-{
-	enum eRenderOptions : unsigned char
-	{
-		eFlipped = 1,
-		eNoZoom = 1 << 1
-	};
-
-	Vector3<unsigned char>	myColor;
-	Vector2f				myDstPos;
-	Vector2<int>			myDstSize;
-	Vector2<int>			mySrcPos;
-	Vector2<int>			mySrcSize;
-	Vector2<int>			myPivot;
-	Texture					myTexture;
-	float					myAngle;
-	unsigned char			myAlpha = 255_uc;
-	unsigned char			myOptions = 0;
-};
 
 class Renderer : public Observer
 {
@@ -103,8 +59,8 @@ private:
 	CU::StaticArray<CU::GrowingArray<LineRenderCommand>, 2>	myDebugLines;
 
 	struct {
-		Vector2f												myPosition;
-		float													myZoom;
+		Vector2f											myPosition;
+		float												myZoom;
 	} myCopiedCameraData;
 
 	CommonUtilities::Stack<Camera*>							myCameraStack;
