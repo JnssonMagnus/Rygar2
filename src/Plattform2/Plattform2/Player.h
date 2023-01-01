@@ -31,10 +31,12 @@ public:
 	void						DropItem();
 
 	void						Collide(GameObject* aGameObject) override;
+	void						Damage(const int aDamage, const Vector2f& aContactPoint) override;
 
 	const Vector2f				GetAimLocalPosition() const;
 
 	const Stats&				GetStats() const;
+	bool						IsAboveEnemy(const GameObject* const aGameObject) const;
 
 private:
 	void						UpdateHook(const float aDeltaTime);
@@ -45,7 +47,6 @@ private:
 
 	void						CycleWeapons(int aCycleValue);
 	void						AddWeapons();
-	bool						IsAboveEnemy(const GameObject* const aGameObject) const;
 
 	bool						IsHinderedFromMoving() const;
 	bool						IsAttacking() const;
@@ -65,6 +66,7 @@ private:
 	float						myJumpStrength;
 	float						myDashStrength;
 	float						myWalkSpeed;
+	float						myInvinsibleTime = 0.f;
 	int							myDashReloadTimer;
 	int							myDashTime;
 };

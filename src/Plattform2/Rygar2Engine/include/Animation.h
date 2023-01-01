@@ -2,6 +2,7 @@
 #include "Sprite.h"
 #include "RenderCommands.h"
 #include <unordered_map>
+#include <queue>
 
 enum class eAnimationID
 {
@@ -30,9 +31,11 @@ public:
 	void					PushAnimation(const eAnimationID aAnimationID);
 	void					FlipImage(const bool aFlag);
 	const Vector2<int>&		GetSize() const;
-	void					DamageBlink();
+	void					ColorBlink(const Color& aBlinkColor, const float aBlinkLength, const float aBlinkFrequency);
 
 private:
+	void					UpdateColorBlink(const float aDeltaTime);
+	const Color&			GetSpriteColor() const;
 
 	struct Animation
 	{
@@ -43,10 +46,22 @@ private:
 		bool myLoop = true;
 	};
 
+	struct SColorBlink {
+		float myBlinkLength = 0;
+		float myBlinkFrequency = 0;
+		Color myBlinkColor;
+
+		Color GetColor() const {
+			return myBlinkColor;
+
+		}
+	};
+
+	std::queue<SColorBlink>						myColorBlinks;
+
 	RenderCommand								myRenderCommand;
 	std::unordered_map<eAnimationID, Animation> myAnimations;
 	float										myCurrentTime = 0;
-	float										myDamageBlinkTime = 0;
 	eAnimationID								myCurrentAnimationID = eAnimationID::eDefault;					
 	bool										myFlipImage = false;
 };

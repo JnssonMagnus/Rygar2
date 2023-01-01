@@ -11,6 +11,7 @@ void Disk::Collide(GameObject* aGameObject)
 		{
 			Actor* actor = dynamic_cast<Actor*>(aGameObject);
 			actor->Damage(1, myPhysicBody->GetPosition());
+			PostMaster::GetInstance()->SendSoundEvent("enemyHit");
 			myHitObjects.emplace(aGameObject);
 		}
 

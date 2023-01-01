@@ -20,7 +20,7 @@ SoundPlayerInterface::SoundPlayerInterface()
 #ifdef USE_SDLMIXER2
 	mySoundManager = new SDLMixer2SoundMan();
 	std::string musicPath = gDataPath + std::string("data/music/01 Starting Point (Sunset).mp3");
-	mySoundManager->PlayMusic(musicPath.c_str());
+	//mySoundManager->PlayMusic(musicPath.c_str());
 
 
 	mySoundManager->LoadSoundEvent("jump", gDataPath + std::string("data/sfx/RygarJump.wav"));
@@ -28,6 +28,10 @@ SoundPlayerInterface::SoundPlayerInterface()
 	mySoundManager->LoadSoundEvent("rygarAttackHitWall", gDataPath + std::string("data/sfx/RygarAttackHitWall.wav"));
 	mySoundManager->LoadSoundEvent("rygarHookStuck", gDataPath + std::string("data/sfx/RygarHookStuck.wav"));
 	mySoundManager->LoadSoundEvent("rygarHookThrow", gDataPath + std::string("data/sfx/RygarHookThrow.wav"));
+	mySoundManager->LoadSoundEvent("rygarLand", gDataPath + std::string("data/sfx/RygarLand.wav"));
+	mySoundManager->LoadSoundEvent("rygarTakeDamage", gDataPath + std::string("data/sfx/RygarTakeDamage.wav"));
+	mySoundManager->LoadSoundEvent("rygarJumpStagger", gDataPath + std::string("data/sfx/RygarJumpStagger.wav"));
+	mySoundManager->LoadSoundEvent("enemyHit", gDataPath + std::string("data/sfx/EnemyHit.wav"));
 	mySoundManager->LoadSoundEvent("enemyDeath", gDataPath + std::string("data/sfx/EnemyDeath.wav"));
 	
 

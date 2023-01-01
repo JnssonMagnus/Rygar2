@@ -32,12 +32,12 @@ void Actor::Damage(const int aDamage, const Vector2f& aContactPoint)
 	const int life = GetProperty<int>(ePropertyValues::eLife);
 	if (life > 0)
 	{
-		MapChunk& map = Megaton::GetInstance().GetMap();
-		for (size_t drop = 0; drop < myBloodHitAmount; drop++)
-		{
-			Vector2f dropOffset(-rand() % 20 + rand() % 20, -rand() % 20 + rand() % 20);
-			map.AddWaterDrop(aContactPoint + dropOffset, Vector2f(rand() % 3 - rand() % 3, -rand() % 3));
-		}
+		//MapChunk& map = Megaton::GetInstance().GetMap();
+		//for (size_t drop = 0; drop < myBloodHitAmount; drop++)
+		//{
+		//	Vector2f dropOffset(-rand() % 20 + rand() % 20, -rand() % 20 + rand() % 20);
+		//	map.AddWaterDrop(aContactPoint + dropOffset, Vector2f(rand() % 3 - rand() % 3, -rand() % 3));
+		//}
 
 		if (myStaggeredData.myStaggeredTime <= 0.f)
 		{
@@ -46,14 +46,14 @@ void Actor::Damage(const int aDamage, const Vector2f& aContactPoint)
 			{
 				myStaggeredData.myStaggeredTime = myStaggeredData.myTimeToBeStaggared;
 				myStaggeredData.myDamageOverLastFiveSeconds = 0.f;
-				myAnimationSet.PushAnimation(eAnimationID::eDead);
-				myPhysicBody->AddForce((myPhysicBody->GetPosition() - aContactPoint).GetNormalized() * 800.f);
+				myAnimationSet.PushAnimation(eAnimationID::eStagger);
+				//myPhysicBody->AddForce((myPhysicBody->GetPosition() - aContactPoint).GetNormalized() * 800.f);
 				PostMaster::GetInstance()->SendSoundEvent("bigEnemy_stagger");
 			}
 		}
 
 		ChangeProperty<int>(ePropertyValues::eLife) -= aDamage;
-		myAnimationSet.DamageBlink();
+		myAnimationSet.ColorBlink(Color(255_uc, 0_uc, 0_uc), 0.3f, 0.f);
 
 		if (GetProperty<int>(ePropertyValues::eLife) <= 0)
 		{
@@ -66,4 +66,9 @@ void Actor::Damage(const int aDamage, const Vector2f& aContactPoint)
 void Actor::Stagger()
 {
 	myStaggeredData.myStaggeredTime = myStaggeredData.myTimeToBeStaggared;
+}
+
+bool Actor::IsStaggered() const
+{
+	return myStaggeredData.myStaggeredTime > 0.f;
 }

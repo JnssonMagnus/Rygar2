@@ -87,9 +87,13 @@ void Enemy::Init(GameObjectType& aGameObjectType)
 void Enemy::Collide(GameObject* aGameObject)
 {
 	if (aGameObject->GetPhysicBody().HasCollisionTag(eCollisionTags::ePlayer))
-	{
+	{		
 		Player* player = dynamic_cast<Player*>(aGameObject);
-	//	player->ChangeStat(eStats::eHealth, -0.3f);
+		DL_ASSERT(player && "Object with player tag was not player!");
+		if (player && player->IsAboveEnemy(this) == false)
+		{
+			player->Damage(1, GetPhysicBody().GetPosition());
+		}
 	}
 
 	Actor::Collide(aGameObject);

@@ -24,6 +24,9 @@ Player::Player()
 	myWalkSpeed = 280.f;
 
 	myProperties.SetValue(PropertyKey::eDucking, false);
+
+	myStaggeredData.myDamageToBeStaggered = 1;
+	myStaggeredData.myTimeToBeStaggared = 0.3f;
 }
 
 Player::~Player()
@@ -46,6 +49,7 @@ void Player::Update(const float aDeltaTime)
 		PostMaster::GetInstance()->SendDelayedMessage(Message(eMessageTypes::ePlayerDied));
 
 	myDashTime--;
+	myInvinsibleTime -= aDeltaTime;
 
 	ChangeProperty<bool>(ePropertyValues::eFacingRight) = myAim.GetPosition().myX > myPhysicBody->GetPosition().myX;
 }
@@ -81,6 +85,7 @@ void Player::Init(GameObjectType& aGameObjectType)
 	myAnimationSet.AddAnimation(eAnimationID::eDuckIdle, 1, frameSize, 5, { 0, frameSize.myY * 2 });
 	myAnimationSet.AddAnimation(eAnimationID::eDuckAttack, 1, frameSize, 5, { frameSize.myX * 2, frameSize.myY});
 	myAnimationSet.AddAnimation(eAnimationID::eThrowHook, 1, frameSize, 5, { frameSize.myX * 1, frameSize.myY * 2 });
+	myAnimationSet.AddAnimation(eAnimationID::eStagger, 1, frameSize, 1, { frameSize.myX * 3, frameSize.myY });
 	myAnimationSet.PushAnimation(eAnimationID::eIdle);
 
 	myAnimationSet.CenterPivot();
@@ -105,6 +110,10 @@ void Player::Init(GameObjectType& aGameObjectType)
 
 void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputState aState, const float aValue)
 {
+	if (IsStaggered()) {
+		return;
+	}
+
 	switch (aEvent)
 	{
 	case Input::eInputEvent::eFireGun1:
@@ -292,7 +301,20 @@ void Player::Collide(GameObject* aGameObject)
 			myPhysicBody->SetVelocity({ myPhysicBody->GetVelocity().myX, -6.f });
 			Actor* actor = dynamic_cast<Actor*>(aGameObject);
 			actor->Stagger();
+			PostMaster::GetInstance()->SendSoundEvent("rygarJumpStagger");
 		}
+	}
+}
+
+void Player::Damage(const int aDamage, const Vector2f& aContactPoint)
+{
+	if (!IsStaggered() && myInvinsibleTime <= 0.f) {
+		PostMaster::GetInstance()->SendSoundEvent("rygarTakeDamage");
+		Actor::Damage(aDamage, aContactPoint);
+		myAnimationSet.ColorBlink(Color(130_uc, 100_uc, 100_uc), 1.7f, 0.1f);
+		const float staggerDirection = aContactPoint.myX < myPhysicBody->GetPosition().myX ? 1.f : -1.f;
+		myPhysicBody->AddForce({ staggerDirection * 3000.f, -300.f });
+		myInvinsibleTime = 2.f;
 	}
 }
 
@@ -329,7 +351,7 @@ void Player::PlayLandOnGroundSound()
 {
 	static bool last = true;
 	if (myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom) == true && last == false)
-		PostMaster::GetInstance()->SendSoundEvent("land");
+		PostMaster::GetInstance()->SendSoundEvent("rygarLand");
 
 	last = myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom);
 }

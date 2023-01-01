@@ -10,14 +10,11 @@ AnimationSet::AnimationSet()
 void AnimationSet::Update(const float aDeltaTime)
 {
 	myCurrentTime += aDeltaTime;
-	myDamageBlinkTime -= aDeltaTime;
+	UpdateColorBlink(aDeltaTime);
 }
 
 void AnimationSet::Draw(const Vector2f& aPosition, const float aAngle, const bool aNoZoom)
 {	
-	static const Color defaultColor(255_uc, 255_uc, 255_uc);
-	static const Color damageBlinkColor(255_uc, 0, 0);
-
 	const Animation& animation = myAnimations[myCurrentAnimationID];
 	int currentFrame = (static_cast<int>(myCurrentTime / (1.f / animation.myFpsCount)) % animation.myFrameCount);
 	if (animation.myLoop == false && myCurrentTime > ((1.f / animation.myFpsCount) * animation.myFrameCount))
@@ -27,7 +24,7 @@ void AnimationSet::Draw(const Vector2f& aPosition, const float aAngle, const boo
 	myRenderCommand.mySrcPos = { animation.myStartPosition.myX + animation.myRectSize.myX * currentFrame, animation.myStartPosition.myY };	
 	myRenderCommand.myDstPos = aPosition;	
 	myRenderCommand.myAngle = aAngle;
-	myRenderCommand.myColor = myDamageBlinkTime > 0.f ? damageBlinkColor : defaultColor;
+	myRenderCommand.myColor = GetSpriteColor();
 	myRenderCommand.myOptions = static_cast<unsigned char>(myFlipImage) * RenderCommand::eRenderOptions::eFlipped + 
 		static_cast<unsigned char>(aNoZoom) * RenderCommand::eRenderOptions::eNoZoom;
 	myRenderCommand.myTexture = myTexture;
@@ -66,7 +63,46 @@ const Vector2<int>& AnimationSet::GetSize() const
 	return it->second.myRectSize;
 }
 
-void AnimationSet::DamageBlink()
+void AnimationSet::ColorBlink(const Color& aBlinkColor, const float aBlinkLength, const float aBlinkFrequency)
 {
-	myDamageBlinkTime = 0.08f;
+	SColorBlink newBlink;
+	newBlink.myBlinkLength = aBlinkLength;
+	newBlink.myBlinkColor = aBlinkColor;
+	newBlink.myBlinkFrequency = aBlinkFrequency;
+	myColorBlinks.push(newBlink);
+}
+
+void AnimationSet::UpdateColorBlink(const float aDeltaTime)
+{
+	if (myColorBlinks.empty()) {
+		return;
+	}
+
+	SColorBlink& frontBlink = myColorBlinks.front();
+	frontBlink.myBlinkLength -= aDeltaTime;
+
+	const float timeLeft = frontBlink.myBlinkLength;
+
+	if (timeLeft <= 0.f) {
+		myColorBlinks.pop();
+		if (!myColorBlinks.empty()) {
+			myColorBlinks.front().myBlinkLength += timeLeft;
+		}
+	}
+}
+
+const Color& AnimationSet::GetSpriteColor() const
+{
+	static const Color defaultColor(255_uc, 255_uc, 255_uc);
+	if (myColorBlinks.empty()) {
+		return defaultColor;
+	}
+
+	const SColorBlink& frontBlink = myColorBlinks.front();
+
+	if (!frontBlink.myBlinkFrequency) {
+		return frontBlink.myBlinkColor;
+	}
+
+	return fmod(frontBlink.myBlinkLength, frontBlink.myBlinkFrequency * 2.f) >= frontBlink.myBlinkFrequency ? frontBlink.myBlinkColor : defaultColor;
 }
