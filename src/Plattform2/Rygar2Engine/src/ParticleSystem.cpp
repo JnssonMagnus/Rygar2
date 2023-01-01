@@ -49,7 +49,7 @@ void ParticleSystem::Draw()
 void ParticleSystem::RecieveMessage(const Message& aMessage)
 {
 	ParticleEmitter* particleEmitter = new ParticleEmitter();
-	DL_ASSERT(aMessage.myIntData >= 0 && aMessage.myIntData < myBlueprints.Size() && "Particle blueprint unknown ID!");	
+ 	DL_ASSERT(aMessage.myIntData >= 0 && aMessage.myIntData < myBlueprints.Size() && "Particle blueprint unknown ID!");	
 	particleEmitter->Init(myBlueprints[aMessage.myIntData], aMessage.myPosition, aMessage.myDirection);
 	myParticleEmitters.Add(particleEmitter);
 }

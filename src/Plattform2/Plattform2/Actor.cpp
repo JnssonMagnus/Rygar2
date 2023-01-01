@@ -59,6 +59,13 @@ void Actor::Damage(const int aDamage, const Vector2f& aContactPoint)
 		{
 			Delete();
 			PostMaster::GetInstance()->SendSoundEvent("enemyDeath");
+			Message particleMsg;
+			particleMsg.myPosition = myPhysicBody->GetPosition();
+			particleMsg.myDirection = { 0.f, -1.f };
+			particleMsg.myMessageType = eMessageTypes::eCreateParticleSystem;
+			particleMsg.myIntData = 2;
+
+			PostMaster::GetInstance()->SendMessage(particleMsg);
 		}
 	}
 }
