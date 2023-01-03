@@ -12,7 +12,9 @@
 #include "DiskArmor.h"
 #include "ParticleEmitter.h"
 #include "PlayerAnimationController.h"
+#include <PostMaster/MessageTypes.h>
 #include <postmaster/postmaster.h>
+
 
 Player::Player()
 {
@@ -24,6 +26,7 @@ Player::Player()
 	myWalkSpeed = 280.f;
 
 	myProperties.SetValue(PropertyKey::eDucking, false);
+	myProperties.SetValue(PropertyKey::eKeepOnLevelReset, true);
 
 	myStaggeredData.myDamageToBeStaggered = 1;
 	myStaggeredData.myTimeToBeStaggared = 0.3f;
@@ -102,10 +105,12 @@ void Player::Init(GameObjectType& aGameObjectType)
 	myStats.SetStat(eStats::eHealth, 1000000.f);
 	myStats.SetStat(eStats::eAmmo, 1000.f);
 
-	myProperties.SetValue(ePropertyValues::eLife, 1000000);
+	myProperties.SetValue(ePropertyValues::eLife, 3);
 
 	myHook.SetHitWallSoundEvent("rygarHookStuck");
 	myHook.SetLaunchSoundEvent("rygarHookThrow");
+
+	SetRespawnPosition(GetPhysicBody().GetPosition());
 }
 
 void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputState aState, const float aValue)
@@ -279,7 +284,29 @@ void Player::DropItem()
 
 bool Player::IsAboveEnemy(const GameObject* const aGameObject) const
 {
-	return myPhysicBody->GetVelocity().myY > 0 && myPhysicBody->GetMiddleBottom().myY < aGameObject->GetPhysicBody().GetMiddleTop().myY + 10;
+	return myPhysicBody->GetVelocity().myY > 0 && myPhysicBody->GetMiddleBottom().myY < aGameObject->GetPhysicBody().GetMiddleTop().myY + 11;
+}
+
+void Player::Respawn()
+{
+	myPhysicBody->SetStartPosition(myRespawnPosition);
+	myPhysicBody->SetVelocity({ 0.f, 0.f });
+	myPhysicBody->SetForce({ 0.f, 0.f });
+	myDashTime = 0;
+	myProperties.SetValue(PropertyKey::eDucking, false);
+	myStaggeredData.myDamageOverLastFiveSeconds = 0;
+	myStaggeredData.myStaggeredTime = 0;
+
+	myHook.Reset();
+	myDisk.Reset();
+
+	myInvinsibleTime = 0;
+	myProperties.SetValue(ePropertyValues::eLife, 3);
+}
+
+void Player::SetRespawnPosition(const Vector2f& aWorldPosition)
+{
+	myRespawnPosition = aWorldPosition;
 }
 
 bool Player::IsHinderedFromMoving() const
@@ -298,7 +325,8 @@ void Player::Collide(GameObject* aGameObject)
 	{
 		if (IsAboveEnemy(aGameObject) == true)
 		{
-			myPhysicBody->SetVelocity({ myPhysicBody->GetVelocity().myX, -6.f });
+			constexpr float jumpOnEnemyBounceForce = -6.f;
+			myPhysicBody->SetVelocity({ myPhysicBody->GetVelocity().myX, jumpOnEnemyBounceForce });
 			Actor* actor = dynamic_cast<Actor*>(aGameObject);
 			actor->Stagger();
 			PostMaster::GetInstance()->SendSoundEvent("rygarJumpStagger");
@@ -315,6 +343,12 @@ void Player::Damage(const int aDamage, const Vector2f& aContactPoint)
 		const float staggerDirection = aContactPoint.myX < myPhysicBody->GetPosition().myX ? 1.f : -1.f;
 		myPhysicBody->AddForce({ staggerDirection * 3000.f, -300.f });
 		myInvinsibleTime = 2.f;
+	}
+
+	if (GetProperty<int>(ePropertyValues::eLife) <= 0) 
+	{
+		Respawn();
+		PostMaster::GetInstance()->SendDelayedMessage(Message(eMessageTypes::ePlayerDied));
 	}
 }
 

@@ -1,19 +1,20 @@
 #pragma once
-#include "../CommonUtilities/Vector2.h"
 #include "Settings.h"
 #include "Tileset.h"
+#include "../CommonUtilities/Vector2.h"
 
 class MapChunk;
 
 class World
 {
 public:
-	World();
+							World();
 	MapChunk*				GetMapChunk(const Vector2f worldPosition);
 	std::vector<MapChunk*>	GetMapChunks(const Vector2f worldPosition, const Vector2<int> aHalfSize);
 	using ChunkId = int;
 
 	bool					PositionHasImpassibleTile(const Vector2f& aWorldPosition);
+	void					UnloadWorld();
 	
 private:
 	inline ChunkId			GetChunkIdFromWorldPosition(const Vector2f worldPosition) const;

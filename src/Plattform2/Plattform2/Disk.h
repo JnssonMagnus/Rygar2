@@ -18,6 +18,7 @@ public:
 	void					Collide(GameObject* aGameObject) override;
 	void					ResetHitObjects();
 	void					SetState(const eStates aState);
+	void					Reset();
 
 
 private:
@@ -25,6 +26,6 @@ private:
 	void					PushEnemy(GameObject& aEnemy) const;
 
 	std::set<GameObject*>	myHitObjects;
-	Disk::eStates			myState;
+	Disk::eStates			myState = Disk::eStates::eIdle;
 };
 

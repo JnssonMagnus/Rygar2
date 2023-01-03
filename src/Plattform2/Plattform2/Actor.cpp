@@ -55,7 +55,7 @@ void Actor::Damage(const int aDamage, const Vector2f& aContactPoint)
 		ChangeProperty<int>(ePropertyValues::eLife) -= aDamage;
 		myAnimationSet.ColorBlink(Color(255_uc, 0_uc, 0_uc), 0.3f, 0.f);
 
-		if (GetProperty<int>(ePropertyValues::eLife) <= 0)
+		if (GetProperty<int>(ePropertyValues::eLife) <= 0 && HasProperty(ePropertyValues::eKeepOnLevelReset) == false)
 		{
 			Delete();
 			PostMaster::GetInstance()->SendSoundEvent("enemyDeath");

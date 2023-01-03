@@ -20,13 +20,15 @@ public:
 
 				Chain();
 	void		Init(const std::string_view aLinkSprite, const std::string_view aFireProjectileSprite, const float aMaxLength, 
-		const float aInitSpeed, const int aReturnSpeed, GameObject* aEndObject = nullptr, const bool aStickToGround = true);
+		const float aInitSpeed, const int aReturnSpeed, std::weak_ptr<GameObject> aEndObject = {}, const bool aStickToGround = true);
 	void		Fire(const Vector2f& aDirection);
 	void		Draw();
 	Vector2f	Update(const float aDeltaTime, const Vector2f& aParentPosition, const Vector2f& aParentVelocity);
 	void		Extend();
 	void		Shorten();
 	eState		GetState() const;
+
+	void		Reset();
 	
 	void		SetLaunchSoundEvent(const std::string& aSoundEvent);
 	void		SetHitWallSoundEvent(const std::string& aSoundEvent);
@@ -47,7 +49,7 @@ private:
 	CU::GrowingArray<Link>			myLinks;
 	Sprite							myLinkSprite;
 	Sprite							myHookSprite;
-	GameObject*						myEndObject = nullptr;
+	std::weak_ptr<GameObject>		myEndObject;
 	Vector2f						myParentPosition;
 	Vector2f						myFireDirection;
 	std::string						myLaunchSoundEvent;

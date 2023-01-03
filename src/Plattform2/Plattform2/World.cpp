@@ -7,11 +7,6 @@
 World::World()
 {
 	LoadTilesets(std::string(gDataPath) + "data/tilesets/tilesets.dat");
-
-    MapChunk* testMap = new MapChunk();
-    testMap->LoadFromFile(std::string(gDataPath) + "data/levels/chunk_0");
-    testMap->Init(myTilesets, Vector2f(0.f, 0.f));
-    myMapChunks[0] = testMap;
 }
 
 MapChunk* World::GetMapChunk(const Vector2f worldPosition)
@@ -58,6 +53,16 @@ bool World::PositionHasImpassibleTile(const Vector2f& aWorldPosition)
 	}
 
 	return mapChunk->PositionHasImpassibleTile(aWorldPosition);
+}
+
+void World::UnloadWorld()
+{
+	for (auto [id, chunk] : myMapChunks)
+	{
+		delete chunk;
+	}
+
+	myMapChunks.clear();
 }
 
 void World::LoadTilesets(const std::string_view aTilesetDatafile)

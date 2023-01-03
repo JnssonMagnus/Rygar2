@@ -32,6 +32,12 @@ void Disk::SetState(const eStates aState)
 	myState = aState;
 }
 
+void Disk::Reset()
+{
+	myState = eIdle;
+	myHitObjects.clear();
+}
+
 bool Disk::HasAlreadyHitObject(GameObject* aGameObject) const
 {
 	return myHitObjects.find(aGameObject) != myHitObjects.end();

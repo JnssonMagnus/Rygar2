@@ -16,6 +16,7 @@ void GameState::InitState()
 	DL_ASSERT(myPlayer == nullptr && "Player is already initiated!");
 
 	PostMaster::GetInstance()->Register(this, eMessageTypes::eCreateObject);
+	PostMaster::GetInstance()->Register(this, eMessageTypes::ePlayerDied);
 
 	myParallaxBackground.AddLayer("data/gfx/background.png", { 0.f, 0.f });
 	myParallaxBackground.AddLayer("data/gfx/background2.png", { 0.1f, 0.0f });
@@ -33,9 +34,9 @@ void GameState::InitState()
 
 	InitKeybindings();
 
-	myPlayer = dynamic_cast<Player*>(myGameObjectFactory.CreateObject(eGameObjectTypes::ePlayer));
+	myPlayer = std::shared_ptr<Player>(dynamic_cast<Player*>(myGameObjectFactory.CreateObject(eGameObjectTypes::ePlayer).release()));
 	myPlayerCamera = new PlayerCamera(myPlayer);
-	GameObjectManager::GetInstance()->AddGameObject(myPlayer);
+	GameObjectManager::GetInstance()->AddGameObject(myPlayer.get());
 	GameObjectManager::GetInstance()->AddAndRemoveObjects();
 	myPlayer->SetStartPosition({ 100, 100 });
 
@@ -47,17 +48,17 @@ void GameState::InitState()
 	pushCameraMessage.myVoidPointer = myPlayerCamera;		
 	PostMaster::GetInstance()->SendMessage(pushCameraMessage);			   
 
-	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eFireGun1, myPlayer);
-	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eMoveLeft, myPlayer);
-	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eMoveRight, myPlayer);
-	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eJump, myPlayer);
-	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eDodge, myPlayer);
-	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::ePickUp, myPlayer);
-	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eUseItem, myPlayer);
-	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eUseHook, myPlayer);
-	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eDown, myPlayer);
-	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eDash, myPlayer);
-	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eCycleWeapons, myPlayer);
+	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eFireGun1, myPlayer.get());
+	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eMoveLeft, myPlayer.get());
+	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eMoveRight, myPlayer.get());
+	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eJump, myPlayer.get());
+	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eDodge, myPlayer.get());
+	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::ePickUp, myPlayer.get());
+	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eUseItem, myPlayer.get());
+	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eUseHook, myPlayer.get());
+	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eDown, myPlayer.get());
+	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eDash, myPlayer.get());
+	Input::InputMapper::GetInstance()->AddObserver(Input::eInputEvent::eCycleWeapons, myPlayer.get());
 }
 
 eStateStatus GameState::Update(const float aDeltaTime)
@@ -123,10 +124,16 @@ void GameState::RecieveMessage(const Message& aMessage)
 	switch (aMessage.myMessageType)
 	{
 	case eMessageTypes::eCreateObject:
-		GameObject* newObject = myGameObjectFactory.CreateObject(aMessage.myIntData);
+	{
+		GameObject* newObject = myGameObjectFactory.CreateObject(aMessage.myIntData).release();
 		newObject->GetPhysicBody().SetStartPosition(aMessage.myPosition);
 		newObject->GetPhysicBody().SetVelocity(aMessage.myDirection);
 		GameObjectManager::GetInstance()->AddGameObject(newObject);
+		break;
+	}
+	case eMessageTypes::ePlayerDied:
+		GameObjectManager::GetInstance()->RemoveAllGameObjects();
+		myWorld->UnloadWorld();
 		break;
 	}
 }
@@ -188,3 +195,4 @@ void GameState::InitPlayerStartPosition()
 	if (playerSpawn != nullptr)
 		myPlayer->SetPosition(playerSpawn->GetPhysicBody().GetPosition());
 }
+

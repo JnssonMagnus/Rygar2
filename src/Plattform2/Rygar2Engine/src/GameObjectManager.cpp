@@ -99,7 +99,10 @@ void GameObjectManager::RemoveAllGameObjects()
 	AddAndRemoveObjects();
 	for (GameObject* gameObjectToDelete : myGameObjects)
 	{
-		DeleteGameObject(gameObjectToDelete);
+		if (gameObjectToDelete->HasProperty(PropertyKey::eKeepOnLevelReset) == false)
+		{
+			DeleteGameObject(gameObjectToDelete);
+		}
 	}
 	AddAndRemoveObjects();
 }

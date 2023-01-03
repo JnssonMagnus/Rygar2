@@ -2,16 +2,17 @@
 #include "gameObjectTypes.h"
 #include "GameObjectType.h"
 #include <unordered_map>
+#include <memory>
 
 class GameObject;
 class TreeType;
 class GameObjectFactory
 {
 public:
-							GameObjectFactory();
-	void					Init();
-	GameObject*				CreateObject(const eGameObjectTypes aGameObjectType);
-	GameObject*				CreateObject(const int aGameObjectTypeID);
+								GameObjectFactory();
+	void						Init();
+	std::unique_ptr<GameObject>	CreateObject(const eGameObjectTypes aGameObjectType);
+	std::unique_ptr<GameObject>	CreateObject(const int aGameObjectTypeID);
 private:
 	GameObjectType&			GetGameObjectType(const eGameObjectTypes aGameObjectType);		
 

@@ -109,6 +109,11 @@ void GameObject::SetStartPosition(const Vector2f& aPosition)
 	myPhysicBody->SetStartPosition(aPosition);
 }
 
+const bool GameObject::HasProperty(const PropertyKey aPropertyKey) const
+{
+	return myProperties.HasValue(aPropertyKey);
+}
+
 const std::string& GameObject::GetTypeName() const
 {
 	return myGameObjectType->GetName();

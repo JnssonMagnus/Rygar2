@@ -38,6 +38,9 @@ public:
 	const Stats&				GetStats() const;
 	bool						IsAboveEnemy(const GameObject* const aGameObject) const;
 
+	void						Respawn();
+	void						SetRespawnPosition(const Vector2f& aWorldPosition);
+
 private:
 	void						UpdateHook(const float aDeltaTime);
 	void						UpdatePickedUpObject();
@@ -62,6 +65,8 @@ private:
 	
 	CU::GrowingArray<Weapon*>	myWeapons;
 	int							myCurrentWeapon = 0;
+
+	Vector2f					myRespawnPosition;
 
 	float						myJumpStrength;
 	float						myDashStrength;

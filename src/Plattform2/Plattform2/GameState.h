@@ -4,6 +4,7 @@
 #include "GameObjectFactory.h"
 #include "State.h"
 #include "IngameDebugDraw.h"
+#include <memory>
 #include <PostMaster/Observer.h>
 
 class PlayerCamera;
@@ -29,7 +30,7 @@ private:
 	ParallaxBackground				myParallaxBackground;
 	GameObjectFactory				myGameObjectFactory;
 	IngameDebugDraw					myIngameDebugDraw;
-	Player*							myPlayer = nullptr;
+	std::shared_ptr<Player>			myPlayer = nullptr;
 	PlayerCamera*					myPlayerCamera = nullptr;
 	World*							myWorld = nullptr;
 	std::map<std::string, Tileset>	myTilesets;

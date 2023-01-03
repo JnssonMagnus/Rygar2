@@ -57,53 +57,53 @@ void GameObjectFactory::Init()
 	//myTreeType->SetLeafSprite("data/gfx/gameObjects/apple.png");
 }
 
-GameObject* GameObjectFactory::CreateObject(const eGameObjectTypes aGameObjectType)
+std::unique_ptr<GameObject> GameObjectFactory::CreateObject(const eGameObjectTypes aGameObjectType)
 {
-	GameObject* newGameObject = nullptr;
+	std::unique_ptr<GameObject> newGameObject;
 	switch (aGameObjectType)
 	{
 	case eGameObjectTypes::eApple:
-		newGameObject = new Apple(); break;
+		newGameObject = std::make_unique<Apple>(); break;
 	case eGameObjectTypes::eBoulder:
-		newGameObject = new Boulder(); break;
+		newGameObject = std::make_unique<Boulder>(); break;
 	case eGameObjectTypes::eSeed:
-		newGameObject = new Seed(); break;
+		newGameObject = std::make_unique<Seed>(); break;
 	case eGameObjectTypes::eEnemy:
-		newGameObject = new Enemy(); break;
+		newGameObject = std::make_unique<Enemy>(); break;
 	case eGameObjectTypes::eBigEnemy:
-		newGameObject = new BigEnemy(); break;
+		newGameObject = std::make_unique<BigEnemy>(); break;
 	case eGameObjectTypes::eBullet:
-		newGameObject = new Bullet(); break;
+		newGameObject = std::make_unique<Bullet>(); break;
 	case eGameObjectTypes::eTree:
 	{
-		newGameObject = new Tree();
-		dynamic_cast<Tree*>(newGameObject)->SetTreeType(myTreeType);
+		newGameObject = std::make_unique<Tree>();
+		dynamic_cast<Tree*>(newGameObject.get())->SetTreeType(myTreeType);
 		break;
 	}
 	case eGameObjectTypes::eHammer:
-		newGameObject = new Hammer(); break;
+		newGameObject = std::make_unique<Hammer>(); break;
 	case eGameObjectTypes::eRainCloud:
-		newGameObject = new RainCloud(); break;
+		newGameObject = std::make_unique<RainCloud>(); break;
 	case eGameObjectTypes::eBucket:
-		newGameObject = new Bucket(); break;
+		newGameObject = std::make_unique<Bucket>(); break;
 	case eGameObjectTypes::eFireFlower:
-		newGameObject = new FireFlower(); break;
+		newGameObject = std::make_unique<FireFlower>(); break;
 	case eGameObjectTypes::ePlayer:
-		newGameObject = new Player(); break;
+		newGameObject = std::make_unique<Player>(); break;
 	case eGameObjectTypes::eSink:
-		newGameObject = new Sink(); break;
+		newGameObject = std::make_unique<Sink>(); break;
 	case eGameObjectTypes::eEnemySpawner:
-		newGameObject = new EnemySpawner(); break;
+		newGameObject = std::make_unique<EnemySpawner>(); break;
 	case eGameObjectTypes::eGrenade:
-		newGameObject = new Grenade(); break;
+		newGameObject = std::make_unique<Grenade>(); break;
 	case eGameObjectTypes::eExplosion:
-		newGameObject = new Explosion(); break;
+		newGameObject = std::make_unique<Explosion>(); break;
 	case eGameObjectTypes::eBloodPortal:
-		newGameObject = new BloodPortal(); break;
+		newGameObject = std::make_unique<BloodPortal>(); break;
 	case eGameObjectTypes::eDisk:
-		newGameObject = new Disk(); break;
+		newGameObject = std::make_unique<Disk>(); break;
 	case eGameObjectTypes::ePlayerSpawn:
-		newGameObject = new GameObject();
+		newGameObject = std::make_unique<GameObject>();
 	default:
 		DL_ASSERT("Tried to create unknown object in factory!");
 	}
@@ -173,14 +173,13 @@ GameObjectType& GameObjectFactory::GetGameObjectType(const eGameObjectTypes aGam
 	return *error;
 }
 
-GameObject* GameObjectFactory::CreateObject(const int aGameObjectTypeID)
+std::unique_ptr<GameObject> GameObjectFactory::CreateObject(const int aGameObjectTypeID)
 {
-	GameObject* newGameObject = nullptr;
 	const auto& it = myGameObjectTypes.find(aGameObjectTypeID);
 	DL_ASSERT(it != myGameObjectTypes.end() && "ObjectType not found!");
 		
 	eGameObjectTypes gameObjectTypeEnum = myGameObjectTypeIDToEnum[it->first];		
-	return CreateObject(gameObjectTypeEnum);
+	return std::move(CreateObject(gameObjectTypeEnum));
 }
 
 void GameObjectFactory::LoadGameObjectTypes()

@@ -313,7 +313,7 @@ bool MapChunk::IsDestructable(const Vector2f& aWorldPosition) const
 bool MapChunk::PositionHasImpassibleTile(const Vector2f& aWorldPosition) const
 {
 	const auto tileIndex = GetTileIndexFromWorldPosition(aWorldPosition);
-	return myTileset->IsObstacle(myTileData[tileIndex]);
+	return tileIndex >= 0 && myTileset->IsObstacle(myTileData[tileIndex]);
 	
 }
 

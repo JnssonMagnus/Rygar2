@@ -1,14 +1,15 @@
 #pragma once
 #include "Camera.h"
+#include <memory>
 
 class Player;
 
 class PlayerCamera : public Camera
 {
 public:
-						PlayerCamera(Player* aPlayer);
-	void				Update() override;
+								PlayerCamera(std::weak_ptr<Player> aPlayer);
+	void						Update() override;
 private:
-	Player*				myPlayer = nullptr;
-	float				myTargetZoom = 1.f;
+	std::weak_ptr<Player>		myPlayer;
+	float						myTargetZoom = 1.f;
 };

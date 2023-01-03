@@ -16,7 +16,7 @@ Chain::Chain()
 }
 
 void Chain::Init(const std::string_view aLinkSprite, const std::string_view aFireProjectileSprite, const float aMaxLength, 
-	const float aInitSpeed, const int aReturnSpeed, GameObject* aEndObject, const bool aStickToGround)
+	const float aInitSpeed, const int aReturnSpeed, std::weak_ptr<GameObject> aEndObject, const bool aStickToGround)
 {
 	myHookSprite.Init(aFireProjectileSprite.data());
 	myHookSprite.CenterPivot();
@@ -49,8 +49,8 @@ void Chain::Fire(const Vector2f& aDirection)
 		myLinks.Add({ myParentPosition, { 0.f, 0.f }, atan2(myFireDirection.myY, myFireDirection.myX) });
 		PostMaster::GetInstance()->SendSoundEvent(myLaunchSoundEvent.c_str());
 		myState = eState::eFired;
-		if (myEndObject)
-			myEndObject->SetPosition(myLinks[0].myPosition);
+		if (GameObject* endObject = myEndObject.lock().get())
+			endObject->SetPosition(myLinks[0].myPosition);
 		break;
 	}
 }
@@ -59,8 +59,8 @@ void Chain::Draw()
 {
 	if (myState != eState::eUnreleased)
 	{
-		if (myEndObject)
-			myEndObject->Draw();
+		if (GameObject* endObject = myEndObject.lock().get())
+			endObject->Draw();
 		else
 			myHookSprite.Draw(myLinks[0].myPosition, myLinks[0].myRotation);
 
@@ -222,10 +222,13 @@ Vector2f Chain::Update(const float aDeltaTime, const Vector2f& aParentPosition, 
 	//	}
 	//}
 
-	if (myEndObject && myState != eState::eUnreleased)
-	{		
-		myEndObject->GetPhysicBody().SetVelocity(myLinks[0].myPosition - myEndObject->GetPhysicBody().GetPosition());				
-		//myEndObject->GetPhysicBody().SetPosition(myLinks[0].myPosition);
+	if (myState != eState::eUnreleased) 
+	{
+		if (GameObject* endObject = myEndObject.lock().get())
+		{		
+			endObject->GetPhysicBody().SetVelocity(myLinks[0].myPosition - endObject->GetPhysicBody().GetPosition());
+			//myEndObject->GetPhysicBody().SetPosition(myLinks[0].myPosition);
+		}
 	}
 
 
@@ -259,6 +262,11 @@ void Chain::Shorten()
 Chain::eState Chain::GetState() const
 {
 	return myState;
+}
+
+void Chain::Reset()
+{
+	myState = eState::eUnreleased;
 }
 
 void Chain::SetLaunchSoundEvent(const std::string& aSoundEvent)

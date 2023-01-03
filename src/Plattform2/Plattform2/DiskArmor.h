@@ -15,6 +15,6 @@ public:
 
 private:
 	Chain						myChain;
-	Disk*						myDisk = nullptr;
+	std::shared_ptr<Disk>		myDisk = nullptr;
 };
 

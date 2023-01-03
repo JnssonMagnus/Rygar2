@@ -13,7 +13,8 @@ enum class ePropertyValues
 	eAlive,
 	eFacingRight,
 	eIsAttacking,
-	eDucking
+	eDucking,
+	eKeepOnLevelReset
 };
 
 typedef ePropertyValues PropertyKey;
@@ -39,7 +40,9 @@ public:
 	void					SetStartPosition(const Vector2f& aPosition);
 
 	template<class T>
-	const T&				GetProperty(const PropertyKey) const;
+	const T&				GetProperty(const PropertyKey aPropertyKey) const;
+
+	const bool				HasProperty(const PropertyKey aPropertyKey) const;
 
 	template<class T>
 	T&						ChangeProperty(const PropertyKey aPropertyKey);
