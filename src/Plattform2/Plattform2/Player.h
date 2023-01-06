@@ -1,8 +1,7 @@
 #pragma once
 #include "Sprite.h"
 #include "PhysicBody.h"
-#include "Stats.h"
-#include "StatsViewer.h"
+#include "PLayerUI.h"
 #include "Actor.h"
 #include "Chain.h"
 #include "Aim.h"
@@ -26,7 +25,6 @@ public:
 	void						Init(GameObjectType& aGameObjectType) override;
 	void						RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputState aState, const float aValue) override;
 	void						CollideWithTile(eCollisionPoint collisionPoint) override;
-	void						ChangeStat(const eStats aStat, const float aChange);
 	bool						PickUp(GameObject* aGameObject);
 	void						DropItem();
 
@@ -35,7 +33,6 @@ public:
 
 	const Vector2f				GetAimLocalPosition() const;
 
-	const Stats&				GetStats() const;
 	bool						IsAboveEnemy(const GameObject* const aGameObject) const;
 
 	void						Respawn();
@@ -55,8 +52,7 @@ private:
 	bool						IsAttacking() const;
 
 	Aim							myAim;
-	Stats						myStats;
-	StatsViewer					myStatsViewer;
+	PlayerUI					myPlayerUI;
 	bool						myHasDoubleJumped = false;
 	GameObject*					myPickedUpObject;
 	Chain						myHook;

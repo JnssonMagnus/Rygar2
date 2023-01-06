@@ -10,6 +10,7 @@ class Player;
 enum class ePropertyValues
 {
 	eLife,
+	eMaxLife,
 	eAlive,
 	eFacingRight,
 	eIsAttacking,

@@ -203,8 +203,7 @@
     <ClCompile Include="RainCloud.cpp" />
     <ClCompile Include="Seed.cpp" />
     <ClCompile Include="Sink.cpp" />
-    <ClCompile Include="Stats.cpp" />
-    <ClCompile Include="StatsViewer.cpp" />
+    <ClCompile Include="PlayerUI.cpp" />
     <ClCompile Include="Tileset.cpp" />
     <ClCompile Include="Tree.cpp" />
     <ClCompile Include="TreeType.cpp" />
@@ -252,8 +251,7 @@
     <ClInclude Include="RainCloud.h" />
     <ClInclude Include="Seed.h" />
     <ClInclude Include="Sink.h" />
-    <ClInclude Include="Stats.h" />
-    <ClInclude Include="StatsViewer.h" />
+    <ClInclude Include="PlayerUI.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Tileset.h" />
     <ClInclude Include="Tree.h" />

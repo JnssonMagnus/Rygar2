@@ -38,7 +38,7 @@ void Renderer::AddTextRenderCommand(const Vector2<int>& aPosition, const std::st
 
 void Renderer::AddGUIRenderCommand(const Vector2f& aDstPos, const Vector2<int>& aDstSize, const Vector2<int>& aSrcPos, const Vector2<int>& aSrcSize, const Color& aColor, Texture aTexture)
 {
-	myGUIRenderCommands[1].Add({ aColor, aDstPos, aDstSize, {0, 0}, aDstSize, {0, 0}, aTexture });
+	myGUIRenderCommands[1].Add({ aColor, aDstPos, aDstSize, aSrcPos, aDstSize, {0, 0}, aTexture });
 }
 
 void Renderer::AddPSRenderCommand(const PSRenderCommand& aPSRenderCommand)
@@ -299,7 +299,7 @@ void Renderer::DrawGUISprites()
 
 		srcRect.x = renderCommand.mySrcPos.myX;
 		srcRect.y = renderCommand.mySrcPos.myY;
-		srcRect.w = renderCommand.mySrcSize.myY;
+		srcRect.w = renderCommand.mySrcSize.myX;
 		srcRect.h = renderCommand.mySrcSize.myY;
 
 		SDL_SetTextureColorMod(texture, renderCommand.myColor.r, renderCommand.myColor.g, renderCommand.myColor.b);

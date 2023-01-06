@@ -92,7 +92,7 @@ eStateStatus GameState::Update(const float aDeltaTime)
 		}
 	}
 
-	if (myPlayer->GetStats().GetStat(eStats::eHealth) <= 0.f)
+	if (myPlayer->GetProperty<int>(PropertyKey::eLife) <= 0.f)
 	{
 		myStateStackProxy.PushState(new GameOverState(myStateStackProxy, true));
 	}

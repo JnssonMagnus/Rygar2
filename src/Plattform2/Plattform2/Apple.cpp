@@ -4,9 +4,9 @@
 
 bool Apple::Use(Player& aPlayer)
 {
-	if (aPlayer.GetStats().GetStat(eStats::eHealth) < 100.f)
+	if (aPlayer.GetProperty<int>(PropertyKey::eLife) < 100.f)
 	{
-		aPlayer.ChangeStat(eStats::eHealth, 10);
+		aPlayer.ChangeProperty<int>(PropertyKey::eLife) += 10;
 		return true;
 	}
 

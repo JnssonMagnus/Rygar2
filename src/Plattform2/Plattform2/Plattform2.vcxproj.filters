@@ -59,10 +59,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>Game\GameObjects\Actors\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Stats.cpp">
-      <Filter>Game\GameObjects\Actors\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="StatsViewer.cpp">
+    <ClCompile Include="PlayerUI.cpp">
       <Filter>Game\GameObjects\Actors\Player</Filter>
     </ClCompile>
     <ClCompile Include="WaterMap.cpp">
@@ -194,10 +191,7 @@
     <ClInclude Include="Player.h">
       <Filter>Game\GameObjects\Actors\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Stats.h">
-      <Filter>Game\GameObjects\Actors\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="StatsViewer.h">
+    <ClInclude Include="PlayerUI.h">
       <Filter>Game\GameObjects\Actors\Player</Filter>
     </ClInclude>
     <ClInclude Include="WaterMap.h">

@@ -16,7 +16,7 @@
 #include <postmaster/postmaster.h>
 
 
-Player::Player()
+Player::Player() : myPlayerUI(*this)
 {
 	myPickedUpObject = nullptr;
 	myDashStrength = 400.f;
@@ -25,6 +25,8 @@ Player::Player()
 	myDashTime = 0;	
 	myWalkSpeed = 280.f;
 
+	myProperties.SetValue(PropertyKey::eLife, 3);
+	myProperties.SetValue(PropertyKey::eMaxLife, 3);
 	myProperties.SetValue(PropertyKey::eDucking, false);
 	myProperties.SetValue(PropertyKey::eKeepOnLevelReset, true);
 
@@ -39,8 +41,7 @@ Player::~Player()
 
 void Player::Update(const float aDeltaTime)
 {
-	Actor::Update(aDeltaTime);
-	myStats.UpdateStats();
+	Actor::Update(aDeltaTime);	
 
 	UpdateHook(aDeltaTime);
 	UpdatePickedUpObject();
@@ -48,7 +49,7 @@ void Player::Update(const float aDeltaTime)
 	PlayLandOnGroundSound();
 	UpdateSoundListenerPosition();
 
-	if (myStats.GetStat(eStats::eHealth) <= 0.f)
+	if (myProperties.GetValue<int>(PropertyKey::eLife) <= 0.f)
 		PostMaster::GetInstance()->SendDelayedMessage(Message(eMessageTypes::ePlayerDied));
 
 	myDashTime--;
@@ -64,8 +65,7 @@ void Player::Draw()
 	
 	myWeapons[myCurrentWeapon]->Draw();
 	
-	myStats.SetStat(eStats::eAmmo, myWeapons[myCurrentWeapon]->GetPercentageAmmoLeft() * 100.f);
-	myStatsViewer.Draw({ 10, 10 });
+	myPlayerUI.Draw({ 10, 10 });
 	myAim.Draw();
 }
 
@@ -101,9 +101,7 @@ void Player::Init(GameObjectType& aGameObjectType)
 	myPhysicBody->SetHalfSize(Vector2f(myAnimationSet.GetSize().x / 2.f,
 		myAnimationSet.GetSize().y / 2.f));
 
-	myStatsViewer.Init(myStats);
-	myStats.SetStat(eStats::eHealth, 1000000.f);
-	myStats.SetStat(eStats::eAmmo, 1000.f);
+	myPlayerUI.Init();
 
 	myProperties.SetValue(ePropertyValues::eLife, 3);
 
@@ -244,11 +242,6 @@ void Player::CollideWithTile(eCollisionPoint collisionPoint)
 	}
 }
 
-void Player::ChangeStat(const eStats aStat, const float aChange)
-{
-	myStats.ChangeStat(aStat, aChange);
-}
-
 bool Player::PickUp(GameObject* aGameObject)
 {
 	DL_ASSERT(aGameObject != nullptr && "Tried to pick up nullptr!");
@@ -357,11 +350,6 @@ const Vector2f Player::GetAimLocalPosition() const
 	return myAim.GetLocalPosition();
 }
 
-const Stats& Player::GetStats() const
-{
-	return myStats;
-}
-
 void Player::UpdateHook(const float aDeltaTime)
 {
 	Vector2f positionByHook = myHook.Update(aDeltaTime, myPhysicBody->GetPosition(), myPhysicBody->GetVelocity());
@@ -433,4 +421,5 @@ void Player::AddWeapons()
 	for (auto& weapon : myWeapons)
 		weapon->Init();
 }
+
 
