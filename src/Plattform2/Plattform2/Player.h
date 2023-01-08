@@ -24,7 +24,6 @@ public:
 	void						Draw() override;
 	void						Init(GameObjectType& aGameObjectType) override;
 	void						RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputState aState, const float aValue) override;
-	void						CollideWithTile(eCollisionPoint collisionPoint) override;
 	bool						PickUp(GameObject* aGameObject);
 	void						DropItem();
 

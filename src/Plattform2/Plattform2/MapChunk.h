@@ -1,6 +1,8 @@
 #include "PhysicBody.h"
 #include "CollisionPoint.h"
+#include "MapCollisionData.h"
 #include <StaticArray.h>
+#include <set>
 
 class Tileset;
 class WaterMap;
@@ -19,7 +21,7 @@ public:
 	void				DebugDraw(const Vector2f& aCameraPosition);
 	void				Init(std::map<std::string, Tileset>& aTilesets, const Vector2f& aWorldPosition);
 	void				LoadFromFile(const std::string_view aFilename);
-	eCollisionPoint		Collided(PhysicBody& aPhysicBody);
+	MapCollisionData	Collided(PhysicBody& aPhysicBody);
 	bool				Collided(const int aNodeIndex) const;
 	bool				Collided(const Vector2f& aPosition) const;
 	int					GetMapWidth() const;
@@ -38,8 +40,8 @@ public:
 	int					GetTileIndexFromWorldPosition(const Vector2f& aWorldPosition) const;
 
 private:
-	bool				Collided(const Vector2f& aStartPosition, const Vector2f& aEndPosition, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator) const;
-	bool				Collided(const int aNodeIndexX, const int aNodeIndexY, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator) const;
+	bool				Collided(const Vector2f& aStartPosition, const Vector2f& aEndPosition, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator, MapCollisionData& aCollidedTileTypes) const;
+	bool				Collided(const int aNodeIndex, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator) const;
 
 	[[nodiscard]]bool	IsOutsideMap(const PhysicBody & aPhysicBody) const;
 	inline bool			IsValidTileIndex(const int aTileIndex) const;

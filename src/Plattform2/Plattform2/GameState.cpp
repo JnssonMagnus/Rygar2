@@ -9,6 +9,7 @@
 #include "CollisionBoxDrawerVisitor.h"
 #include "World.h"
 #include "MapChunk.h"
+#include "MapCollisionData.h"
 #include <InputMapper.h>
 
 void GameState::InitState()
@@ -67,7 +68,7 @@ eStateStatus GameState::Update(const float aDeltaTime)
 	auto mapChunksWithPlayer = myWorld->GetMapChunks(myPlayer->GetPhysicBody().GetPosition(), myPlayer->GetPhysicBody().GetHalfSize());
 	for (auto mapChunk : mapChunksWithPlayer)
 	{
-		mapChunk->Collided(myPlayer->GetPhysicBody());
+		//mapChunk->Collided(myPlayer->GetPhysicBody());
 	//	mapChunk->UpdatePlayerVsWaterCollisions(*myPlayer);
 	}
 
@@ -83,11 +84,11 @@ eStateStatus GameState::Update(const float aDeltaTime)
 		auto mapChunks = myWorld->GetMapChunks(gameObjects[gameObjectIndex]->GetPhysicBody().GetPosition(), gameObjects[gameObjectIndex]->GetPhysicBody().GetHalfSize());
 		for (auto mapChunk : mapChunks)
 		{
-			eCollisionPoint collisionPoint = eCollisionPoint::eNoCollision;
-			collisionPoint = mapChunk->Collided(gameObjects[gameObjectIndex]->GetPhysicBody());
-			if (collisionPoint != eCollisionPoint::eNoCollision)
+			MapCollisionData mapCollisionData;
+			mapCollisionData = mapChunk->Collided(gameObjects[gameObjectIndex]->GetPhysicBody());
+			if (!mapCollisionData.myCollidedTileTypes.empty())
 			{
-				gameObjects[gameObjectIndex]->CollideWithTile(collisionPoint);
+				gameObjects[gameObjectIndex]->CollidedWithMap(mapCollisionData);
 			}
 		}
 	}

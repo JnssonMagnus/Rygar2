@@ -116,6 +116,7 @@ namespace PlatformEditor
             myTilesetMarker = myTilesetPreviewMarker;
             ObstacleCheckbox.Checked = myTilesets[Tilesets.Text].GetIsObstacle(GetTileID());
             DestructableCheckbox.Checked = myTilesets[Tilesets.Text].GetIsDestructable(GetTileID());
+            FalloutCheckBox.Checked = myTilesets[Tilesets.Text].GetIsFallout(GetTileID());
         }
 
         private void TilesetImage_Paint(object sender, PaintEventArgs e)
@@ -292,6 +293,14 @@ namespace PlatformEditor
             AutoTile autoTile = new AutoTile(myTilesets[Tilesets.Text]);
             autoTile.Show();
             autoTile.Focus();
+        }
+
+        private void FalloutCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TileSetIsChosen() == true)
+            {
+                myTilesets[Tilesets.Text].SetIsFallout(GetTileID(), FalloutCheckBox.Checked);
+            }
         }
     }
 }

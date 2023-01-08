@@ -302,6 +302,9 @@
     <ClInclude Include="PlayerAnimationController.h">
       <Filter>Game\GameObjects\Actors\Player</Filter>
     </ClInclude>
+    <ClInclude Include="MapCollisionData.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="DD.txt" />

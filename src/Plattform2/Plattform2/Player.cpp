@@ -223,24 +223,24 @@ void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputSt
 			{
 				myPhysicBody->AddForce({ -10.f, -5.f });
 			}
-			else if (myHasDoubleJumped == false)
-			{
-				myPhysicBody->SetForce({ myPhysicBody->GetForce().myX, -myJumpStrength });
-				myHasDoubleJumped = true;
-			}
+			//else if (myHasDoubleJumped == false)
+			//{
+			//	myPhysicBody->SetForce({ myPhysicBody->GetForce().myX, -myJumpStrength });
+			//	myHasDoubleJumped = true;
+			//}
 		}
 		break;
 	}
 }
 
-void Player::CollideWithTile(eCollisionPoint collisionPoint)
-{
-	if (myHook.GetState() == Chain::eState::eStuck)
-	{
-		if (myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eTop) == true)
-			myHook.Fire(Vector2f(0.f, 0.f));
-	}
-}
+//void Player::CollideWithTile(eCollisionPoint collisionPoint)
+//{
+//	if (myHook.GetState() == Chain::eState::eStuck)
+//	{
+//		if (myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eTop) == true)
+//			myHook.Fire(Vector2f(0.f, 0.f));
+//	}
+//}
 
 bool Player::PickUp(GameObject* aGameObject)
 {
@@ -295,6 +295,8 @@ void Player::Respawn()
 
 	myInvinsibleTime = 0;
 	myProperties.SetValue(ePropertyValues::eLife, 3);
+
+	myAnimationSet.ClearColorBlinks();
 }
 
 void Player::SetRespawnPosition(const Vector2f& aWorldPosition)

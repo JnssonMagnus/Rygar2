@@ -5,5 +5,5 @@ class Bullet : public GameObject
 {
 public:
 	void	Collide(GameObject* aGameObject) override;
-	void	CollideWithTile(eCollisionPoint collisionPoint) override;
+	void	CollidedWithMap(const MapCollisionData& aMapCollisionData) override;
 };

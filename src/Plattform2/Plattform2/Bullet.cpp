@@ -2,6 +2,7 @@
 #include "Bullet.h"
 #include "Actor.h"
 #include "physicBody.h"
+#include "MapCollisionData.h"
 
 void Bullet::Collide(GameObject* aGameObject)
 {
@@ -19,13 +20,13 @@ void Bullet::Collide(GameObject* aGameObject)
 	}
 }
 
-void Bullet::CollideWithTile(eCollisionPoint collisionPoint)
+void Bullet::CollidedWithMap(const MapCollisionData& aMapCollisionData)
 {
 	Message particleMsg(eMessageTypes::eCreateParticleSystem);
 	particleMsg.myPosition = myPhysicBody->GetPosition();
 	particleMsg.myIntData = 0;
 	Vector2f dir;
-	switch (collisionPoint)
+	switch (aMapCollisionData.myCollisionPoint)
 	{
 	case eCollisionPoint::eBottom:
 			dir.y = -1; break;

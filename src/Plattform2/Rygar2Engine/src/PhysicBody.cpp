@@ -84,7 +84,6 @@ bool PhysicBody::Collides(const Vector2f& aPoint) const
 			aPoint.myY < myPosition.myY - myHalfSize.myY ||
 			aPoint.myX > myPosition.myX + myHalfSize.myX ||
 			aPoint.myY > myPosition.myY + myHalfSize.myY);
-
 }
 
 void PhysicBody::TranslatePosition(const Vector2f& aOffset)

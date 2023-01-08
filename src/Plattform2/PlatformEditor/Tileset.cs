@@ -12,12 +12,14 @@ namespace PlatformEditor
     {
         public bool myIsObstacle;
         public bool myIsDestructable;
+        public bool myIsFallout;
     }
     public class Tileset
     {
         public List<int>[] myAutoTiles = null;
         private int myTileHeight = 32;
         private int myTileWidth = 32;
+        private int myVersion = 1;
         private Image myImage = null;
         private Random myRandomTile = new Random();
 
@@ -148,6 +150,13 @@ namespace PlatformEditor
                 myTileData[aTileID].myIsDestructable = aIsDestructable;
             }
         }
+        public void SetIsFallout(int aTileID, bool aIsFallout)
+        {
+            if (myTileData != null && aTileID < myTileData.Length)
+            {
+                myTileData[aTileID].myIsFallout = aIsFallout;
+            }
+        }
         public bool GetIsObstacle(int aTileID)
         {
             return myTileData[aTileID].myIsObstacle;
@@ -157,9 +166,13 @@ namespace PlatformEditor
         {
             return myTileData[aTileID].myIsDestructable;
         }
-
+        public bool GetIsFallout(int aTileID)
+        {
+            return myTileData[aTileID].myIsDestructable;
+        }
         public void SaveTo(System.IO.BinaryWriter aBinaryWriter)
         {
+            aBinaryWriter.Write(myVersion);
             aBinaryWriter.Write(myTilesetName);
             aBinaryWriter.Write(myTileImage);
             aBinaryWriter.Write(myTileWidth);
@@ -169,6 +182,7 @@ namespace PlatformEditor
             {
                 aBinaryWriter.Write(tileData.myIsObstacle);
                 aBinaryWriter.Write(tileData.myIsDestructable);
+                aBinaryWriter.Write(tileData.myIsFallout);
             }
 
             // Save autotiles
@@ -184,6 +198,7 @@ namespace PlatformEditor
 
         public void LoadFrom(System.IO.BinaryReader aBinaryReader)
         {
+            myVersion = aBinaryReader.ReadInt32();
             myTilesetName = aBinaryReader.ReadString();
             TileImage = aBinaryReader.ReadString();
 
@@ -196,6 +211,7 @@ namespace PlatformEditor
             {
                 myTileData[tileIndex].myIsObstacle = aBinaryReader.ReadBoolean();
                 myTileData[tileIndex].myIsDestructable = aBinaryReader.ReadBoolean();
+                myTileData[tileIndex].myIsFallout = aBinaryReader.ReadBoolean();
             }
 
             // Load autotiles

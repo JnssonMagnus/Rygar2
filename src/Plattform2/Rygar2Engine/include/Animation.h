@@ -32,6 +32,7 @@ public:
 	void					FlipImage(const bool aFlag);
 	const Vector2<int>&		GetSize() const;
 	void					ColorBlink(const Color& aBlinkColor, const float aBlinkLength, const float aBlinkFrequency);
+	void					ClearColorBlinks();
 
 private:
 	void					UpdateColorBlink(const float aDeltaTime);

@@ -72,6 +72,14 @@ void AnimationSet::ColorBlink(const Color& aBlinkColor, const float aBlinkLength
 	myColorBlinks.push(newBlink);
 }
 
+void AnimationSet::ClearColorBlinks()
+{
+	while (!myColorBlinks.empty())
+	{
+		myColorBlinks.pop();
+	}
+}
+
 void AnimationSet::UpdateColorBlink(const float aDeltaTime)
 {
 	if (myColorBlinks.empty()) {

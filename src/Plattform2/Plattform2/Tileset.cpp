@@ -8,6 +8,9 @@ void Tileset::Load(std::ifstream& aStreamLoader)
 	for (char& c : buffer)
 		c = 0;
 
+	aStreamLoader.read(buffer, sizeof(int));
+	myVersion = *(reinterpret_cast<int*>(buffer));
+
 	aStreamLoader.read(&stringSize, 1);
 	aStreamLoader.read(buffer, stringSize);
 	myTilesetName = buffer;

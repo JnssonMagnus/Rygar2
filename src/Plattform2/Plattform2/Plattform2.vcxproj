@@ -237,6 +237,7 @@
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="GrenadeLauncher.h" />
     <ClInclude Include="IngameDebugDraw.h" />
+    <ClInclude Include="MapCollisionData.h" />
     <ClInclude Include="PlayerAnimationController.h" />
     <ClInclude Include="Shotgun.h" />
     <ClInclude Include="Sprayer.h" />

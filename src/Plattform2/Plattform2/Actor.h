@@ -16,6 +16,7 @@ public:
 	virtual void			Draw() override;
 	virtual void			Damage(const int aDamage, const Vector2f& aContactPoint);
 	virtual void			Stagger();
+	virtual void			CollidedWithMap(const MapCollisionData& aMapCollisonData) override;
 	bool					IsStaggered() const;
 
 

@@ -4,6 +4,7 @@
 #include "MapChunk.h"
 #include "Megaton.h"
 #include "AnimationController.h"
+#include "Tileset.h"
 
 Actor::~Actor()
 {
@@ -38,8 +39,9 @@ void Actor::Damage(const int aDamage, const Vector2f& aContactPoint)
 		//	Vector2f dropOffset(-rand() % 20 + rand() % 20, -rand() % 20 + rand() % 20);
 		//	map.AddWaterDrop(aContactPoint + dropOffset, Vector2f(rand() % 3 - rand() % 3, -rand() % 3));
 		//}
+		ChangeProperty<int>(ePropertyValues::eLife) -= aDamage;
 
-		if (myStaggeredData.myStaggeredTime <= 0.f)
+		if (myStaggeredData.myStaggeredTime <= 0.f && GetProperty<int>(ePropertyValues::eLife) > 0)
 		{
 			myStaggeredData.myDamageOverLastFiveSeconds += aDamage;
 			if (myStaggeredData.myDamageOverLastFiveSeconds > myStaggeredData.myDamageToBeStaggered)
@@ -52,7 +54,6 @@ void Actor::Damage(const int aDamage, const Vector2f& aContactPoint)
 			}
 		}
 
-		ChangeProperty<int>(ePropertyValues::eLife) -= aDamage;
 		myAnimationSet.ColorBlink(Color(255_uc, 0_uc, 0_uc), 0.3f, 0.f);
 
 		if (GetProperty<int>(ePropertyValues::eLife) <= 0 && HasProperty(ePropertyValues::eKeepOnLevelReset) == false)
@@ -73,6 +74,18 @@ void Actor::Damage(const int aDamage, const Vector2f& aContactPoint)
 void Actor::Stagger()
 {
 	myStaggeredData.myStaggeredTime = myStaggeredData.myTimeToBeStaggared;
+}
+
+void Actor::CollidedWithMap(const MapCollisionData& aMapCollisonData)
+{
+	for (const TileData* tileData : aMapCollisonData.myCollidedTileTypes)
+	{
+		if (tileData->myIsFallout)
+		{
+			Damage(99999, { 0,0 });
+			return;
+		}
+	}
 }
 
 bool Actor::IsStaggered() const

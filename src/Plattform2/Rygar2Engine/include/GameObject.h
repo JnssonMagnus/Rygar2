@@ -2,7 +2,9 @@
 #include "sprite.h"
 #include "CollisionPoint.h"
 #include <OpaqueDictionary.h>
+#include <set>
 
+struct MapCollisionData;
 class PhysicBody;
 class GameObjectType;
 class Player;
@@ -33,7 +35,7 @@ public:
 	virtual void			Draw();
 	virtual bool			Use(Player& aPlayer);
 	virtual void			Collide(GameObject* aGameObject);
-	virtual void			CollideWithTile(eCollisionPoint collisionPoint = eCollisionPoint::eNoCollision);
+	virtual void			CollidedWithMap(const MapCollisionData& aMapCollisionData);
 	void					Delete();
 	void					SetPosition(const Vector2f& aPosition);
 	

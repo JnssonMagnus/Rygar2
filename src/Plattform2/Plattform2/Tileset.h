@@ -8,6 +8,7 @@ struct TileData
 {
 	bool	myIsObstacle;
 	bool	myIsDestructable;
+	bool	myIsFallout;
 };
 
 class Tileset
@@ -19,6 +20,8 @@ public:
 	const Vector2<int>&				GetTileSize() const;
 	inline bool						IsObstacle(const char aTileIndex) const;
 	inline bool						IsDestructable(const char aTileIndex) const;
+	inline bool						IsFallout(const char aTileIndex) const;
+	const TileData&					GetTileData(const char aTileIndex) const;
 
 private:
 	void							CalculateTileSourcePositions();
@@ -29,6 +32,7 @@ private:
 	CU::GrowingArray<TileData>		myTileData;
 	CU::GrowingArray<Vector2<int>>	myTileSourcePositions;
 	Sprite							mySprite;
+	int								myVersion;
 };
 
 inline const Vector2<int>& Tileset::GetTileSize() const
@@ -46,5 +50,15 @@ inline bool Tileset::IsDestructable(const char aTileIndex) const
 {
 	DL_ASSERT(aTileIndex < myTileData.Size() && "Tile index out of bounds!");
 	return myTileData[aTileIndex].myIsDestructable;
+}
 
+inline bool Tileset::IsFallout(const char aTileIndex) const
+{
+	DL_ASSERT(aTileIndex < myTileData.Size() && "Tile index out of bounds!");
+	return myTileData[aTileIndex].myIsFallout;
+}
+
+inline const TileData& Tileset::GetTileData(const char aTileIndex) const
+{
+	return myTileData[aTileIndex];
 }

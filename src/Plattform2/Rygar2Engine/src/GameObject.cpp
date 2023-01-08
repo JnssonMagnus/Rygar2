@@ -88,7 +88,7 @@ void GameObject::Collide(GameObject* aGameObject)
 {
 }
 
-void GameObject::CollideWithTile(eCollisionPoint collisionPoint)
+void GameObject::CollidedWithMap(const MapCollisionData& aMapCollisionData)
 {
 }
 

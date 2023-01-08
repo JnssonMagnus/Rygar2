@@ -15,7 +15,7 @@ void Grenade::Collide(GameObject* aGameObject)
 	}
 }
 
-void Grenade::CollideWithTile(eCollisionPoint collisionPoint)
+void Grenade::CollidedWithMap(const MapCollisionData& aMapCollisionDatas)
 {
 	PostMaster::GetInstance()->SendSoundEvent("grenadeBounce");
 }

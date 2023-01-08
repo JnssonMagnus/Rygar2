@@ -159,16 +159,18 @@ void MapChunk::LoadFromFile(const std::string_view aFilename)
 	loadFile.close();
 }
 
-eCollisionPoint MapChunk::Collided(PhysicBody& aPhysicBody)
+MapCollisionData MapChunk::Collided(PhysicBody& aPhysicBody)
 {
+	MapCollisionData mapCollisionData;
+
 	DL_ASSERT(myTileset != nullptr && "MapChunk is not initiated with tileset!");
 	if (aPhysicBody.IsEnabled() == false)
 	{
-		return eCollisionPoint::eNoCollision;
+		return mapCollisionData;
 	}
 
 	if (IsOutsideMap(aPhysicBody) == true)
-		return eCollisionPoint::eNoCollision;
+		return mapCollisionData;
 
 	eCollisionPoint collision = eCollisionPoint::eNoCollision;
 
@@ -192,7 +194,7 @@ eCollisionPoint MapChunk::Collided(PhysicBody& aPhysicBody)
 
 	int safeGuard = 0;
 	// collided bottom
-	while (Collided(newBottomOldLeft, newBottomOldRight, aPhysicBody, PhysicBody::eLocator::eBottom) == true)
+	while (Collided(newBottomOldLeft, newBottomOldRight, aPhysicBody, PhysicBody::eLocator::eBottom, mapCollisionData) == true)
 	{
 		float bottomPosition = aPhysicBody.GetLeftBottom().myY;
 		bottomPosition = static_cast<float>(static_cast<int>(bottomPosition / myTileHeight));
@@ -206,7 +208,7 @@ eCollisionPoint MapChunk::Collided(PhysicBody& aPhysicBody)
 
 	safeGuard = 0;
 	// collided top
-	while (Collided(newTopOldLeft, newTopOldRight, aPhysicBody, PhysicBody::eLocator::eTop) == true)
+	while (Collided(newTopOldLeft, newTopOldRight, aPhysicBody, PhysicBody::eLocator::eTop, mapCollisionData) == true)
 	{
 		float topPosition = aPhysicBody.GetLeftTop().myY;
 		topPosition = static_cast<float>(std::ceil(topPosition / myTileHeight));
@@ -220,7 +222,7 @@ eCollisionPoint MapChunk::Collided(PhysicBody& aPhysicBody)
 
 	safeGuard = 0;
 	// collided to left
-	while (Collided(oldTopNewLeft, oldBottomNewLeft, aPhysicBody, PhysicBody::eLocator::eLeft) == true)
+	while (Collided(oldTopNewLeft, oldBottomNewLeft, aPhysicBody, PhysicBody::eLocator::eLeft, mapCollisionData) == true)
 	{
 		float leftPosition = aPhysicBody.GetLeftTop().myX;
 		leftPosition = static_cast<float>(std::ceil(leftPosition / myTileWidth));
@@ -235,7 +237,7 @@ eCollisionPoint MapChunk::Collided(PhysicBody& aPhysicBody)
 
 	safeGuard = 0;
 	// collided to right
-	while (Collided(oldTopNewRight, oldBottomNewRight, aPhysicBody, PhysicBody::eLocator::eRight) == true)
+	while (Collided(oldTopNewRight, oldBottomNewRight, aPhysicBody, PhysicBody::eLocator::eRight, mapCollisionData) == true)
 	{
 		float rightPosition = aPhysicBody.GetRightTop().myX;
 		rightPosition = static_cast<float>(static_cast<int>(rightPosition / myTileWidth));
@@ -247,7 +249,7 @@ eCollisionPoint MapChunk::Collided(PhysicBody& aPhysicBody)
 		if (safeGuard++ > 20) break;
 	}
 
-	return collision;
+	return mapCollisionData;
 }
 
 bool MapChunk::Collided(const int aNodeIndex) const
@@ -323,7 +325,7 @@ int MapChunk::GetTileIndexFromWorldPosition(const Vector2f& aWorldPosition) cons
 		static_cast<int>((aWorldPosition.myY - myWorldPosition.myY) / myTileHeight) * myMapWidth;
 }
 
-bool MapChunk::Collided(const Vector2f& aStartPosition, const Vector2f& aEndPosition, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator) const
+bool MapChunk::Collided(const Vector2f& aStartPosition, const Vector2f& aEndPosition, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator, MapCollisionData& mapCollisionData) const
 {
 	Vector2<int> startNode = { static_cast<int>(floor((aStartPosition.myX - myWorldPosition.myX) / myTileWidth)),
 								static_cast<int>(floor((aStartPosition.myY - myWorldPosition.myY) / myTileHeight)) };
@@ -339,7 +341,9 @@ bool MapChunk::Collided(const Vector2f& aStartPosition, const Vector2f& aEndPosi
 	{
 		for (int x = startNode.myX; x <= endNode.myX; x++)
 		{
-			if (Collided(x, y, aPhysicBody, aLocator) == true)
+			const int nodeIndex = x + y * myMapWidth;
+			mapCollisionData.myCollidedTileTypes.emplace(&myTileset->GetTileData(myTileData[nodeIndex]));
+			if (Collided(nodeIndex, aPhysicBody, aLocator) == true)
 			{
 				return true;
 			}
@@ -349,10 +353,10 @@ bool MapChunk::Collided(const Vector2f& aStartPosition, const Vector2f& aEndPosi
 	return false;
 }
 
-bool MapChunk::Collided(const int aNodeIndexX, const int aNodeIndexY, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator) const
+bool MapChunk::Collided(const int aNodeIndex, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator) const
 {
-	const int nodeIndex = aNodeIndexX + aNodeIndexY * myMapWidth;
-	if (IsValidTileIndex(nodeIndex) && myTileset->IsObstacle(myTileData[nodeIndex]) == true)
+	
+	if (IsValidTileIndex(aNodeIndex) && myTileset->IsObstacle(myTileData[aNodeIndex]) == true)
 	{
 		aPhysicBody.AddPhysicState(ePhysicStates::eOnGround, aLocator);
 		return true;

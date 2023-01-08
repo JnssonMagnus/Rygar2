@@ -7,7 +7,7 @@ class Grenade : public GameObject
 public:
 					Grenade();
 	void			Collide(GameObject* aGameObject) override;
-	void			CollideWithTile(eCollisionPoint collisionPoint) override;
+	void			CollidedWithMap(const MapCollisionData& aMapCollisionDatas) override;
 	void			Update(const float aDeltaTime) override;
 	void			Init(GameObjectType& aGameObjectType) override;
 	void			Draw() override;
