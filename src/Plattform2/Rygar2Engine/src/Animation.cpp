@@ -112,5 +112,5 @@ const Color& AnimationSet::GetSpriteColor() const
 		return frontBlink.myBlinkColor;
 	}
 
-	return fmod(frontBlink.myBlinkLength, frontBlink.myBlinkFrequency * 2.f) >= frontBlink.myBlinkFrequency ? frontBlink.myBlinkColor : defaultColor;
+	return fmod(frontBlink.myBlinkLength, frontBlink.myBlinkFrequency * 2.f) <= frontBlink.myBlinkFrequency ? frontBlink.myBlinkColor : defaultColor;
 }

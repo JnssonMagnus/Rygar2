@@ -1,19 +1,24 @@
 #include "stdafx.h"
 #include "PlayerAnimationController.h"
-#include "GameObject.h"
+#include "Actor.h"
 #include "Animation.h"
 #include "PhysicBody.h"
 
 void PlayerAnimationController::Update()
 {
 	assert(myParent != nullptr && "AnimationController not initiated!");
-	if (myParent->GetProperty<int>(PropertyKey::eLife) <= 0)
+	myParentAnimationSet->FlipImage(!myParent->GetProperty<bool>(PropertyKey::eFacingRight));
+	if (myParent->GetProperty<int>(PropertyKey::eLife) < 0)
 	{
 		myParentAnimationSet->PushAnimation(eAnimationID::eDead);
+	} 
+	else if (myParent->IsStaggered())
+	{
+		myParentAnimationSet->PushAnimation(eAnimationID::eStagger);
 	}
 	else if (myParent->GetPhysicBody().IsEnabled())
 	{
-		myParentAnimationSet->FlipImage(!myParent->GetProperty<bool>(PropertyKey::eFacingRight));
+		
 		if (IsOnGround() == false)
 		{
 			ChoseInAirAnimation();

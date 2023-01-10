@@ -35,26 +35,6 @@ void GameObjectFactory::Init()
 {
 	LoadGameObjectTypes();
 	InitTypeIDToEnums();
-
-	myTreeType = new TreeType();
-	myTreeType->SetLeafLevel(4);
-	myTreeType->SetDefaultRotation(0.f, 0.f);
-	myTreeType->SetDefaultPlacement(0.5f, 1.f);
-	myTreeType->SetRotationAtLevel(0, -PI / 2.1f, -PI / 1.9f);
-	myTreeType->SetRotationAtLevel(1, PI / 1.9f, PI / 2.1f);
-	myTreeType->SetRotationAtLevel(2, -PI / 2.1f, -PI / 1.9f);
-	myTreeType->SetRotationAtLevel(3, PI / 1.9f, PI / 2.1f);
-	myTreeType->SetRotationAtLevel(4, -PI / 2.1f, -PI / 1.9f);
-		
-	myTreeType->SetMaxGrowthAtLevel(1, 0.3f);
-	myTreeType->SetMaxGrowthAtLevel(2, 0.5f);
-	myTreeType->SetMaxGrowthAtLevel(3, 0.3f);
-	myTreeType->SetMaxGrowthAtLevel(4, 0.2f);
-
-	myTreeType->SetDefaultSprite("data/gfx/gameObjects/twig.png");
-	myTreeType->SetRootSprite("data/gfx/gameObjects/TreeTrunk.png");
-	//myTreeType->SetSpriteAtLevel(2, "data/gfx/gameObjects/TreeLeaves.png");
-	//myTreeType->SetLeafSprite("data/gfx/gameObjects/apple.png");
 }
 
 std::unique_ptr<GameObject> GameObjectFactory::CreateObject(const eGameObjectTypes aGameObjectType)
@@ -74,12 +54,6 @@ std::unique_ptr<GameObject> GameObjectFactory::CreateObject(const eGameObjectTyp
 		newGameObject = std::make_unique<BigEnemy>(); break;
 	case eGameObjectTypes::eBullet:
 		newGameObject = std::make_unique<Bullet>(); break;
-	case eGameObjectTypes::eTree:
-	{
-		newGameObject = std::make_unique<Tree>();
-		dynamic_cast<Tree*>(newGameObject.get())->SetTreeType(myTreeType);
-		break;
-	}
 	case eGameObjectTypes::eHammer:
 		newGameObject = std::make_unique<Hammer>(); break;
 	case eGameObjectTypes::eRainCloud:

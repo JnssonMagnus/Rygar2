@@ -95,6 +95,8 @@ void Enemy::Collide(GameObject* aGameObject)
 			player->Damage(1, GetPhysicBody().GetPosition());
 		}
 	}
-
-	Actor::Collide(aGameObject);
+	else
+	{
+		//Actor::Collide(aGameObject);
+	}
 }

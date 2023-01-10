@@ -93,7 +93,7 @@ eStateStatus GameState::Update(const float aDeltaTime)
 		}
 	}
 
-	if (myPlayer->GetProperty<int>(PropertyKey::eLife) <= 0.f)
+	if (myPlayer->IsDead())
 	{
 		myStateStackProxy.PushState(new GameOverState(myStateStackProxy, true));
 	}

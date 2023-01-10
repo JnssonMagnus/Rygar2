@@ -49,7 +49,7 @@ void Player::Update(const float aDeltaTime)
 	PlayLandOnGroundSound();
 	UpdateSoundListenerPosition();
 
-	if (myProperties.GetValue<int>(PropertyKey::eLife) <= 0.f)
+	if (IsDead())
 		PostMaster::GetInstance()->SendDelayedMessage(Message(eMessageTypes::ePlayerDied));
 
 	myDashTime--;
@@ -79,7 +79,7 @@ void Player::Init(GameObjectType& aGameObjectType)
 	myAnimationSet.Init("data/gfx/player.png");
 
 	const Vector2<int> frameSize(24, 32);
-	myAnimationSet.AddAnimation(eAnimationID::eWalk, 4, frameSize, 7);
+	myAnimationSet.AddAnimation(eAnimationID::eWalk, 6, frameSize, 7);
 	myAnimationSet.AddAnimation(eAnimationID::eIdle, 1, frameSize, 5, { frameSize.myX * 2, frameSize.myY * 2 });
 	myAnimationSet.AddAnimation(eAnimationID::eFall, 1, frameSize, 5, { 0, frameSize.myY * 3 });
 	myAnimationSet.AddAnimation(eAnimationID::eJump, 1, frameSize, 5, { 0, frameSize.myY * 3 });
@@ -233,14 +233,14 @@ void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputSt
 	}
 }
 
-//void Player::CollideWithTile(eCollisionPoint collisionPoint)
-//{
-//	if (myHook.GetState() == Chain::eState::eStuck)
-//	{
-//		if (myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eTop) == true)
-//			myHook.Fire(Vector2f(0.f, 0.f));
-//	}
-//}
+void Player::CollidedWithMap(const MapCollisionData& aMapCollisionData)
+{
+	if (myHook.GetState() == Chain::eState::eStuck)
+	{
+		if (myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eTop) == true)
+			myHook.Fire(Vector2f(0.f, 0.f));
+	}
+}
 
 bool Player::PickUp(GameObject* aGameObject)
 {
@@ -277,7 +277,7 @@ void Player::DropItem()
 
 bool Player::IsAboveEnemy(const GameObject* const aGameObject) const
 {
-	return myPhysicBody->GetVelocity().myY > 0 && myPhysicBody->GetMiddleBottom().myY < aGameObject->GetPhysicBody().GetMiddleTop().myY + 11;
+	return myPhysicBody->GetMiddleBottom().myY < aGameObject->GetPhysicBody().GetMiddleTop().myY + 5;
 }
 
 void Player::Respawn()
@@ -295,13 +295,18 @@ void Player::Respawn()
 
 	myInvinsibleTime = 0;
 	myProperties.SetValue(ePropertyValues::eLife, 3);
-
 	myAnimationSet.ClearColorBlinks();
+	PostMaster::GetInstance()->SendDelayedMessage(Message(eMessageTypes::ePlayerDied));
 }
 
 void Player::SetRespawnPosition(const Vector2f& aWorldPosition)
 {
 	myRespawnPosition = aWorldPosition;
+}
+
+bool Player::IsDead() const
+{
+	return GetProperty<int>(ePropertyValues::eLife) < 0;
 }
 
 bool Player::IsHinderedFromMoving() const
@@ -335,15 +340,18 @@ void Player::Damage(const int aDamage, const Vector2f& aContactPoint)
 		PostMaster::GetInstance()->SendSoundEvent("rygarTakeDamage");
 		Actor::Damage(aDamage, aContactPoint);
 		myAnimationSet.ColorBlink(Color(130_uc, 100_uc, 100_uc), 1.7f, 0.1f);
+		
 		const float staggerDirection = aContactPoint.myX < myPhysicBody->GetPosition().myX ? 1.f : -1.f;
-		myPhysicBody->AddForce({ staggerDirection * 3000.f, -300.f });
+		myPhysicBody->TranslatePosition({ 0.f, -1.f });
+		myPhysicBody->SetVelocity({ 0, 0 });
+		myPhysicBody->AddForce({ staggerDirection * 3000.f, -300.1f });
 		myInvinsibleTime = 2.f;
+		myAnimationSet.PushAnimation(eAnimationID::eStagger);
 	}
 
-	if (GetProperty<int>(ePropertyValues::eLife) <= 0) 
+	if (IsDead()) 
 	{
 		Respawn();
-		PostMaster::GetInstance()->SendDelayedMessage(Message(eMessageTypes::ePlayerDied));
 	}
 }
 

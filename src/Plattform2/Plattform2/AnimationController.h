@@ -1,17 +1,17 @@
 #pragma once
 
-class GameObject;
+class Actor;
 class AnimationSet;
 
 class AnimationController
 {
 public:
 	virtual					~AnimationController() = default;
-							AnimationController(const GameObject& aParent, AnimationSet& aAnimationSet);
+							AnimationController(const Actor& aParent, AnimationSet& aAnimationSet);
 	virtual void			Update();
 
 protected:
-	const GameObject*		myParent = nullptr;
+	const Actor*			myParent = nullptr;
 	AnimationSet*			myParentAnimationSet = nullptr;
 
 	bool					IsOnGround() const;

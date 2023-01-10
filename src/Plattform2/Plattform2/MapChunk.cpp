@@ -262,7 +262,9 @@ bool MapChunk::Collided(const Vector2f& aPosition) const
 	const int nodeX = static_cast<int>((aPosition.myX - myWorldPosition.myX) / myTileWidth);
 	const int nodeY = static_cast<int>((aPosition.myY - myWorldPosition.myY) / myTileHeight);
 
-	return myTileset->IsObstacle(myTileData[nodeX + nodeY * myMapWidth]);
+	const int nodeIndex = nodeX + nodeY * myMapWidth;
+
+	return nodeIndex < myTileData.Size() && nodeIndex >= 0 && myTileset->IsObstacle(myTileData[nodeX + nodeY * myMapWidth]);
 }
 
 int MapChunk::GetMapWidth() const

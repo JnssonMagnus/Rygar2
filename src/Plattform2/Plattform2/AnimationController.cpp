@@ -2,9 +2,9 @@
 #include "AnimationController.h"
 #include "PhysicBody.h"
 #include "Animation.h"
-#include "GameObject.h"
+#include "Actor.h"
 
-AnimationController::AnimationController(const GameObject& aParent, AnimationSet& aAnimationSet)
+AnimationController::AnimationController(const Actor& aParent, AnimationSet& aAnimationSet)
 {
 	DL_ASSERT(myParentAnimationSet == nullptr && "Character animationController already set up!");
 	myParent = &aParent;

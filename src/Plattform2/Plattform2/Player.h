@@ -36,8 +36,10 @@ public:
 
 	void						Respawn();
 	void						SetRespawnPosition(const Vector2f& aWorldPosition);
+	bool						IsDead() const;
 
 private:
+	void						CollidedWithMap(const MapCollisionData& aMapCollisionData) override;
 	void						UpdateHook(const float aDeltaTime);
 	void						UpdatePickedUpObject();
 	void						PlayLandOnGroundSound();
