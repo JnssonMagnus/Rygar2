@@ -9,7 +9,7 @@
 
 void BigEnemy::Update(const float aDeltaTime)
 {
-	const float moveForce = 20.f;
+	const float moveForce = 3.f;
 	if (myStaggeredData.myStaggeredTime > 0)
 	{
 		myStaggeredData.myStaggeredTime -= aDeltaTime;
@@ -26,10 +26,10 @@ void BigEnemy::Update(const float aDeltaTime)
 		else
 			myPhysicBody->AddForce({ moveForce, 0.f });
 
-		if (player->GetPhysicBody().GetPosition().myY - myPhysicBody->GetPosition().myY < -150 
+		if (player->GetPhysicBody().GetPosition().myY - myPhysicBody->GetPosition().myY < -20 
 			&& myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eBottom))
 		{
-			constexpr float jumpForce = -1400.f;
+			constexpr float jumpForce = -500.f;
 			myPhysicBody->AddForce({ 0.f, jumpForce });
 		}
 	}
@@ -74,22 +74,22 @@ void BigEnemy::Update(const float aDeltaTime)
 void BigEnemy::Init(GameObjectType& aGameObjectType)
 {
 	Actor::Init<AnimationController>(aGameObjectType, *this, myAnimationSet);
-	myProperties.SetValue(ePropertyValues::eLife, 1000);
+	myProperties.SetValue(ePropertyValues::eLife, 5);
 	myProperties.SetValue(ePropertyValues::eAlive, true);
 	myProperties.SetValue(ePropertyValues::eFacingRight, true);
 
-	myAnimationSet.Init("data/gfx/enemies/bigEnemy.png");
+	myAnimationSet.Init("data/gfx/enemies/rollerEnemy.png");
 
-	const Vector2<int> frameSize(112, 150);
-	myAnimationSet.AddAnimation(eAnimationID::eWalk, 4, frameSize, 10, { 0, 150 });
-	myAnimationSet.AddAnimation(eAnimationID::eIdle, 1, frameSize, 5, { 0, 150 });
-	myAnimationSet.AddAnimation(eAnimationID::eFall, 1, frameSize, 5, { 112, 150 });
-	myAnimationSet.AddAnimation(eAnimationID::eJump, 1, frameSize, 5, { 225, 150 });
-	myAnimationSet.AddAnimation(eAnimationID::eDead, 4, frameSize, 7, { 0, 600 }, false);
+	const Vector2<int> frameSize(24, 30);
+	myPhysicBody->SetHalfSize(frameSize / 2.f);
+	myAnimationSet.AddAnimation(eAnimationID::eWalk, 4, frameSize, 10);
+	myAnimationSet.AddAnimation(eAnimationID::eIdle, 4, frameSize, 10);
+	myAnimationSet.AddAnimation(eAnimationID::eFall, 4, frameSize, 10);
+	myAnimationSet.AddAnimation(eAnimationID::eJump, 4, frameSize, 10);
+	myAnimationSet.AddAnimation(eAnimationID::eDead, 4, frameSize, 10);
 	myAnimationSet.PushAnimation(eAnimationID::eIdle);
 	myAnimationSet.CenterPivot();
 
-	myBloodHitAmount = 4;
 }
 
 void BigEnemy::Collide(GameObject* aGameObject)
@@ -97,8 +97,10 @@ void BigEnemy::Collide(GameObject* aGameObject)
 	if (aGameObject->GetPhysicBody().HasCollisionTag(eCollisionTags::ePlayer))
 	{
 		Player* player = dynamic_cast<Player*>(aGameObject);
-		//	player->ChangeStat(eStats::eHealth, -0.3f);
+		DL_ASSERT(player && "Object with player tag was not player!");
+		if (player && player->IsAboveEnemy(this) == false)
+		{
+			player->Damage(1, GetPhysicBody().GetPosition());
+		}
 	}
-
-	Actor::Collide(aGameObject);
 }

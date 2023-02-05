@@ -75,6 +75,13 @@
       <DependentUpon>AutoTile.cs</DependentUpon>
     </Compile>
     <Compile Include="EditorCamera.cs" />
+    <Compile Include="EnemyEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EnemyEditor.Designer.cs">
+      <DependentUpon>EnemyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EnemyType.cs" />
     <Compile Include="GameObjectEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,6 +116,9 @@
     <Compile Include="World.cs" />
     <EmbeddedResource Include="AutoTile.resx">
       <DependentUpon>AutoTile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EnemyEditor.resx">
+      <DependentUpon>EnemyEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GameObjectEditor.resx">
       <DependentUpon>GameObjectEditor.cs</DependentUpon>

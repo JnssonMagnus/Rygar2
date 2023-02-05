@@ -2,6 +2,7 @@
 #include "PhysicStates.h"
 #include <vector2.h>
 #include <StaticArray.h>
+#include <..\external\rapidJSON\document.h>
 
 class GameObject;
 
@@ -19,6 +20,19 @@ enum class eCollisionTags
 	eBullet = 1 << 1,
 	eEnemy = 1 << 2,
 	ePickable = 1 << 3
+};
+
+struct PhysicBodyData
+{
+	void Init(const rapidjson::GenericObject<false, rapidjson::Value>& aObject);
+	Vector2f				myAirFriction;
+	Vector2f				myGroundFriction;
+	float					myBounciness;
+	float					myWeight;
+	bool					myDefaultPhysics;
+	bool					myDefaultGravity;
+	bool					myDefaultKinetic;
+	char					myCollisionTags = 0;
 };
 
 

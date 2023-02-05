@@ -224,3 +224,8 @@ void PhysicBody::SetIsKinetic(const bool aIsKinetic)
 {
 	SetOption(ePhysicBodyOptions::eKinetic, aIsKinetic);
 }
+
+void PhysicBodyData::Init(const rapidjson::GenericObject<false, rapidjson::Value>& aObject)
+{
+
+}

@@ -142,8 +142,8 @@ void PhysicManager::ResolveCollisions()
 					force.y = (toTestAgainst->GetPosition().myY + toTestAgainst->GetHalfSize().myY) - (toTest->GetPosition().myY - toTest->GetHalfSize().myY);
 				}
 
-				if (abs(force.y) < 0.1f) force.y = 0;
-				if (abs(force.x) < 0.1f) force.x = 0;
+				if (abs(force.y) < 0.05f) force.y = 0;
+				if (abs(force.x) < 0.05f) force.x = 0;
 				force *= ((force.Length()) / 600.f); // was 600
 				toTest->AddForce(force * ((toTestAgainst->GetMass() * toTestAgainst->GetMass()) / totalWeight) * toTest->GetMass());
 				toTestAgainst->AddForce((force * -1.f) * ((toTest->GetMass() * toTest->GetMass()) / totalWeight) * toTestAgainst->GetMass());

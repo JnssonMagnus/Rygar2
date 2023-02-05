@@ -13,7 +13,7 @@ enum class eGameObjectTypes
 	ePlayer,
 	eSink,
 	eEnemy,
-	eBigEnemy,
+	eRollerEnemy,
 	eBullet,
 	eEnemySpawner,
 	eGrenade,

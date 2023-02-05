@@ -50,7 +50,7 @@ std::unique_ptr<GameObject> GameObjectFactory::CreateObject(const eGameObjectTyp
 		newGameObject = std::make_unique<Seed>(); break;
 	case eGameObjectTypes::eEnemy:
 		newGameObject = std::make_unique<Enemy>(); break;
-	case eGameObjectTypes::eBigEnemy:
+	case eGameObjectTypes::eRollerEnemy:
 		newGameObject = std::make_unique<BigEnemy>(); break;
 	case eGameObjectTypes::eBullet:
 		newGameObject = std::make_unique<Bullet>(); break;
@@ -116,8 +116,8 @@ GameObjectType& GameObjectFactory::GetGameObjectType(const eGameObjectTypes aGam
 		nameToFind = "player"; break;
 	case eGameObjectTypes::eEnemy:
 		nameToFind = "enemy"; break;
-	case eGameObjectTypes::eBigEnemy:
-		nameToFind = "bigEnemy"; break;
+	case eGameObjectTypes::eRollerEnemy:
+		nameToFind = "rollerEnemy"; break;
 	case eGameObjectTypes::eEnemySpawner:
 		nameToFind = "enemySpawner"; break;
 	case eGameObjectTypes::eGrenade:
@@ -201,10 +201,10 @@ void GameObjectFactory::InitTypeIDToEnums()
 			myGameObjectTypeIDToEnum[gameObjectType.first] = eGameObjectTypes::eEnemy;
 			myEnumToGameObjectTypeID[eGameObjectTypes::eEnemy] = gameObjectType.first;
 		}
-		else if (gameObjectType.second.GetName() == "bigEnemy")
+		else if (gameObjectType.second.GetName() == "rollerEnemy")
 		{
-			myGameObjectTypeIDToEnum[gameObjectType.first] = eGameObjectTypes::eBigEnemy;
-			myEnumToGameObjectTypeID[eGameObjectTypes::eBigEnemy] = gameObjectType.first;
+			myGameObjectTypeIDToEnum[gameObjectType.first] = eGameObjectTypes::eRollerEnemy;
+			myEnumToGameObjectTypeID[eGameObjectTypes::eRollerEnemy] = gameObjectType.first;
 		}
 		else if (gameObjectType.second.GetName() == "bucket")
 		{

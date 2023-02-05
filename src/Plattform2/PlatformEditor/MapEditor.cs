@@ -18,6 +18,7 @@ namespace PlatformEditor
         private EditorCamera myCamera = new EditorCamera();
         private Dictionary<string, Tileset> myTilesets;
         static public List<GameObjectType> ourGameObjectTypes = new List<GameObjectType>();
+        static public List<EnemyType> ourEnemyTypes = new List<EnemyType>();
         static public MapEditor ourInstance;
 
         private GameObject mySelectedGameObject = null;
@@ -80,6 +81,15 @@ namespace PlatformEditor
             }
         }
 
+        public void LoadEnemyTypes()
+        {
+            using (StreamReader file = File.OpenText(@"data/json/enemies.json"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                ourEnemyTypes = (List<EnemyType>)serializer.Deserialize(file, typeof(List<EnemyType>));
+            }
+        }
+
         public void LoadGameObjectTypes()
         {
             GameObjectTypesList.Items.Clear();
@@ -111,6 +121,7 @@ namespace PlatformEditor
         {
             LoadTilesets();
             LoadGameObjectTypes();
+            LoadEnemyTypes();
 
             Map.AllowDrop = true;
             Map.DragEnter += Map_DragEnter;
@@ -673,6 +684,18 @@ namespace PlatformEditor
                 SetTile(0, y, 1, true);
                 SetTile(Settings.MapWidth() - 1, y, 1, true);
             }
+        }
+
+        private void MapContainer_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void enemyTypeEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EnemyEditor enemyEditor = new EnemyEditor();
+            enemyEditor.Show();
+            this.Enabled = false;
         }
     }
 }

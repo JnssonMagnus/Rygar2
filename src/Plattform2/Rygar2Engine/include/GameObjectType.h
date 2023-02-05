@@ -2,6 +2,7 @@
 #include <Vector2.h>
 #include <string>
 #include <functional>
+#include "PhysicBody.h"
 #include <..\external\rapidJSON\document.h>
 
 class GameObject;
@@ -22,15 +23,8 @@ public:
 private:
 	std::string				myName;
 	Sprite*					mySprite = nullptr;
-	Vector2f				myAirFriction;
-	Vector2f				myGroundFriction;
-	float					myBounciness;
-	float					myWeight;
-	bool					myDefaultPhysics;
-	bool					myDefaultGravity;
-	bool					myDefaultKinetic;
+	PhysicBodyData			myPhysicBodyData;
 	bool					myDefaultRotate;
-	char					myCollisionTags = 0;
 };
 
 inline Sprite& GameObjectType::GetSprite()

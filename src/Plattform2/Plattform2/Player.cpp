@@ -99,7 +99,7 @@ void Player::Init(GameObjectType& aGameObjectType)
 
 	myPhysicBody->SetPosition({ 100, 50 });
 	myPhysicBody->SetHalfSize(Vector2f(myAnimationSet.GetSize().x / 2.f,
-		myAnimationSet.GetSize().y / 2.f));
+		myAnimationSet.GetSize().y / 2.f - 2));
 
 	myPlayerUI.Init();
 
@@ -235,6 +235,7 @@ void Player::RecieveEvent(const Input::eInputEvent aEvent, const Input::eInputSt
 
 void Player::CollidedWithMap(const MapCollisionData& aMapCollisionData)
 {
+	Actor::CollidedWithMap(aMapCollisionData);
 	if (myHook.GetState() == Chain::eState::eStuck)
 	{
 		if (myPhysicBody->HasPhysicState(ePhysicStates::eOnGround, PhysicBody::eLocator::eTop) == true)

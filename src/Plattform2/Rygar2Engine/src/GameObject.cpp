@@ -71,7 +71,7 @@ void GameObject::Init(GameObjectType& aGameObjectType)
 	aGameObjectType.InitGameObject(*this);
 
 	const Sprite& sprite = aGameObjectType.GetSprite();
-	myPhysicBody->SetHalfSize({ sprite.GetSize().myX / 2.f, sprite.GetSize().myY / 2.f });
+	myPhysicBody->SetHalfSize({ sprite.GetSize().myX / 2.f, sprite.GetSize().myY / 2.f - 3});
 }
 
 void GameObject::Draw()

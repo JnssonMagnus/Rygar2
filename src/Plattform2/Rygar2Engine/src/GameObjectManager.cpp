@@ -96,7 +96,7 @@ void GameObjectManager::RecieveMessage(const Message& aMessage)
 
 void GameObjectManager::RemoveAllGameObjects()
 {
-	AddAndRemoveObjects();
+	//AddAndRemoveObjects();
 	for (GameObject* gameObjectToDelete : myGameObjects)
 	{
 		if (gameObjectToDelete->HasProperty(PropertyKey::eKeepOnLevelReset) == false)
@@ -104,7 +104,7 @@ void GameObjectManager::RemoveAllGameObjects()
 			DeleteGameObject(gameObjectToDelete);
 		}
 	}
-	AddAndRemoveObjects();
+	//AddAndRemoveObjects();
 }
 
 const CU::GrowingArray<GameObject*>& GameObjectManager::GetGameObjects() const

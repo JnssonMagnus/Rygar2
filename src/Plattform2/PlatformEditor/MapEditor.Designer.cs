@@ -41,6 +41,7 @@
             this.tilesetEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameObjectTypeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.animationEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.specialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createFrameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
@@ -59,7 +60,7 @@
             this.DefaultValueLabel = new System.Windows.Forms.Label();
             this.VariableDefaultValue = new System.Windows.Forms.NumericUpDown();
             this.VariableListBox = new System.Windows.Forms.ListBox();
-            this.animationEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enemyTypeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.Tileset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TilePreview)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -166,7 +167,8 @@
             this.tilesetEditorToolStripMenuItem,
             this.gameObjectTypeEditorToolStripMenuItem,
             this.mapSettingsToolStripMenuItem,
-            this.animationEditorToolStripMenuItem});
+            this.animationEditorToolStripMenuItem,
+            this.enemyTypeEditorToolStripMenuItem});
             this.editorsToolStripMenuItem.Name = "editorsToolStripMenuItem";
             this.editorsToolStripMenuItem.Size = new System.Drawing.Size(83, 29);
             this.editorsToolStripMenuItem.Text = "Editors";
@@ -191,6 +193,12 @@
             this.mapSettingsToolStripMenuItem.Size = new System.Drawing.Size(311, 34);
             this.mapSettingsToolStripMenuItem.Text = "Map settings";
             this.mapSettingsToolStripMenuItem.Click += new System.EventHandler(this.mapSettingsToolStripMenuItem_Click);
+            // 
+            // animationEditorToolStripMenuItem
+            // 
+            this.animationEditorToolStripMenuItem.Name = "animationEditorToolStripMenuItem";
+            this.animationEditorToolStripMenuItem.Size = new System.Drawing.Size(311, 34);
+            this.animationEditorToolStripMenuItem.Text = "Animation Editor";
             // 
             // specialToolStripMenuItem
             // 
@@ -238,6 +246,7 @@
             this.MapContainer.Name = "MapContainer";
             this.MapContainer.Size = new System.Drawing.Size(1442, 756);
             this.MapContainer.TabIndex = 6;
+            this.MapContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.MapContainer_Paint);
             // 
             // Map
             // 
@@ -386,11 +395,12 @@
             this.VariableListBox.Size = new System.Drawing.Size(227, 144);
             this.VariableListBox.TabIndex = 6;
             // 
-            // animationEditorToolStripMenuItem
+            // enemyTypeEditorToolStripMenuItem
             // 
-            this.animationEditorToolStripMenuItem.Name = "animationEditorToolStripMenuItem";
-            this.animationEditorToolStripMenuItem.Size = new System.Drawing.Size(311, 34);
-            this.animationEditorToolStripMenuItem.Text = "Animation Editor";
+            this.enemyTypeEditorToolStripMenuItem.Name = "enemyTypeEditorToolStripMenuItem";
+            this.enemyTypeEditorToolStripMenuItem.Size = new System.Drawing.Size(311, 34);
+            this.enemyTypeEditorToolStripMenuItem.Text = "Enemy Type Editor";
+            this.enemyTypeEditorToolStripMenuItem.Click += new System.EventHandler(this.enemyTypeEditorToolStripMenuItem_Click);
             // 
             // MapEditor
             // 
@@ -461,6 +471,7 @@
         private System.Windows.Forms.NumericUpDown VariableDefaultValue;
         private System.Windows.Forms.ListBox VariableListBox;
         private System.Windows.Forms.ToolStripMenuItem animationEditorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enemyTypeEditorToolStripMenuItem;
     }
 }
 

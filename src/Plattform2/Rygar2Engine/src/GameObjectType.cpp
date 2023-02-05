@@ -7,13 +7,13 @@
 
 GameObjectType::GameObjectType()
 {
-	myAirFriction = { 1.0f, 1.0f };
-	myGroundFriction = { 1.0f, 1.0f };
-	myBounciness = 0.8f;
-	myWeight = 1.f;
-	myDefaultPhysics = true;
-	myDefaultGravity = true;
-	myDefaultKinetic = false;
+	myPhysicBodyData.myAirFriction = { 1.0f, 1.0f };
+	myPhysicBodyData.myGroundFriction = { 1.0f, 1.0f };
+	myPhysicBodyData.myBounciness = 0.8f;
+	myPhysicBodyData.myWeight = 1.f;
+	myPhysicBodyData.myDefaultPhysics = true;
+	myPhysicBodyData.myDefaultGravity = true;
+	myPhysicBodyData.myDefaultKinetic = false;
 	myDefaultRotate = false;
 }
 
@@ -26,15 +26,8 @@ GameObjectType& GameObjectType::operator=(GameObjectType& aObjectToCopy)
 {
 	myName = aObjectToCopy.myName;
 	mySprite = aObjectToCopy.mySprite;
-	myAirFriction = aObjectToCopy.myAirFriction;
-	myGroundFriction = aObjectToCopy.myGroundFriction;
-	myBounciness = aObjectToCopy.myBounciness;
-	myWeight = aObjectToCopy.myWeight;
-	myDefaultPhysics = aObjectToCopy.myDefaultPhysics;
-	myDefaultGravity = aObjectToCopy.myDefaultGravity;
-	myDefaultKinetic = aObjectToCopy.myDefaultKinetic;
+	myPhysicBodyData = aObjectToCopy.myPhysicBodyData;
 	myDefaultRotate = aObjectToCopy.myDefaultRotate;
-	myCollisionTags = aObjectToCopy.myCollisionTags;
 		
 	aObjectToCopy.mySprite = nullptr;
 
@@ -49,22 +42,24 @@ void GameObjectType::Init(const rapidjson::GenericObject<false, rapidjson::Value
 	mySprite->Init(imagePath.c_str());
 	mySprite->CenterPivot();
 
-	auto airFrictionObject = aObject.FindMember("airFriction")->value.GetObject();
-	myAirFriction = { airFrictionObject.FindMember("x")->value.GetFloat(),
-		airFrictionObject.FindMember("y")->value.GetFloat() };
+	auto physicBodyNode = aObject.FindMember("physicBody")->value.GetObject();
+	myPhysicBodyData.Init(physicBodyNode);
+	//auto airFrictionObject = aObject.FindMember("airFriction")->value.GetObject();
+	//myAirFriction = { airFrictionObject.FindMember("x")->value.GetFloat(),
+	//	airFrictionObject.FindMember("y")->value.GetFloat() };
 
-	auto groundFrictionObject = aObject.FindMember("groundFriction")->value.GetObject();
-	myGroundFriction = { groundFrictionObject.FindMember("x")->value.GetFloat(),
-		groundFrictionObject.FindMember("y")->value.GetFloat() };
+	//auto groundFrictionObject = aObject.FindMember("groundFriction")->value.GetObject();
+	//myGroundFriction = { groundFrictionObject.FindMember("x")->value.GetFloat(),
+	//	groundFrictionObject.FindMember("y")->value.GetFloat() };
 
-	myBounciness = aObject.FindMember("bounciness")->value.GetFloat();
-	myWeight = aObject.FindMember("weight")->value.GetFloat();
-	myDefaultPhysics = aObject.FindMember("physicsEnabled")->value.GetBool();
-	myDefaultGravity = aObject.FindMember("gravity")->value.GetBool();
-	myDefaultKinetic = aObject.FindMember("kinetic")->value.GetBool();
+	//myBounciness = aObject.FindMember("bounciness")->value.GetFloat();
+	//myWeight = aObject.FindMember("weight")->value.GetFloat();
+	//myDefaultPhysics = aObject.FindMember("physicsEnabled")->value.GetBool();
+	//myDefaultGravity = aObject.FindMember("gravity")->value.GetBool();
+	//myDefaultKinetic = aObject.FindMember("kinetic")->value.GetBool();
+	/*myCollisionTags = static_cast<char>(aObject.FindMember("collisionTags")->value.GetInt());*/
 	myDefaultRotate = aObject.FindMember("rotateObject")->value.GetBool();
 
-	myCollisionTags = static_cast<char>(aObject.FindMember("collisionTags")->value.GetInt());
 }
 
 void GameObjectType::InitGameObject(GameObject& aGameObject)
