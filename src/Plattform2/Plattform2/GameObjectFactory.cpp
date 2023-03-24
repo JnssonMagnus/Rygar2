@@ -28,12 +28,12 @@
 
 GameObjectFactory::GameObjectFactory()
 {
-	myTreeType = nullptr;
 }
 
 void GameObjectFactory::Init()
 {
 	LoadGameObjectTypes();
+	LoadEnemyTypes();
 	InitTypeIDToEnums();
 }
 
@@ -48,8 +48,8 @@ std::unique_ptr<GameObject> GameObjectFactory::CreateObject(const eGameObjectTyp
 		newGameObject = std::make_unique<Boulder>(); break;
 	case eGameObjectTypes::eSeed:
 		newGameObject = std::make_unique<Seed>(); break;
-	case eGameObjectTypes::eEnemy:
-		newGameObject = std::make_unique<Enemy>(); break;
+	//case eGameObjectTypes::eEnemy:
+	//	newGameObject = std::make_unique<Enemy>(); break;
 	case eGameObjectTypes::eRollerEnemy:
 		newGameObject = std::make_unique<BigEnemy>(); break;
 	case eGameObjectTypes::eBullet:
@@ -156,6 +156,13 @@ std::unique_ptr<GameObject> GameObjectFactory::CreateObject(const int aGameObjec
 	return std::move(CreateObject(gameObjectTypeEnum));
 }
 
+std::unique_ptr<GameObject> GameObjectFactory::CreateEnemy(const int aGameObjectTypeID)
+{
+	const auto& it = myEnemyTypes.find(aGameObjectTypeID);
+	DL_ASSERT(it != myEnemyTypes.end() && "EnemyType not found!");
+	return std::make_unique<Enemy>(myEnemyTypes[aGameObjectTypeID]);
+}
+
 void GameObjectFactory::LoadGameObjectTypes()
 {
 	std::ifstream file(std::string(gDataPath) + "data/json/gameObjects.json");
@@ -170,10 +177,31 @@ void GameObjectFactory::LoadGameObjectTypes()
 	for (auto it = gameObjectTypes.Begin(); it != gameObjectTypes.End(); it++)
 	{
 		GameObjectType newType;
-		newType.Init(it->GetObject());
+		newType.LoadTypeJSON(it->GetObject());
 		const int ID = it->GetObject().FindMember("ID")->value.GetInt();
 		DL_ASSERT(myGameObjectTypes.find(ID) == myGameObjectTypes.end() && "Two GameObjectTypes has same ID!");
 		myGameObjectTypes[ID] = newType;
+	}
+}
+
+void GameObjectFactory::LoadEnemyTypes()
+{
+	std::ifstream file(std::string(gDataPath) + "data/json/enemies.json");
+	DL_ASSERT(file.is_open() == true && "Can't open data/json/enemies.json!!");
+
+	std::string text((std::istreambuf_iterator<char>(file)),
+		std::istreambuf_iterator<char>());
+	rapidjson::Document enemyTypes;
+	enemyTypes.Parse(text.c_str());
+	DL_ASSERT(enemyTypes.HasParseError() == false && "Error while reading enemies.json!");
+
+	for (auto it = enemyTypes.Begin(); it != enemyTypes.End(); it++)
+	{
+		EnemyType newType;
+		newType.LoadTypeJSON(it->GetObject());
+		const int ID = it->GetObject().FindMember("ID")->value.GetInt();
+		DL_ASSERT(myEnemyTypes.find(ID) == myEnemyTypes.end() && "Two EnemyTypes has same ID!");
+		myEnemyTypes[ID] = newType;
 	}
 }
 

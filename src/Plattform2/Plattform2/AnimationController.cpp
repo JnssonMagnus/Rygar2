@@ -44,7 +44,7 @@ void AnimationController::Update()
 				{
 					myParentAnimationSet->PushAnimation(eAnimationID::eAttack);
 				}
-				else if (abs(myParent->GetPhysicBody().GetVelocity().myX) < 1.f)
+				else if (abs(myParent->GetPhysicBody().GetVelocity().myX) < 0.3f)
 				{
 					myParentAnimationSet->PushAnimation(eAnimationID::eIdle);
 				}

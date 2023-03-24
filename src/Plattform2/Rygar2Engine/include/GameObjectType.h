@@ -12,10 +12,10 @@ class GameObjectType
 {		
 public:
 							GameObjectType();
-							~GameObjectType();
+	virtual					~GameObjectType();
 	GameObjectType&			operator=(GameObjectType& aObjectToCopy);
 
-	void					Init(const rapidjson::GenericObject<false, rapidjson::Value>& aObject);
+	virtual void			LoadTypeJSON(const rapidjson::GenericObject<false, rapidjson::Value>& aObject);
 	void					InitGameObject(GameObject& aGameObject);
 	Sprite&					GetSprite();
 	const std::string&		GetName() const;

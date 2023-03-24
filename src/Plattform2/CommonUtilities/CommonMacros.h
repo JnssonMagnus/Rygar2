@@ -11,6 +11,10 @@
 
 #define TINYXML_CHECKQUERY(value) if (value != 0) assert(false && #value);
 
+#define SMART_ENUM(_name, ...) enum _name{##__VA_ARGS__}
+
+
+
 #ifdef PI
 #undef PI
 #endif

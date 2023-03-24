@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Enemy.h"
+#include "EnemyType.h"
 #include "Player.h"
 #include "GameObjectManager.h"
 #include "PhysicBody.h"
@@ -7,6 +8,11 @@
 #include "MapChunk.h"
 #include "AIBehaviour.h"
 #include "AnimationController.h"
+
+Enemy::Enemy(EnemyType& enemyType) : myEnemyType(enemyType)
+{
+	Init(enemyType);
+}
 
 void Enemy::Update(const float aDeltaTime)
 {
@@ -64,23 +70,25 @@ void Enemy::Update(const float aDeltaTime)
 
 }
 
-void Enemy::Init(GameObjectType& aGameObjectType)
+void Enemy::Init(EnemyType& aEnemyType)
 {
-	Actor::Init<AnimationController>(aGameObjectType, *this, myAnimationSet);
-	myProperties.SetValue(ePropertyValues::eLife, 3);
+	Actor::Init<AnimationController>(aEnemyType, *this, myAnimationSet);
+
+	myProperties.SetValue(ePropertyValues::eLife, aEnemyType.GetMaxLife());
 	myProperties.SetValue(ePropertyValues::eAlive, true);
 	myProperties.SetValue(ePropertyValues::eFacingRight, true);
 
-	myAnimationSet.Init("data/gfx/enemies/turtleEnemy.png");
+	const AnimationSet2& animationSet = aEnemyType.GetAnimationSet();
 
-	const Vector2<int> frameSize(24, 15);
+	myAnimationSet.Init(animationSet.mySprite.c_str());
+
+	const Vector2<int> frameSize = animationSet.myCellSize;
 	myPhysicBody->SetHalfSize(frameSize / 2.f);
-	myAnimationSet.AddAnimation(eAnimationID::eWalk, 2, frameSize, 6);
-	myAnimationSet.AddAnimation(eAnimationID::eIdle, 2, frameSize, 6);
-	myAnimationSet.AddAnimation(eAnimationID::eFall, 1, frameSize);
-	myAnimationSet.AddAnimation(eAnimationID::eJump, 1, frameSize);
-	myAnimationSet.AddAnimation(eAnimationID::eDead, 1, frameSize);
-	myAnimationSet.PushAnimation(eAnimationID::eIdle);
+
+	for (const auto& [animationID, animationData] : animationSet.myAnimations) {
+		myAnimationSet.AddAnimation(animationID, animationData.myFrameCount, frameSize, animationData.myFpsCount);
+	}
+
 	myAnimationSet.CenterPivot();
 }
 

@@ -16,6 +16,7 @@ void GameState::InitState()
 {
 	DL_ASSERT(myPlayer == nullptr && "Player is already initiated!");
 
+	PostMaster::GetInstance()->Register(this, eMessageTypes::eCreateEnemy);
 	PostMaster::GetInstance()->Register(this, eMessageTypes::eCreateObject);
 	PostMaster::GetInstance()->Register(this, eMessageTypes::ePlayerDied);
 
@@ -132,6 +133,15 @@ void GameState::RecieveMessage(const Message& aMessage)
 		GameObjectManager::GetInstance()->AddGameObject(newObject);
 		break;
 	}
+	case eMessageTypes::eCreateEnemy:
+	{
+		GameObject* newObject = myGameObjectFactory.CreateEnemy(aMessage.myIntData).release();
+		newObject->GetPhysicBody().SetStartPosition(aMessage.myPosition);
+		newObject->GetPhysicBody().SetVelocity(aMessage.myDirection);
+		GameObjectManager::GetInstance()->AddGameObject(newObject);
+		break;
+	}
+
 	case eMessageTypes::ePlayerDied:
 		GameObjectManager::GetInstance()->RemoveAllGameObjects();
 		myWorld->UnloadWorld();

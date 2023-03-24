@@ -3,6 +3,7 @@
 #include "RenderCommands.h"
 #include <unordered_map>
 #include <queue>
+#include <..\external\rapidJSON\document.h>
 
 enum class eAnimationID
 {
@@ -18,6 +19,28 @@ enum class eAnimationID
 	eDead,
 	eDuckIdle,
 	eThrowHook
+};
+
+eAnimationID GetAnimationEnum(const char* str);
+
+struct Animation2
+{
+	void LoadAnimation(const rapidjson::GenericObject<false, rapidjson::Value>& aObject);
+
+	Vector2<int> myStartPosition;
+	Vector2<int> myRectSize;
+	float myFpsCount;
+	int myFrameCount;
+	bool myLoop = true;
+};
+
+struct AnimationSet2
+{
+
+	void LoadAnimationSet(const rapidjson::GenericObject<false, rapidjson::Value>& aAnimationObject);
+	std::unordered_map<eAnimationID, Animation2> myAnimations;
+	std::string mySprite;
+	Vector2<int> myCellSize;
 };
 
 class AnimationSet : public Sprite

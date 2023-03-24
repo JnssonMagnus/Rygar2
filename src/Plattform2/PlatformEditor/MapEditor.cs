@@ -22,8 +22,10 @@ namespace PlatformEditor
         static public MapEditor ourInstance;
 
         private GameObject mySelectedGameObject = null;
+        private Enemy mySelectedEnemy = null;
 
         public Dictionary<int, Image> myGameObjectTypeImages = new Dictionary<int, Image>();
+        public Dictionary<int, Image> myEnemyTypeImages = new Dictionary<int, Image>();
 
         private int myTileSourceX = 0;
         private int myTileSourceY = 0;
@@ -83,10 +85,28 @@ namespace PlatformEditor
 
         public void LoadEnemyTypes()
         {
+            EnemyList.Items.Clear();
             using (StreamReader file = File.OpenText(@"data/json/enemies.json"))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 ourEnemyTypes = (List<EnemyType>)serializer.Deserialize(file, typeof(List<EnemyType>));
+            }
+
+            foreach (EnemyType enemyType in ourEnemyTypes)
+            {
+                EnemyList.Items.Add(enemyType.name);
+                if (enemyType.image != null && enemyType.image != "")
+                {
+                    try
+                    {
+                        Image image = Image.FromFile(enemyType.image);
+                        myEnemyTypeImages[enemyType.ID] = image;
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Image not found" + enemyType.image);
+                    }
+                }
             }
         }
 
@@ -102,7 +122,7 @@ namespace PlatformEditor
             foreach (GameObjectType gameObjectType in ourGameObjectTypes)
             {
                 GameObjectTypesList.Items.Add(gameObjectType.name);
-                if (gameObjectType.image != null)
+                if (gameObjectType.image != null && gameObjectType.image != "")
                 {
                     try
                     {
@@ -133,7 +153,13 @@ namespace PlatformEditor
             myCamera.Size.y = (int)Map.Height * 10;
 
             myWorld.LoadAll(myTilesets);
-            Tilesets.SelectedIndex = Tilesets.Items.IndexOf(myWorld.GetMapChunkFromTileIndex(0, 0).myTilesetName);
+
+            var chunk = myWorld.GetMapChunkFromTileIndex(0, 0);
+            if (chunk.myTilesetName != null)
+            {
+                Tilesets.SelectedIndex = Tilesets.Items.IndexOf(chunk.myTilesetName);
+            }
+
             Map.Refresh();
         }
 
@@ -272,6 +298,28 @@ namespace PlatformEditor
             return null;
         }
 
+        private Enemy PickEnemy(MouseEventArgs aMouseEvent)
+        {
+            var enemies = myWorld.GeEnemiesFromChunk(aMouseEvent.X + (int)myCamera.Position.x, aMouseEvent.Y + (int)myCamera.Position.y);
+            foreach (Enemy enemy in enemies)
+            {
+                if (enemy.IsInside(aMouseEvent.X + (int)myCamera.Position.x, aMouseEvent.Y + (int)myCamera.Position.y) == true)
+                {
+                    if (mySelectedEnemy != enemy)
+                    {
+                        return enemy;
+                    }
+                }
+            }
+
+            if (mySelectedEnemy != null && mySelectedEnemy.IsInside(aMouseEvent.X + (int)myCamera.Position.x, aMouseEvent.Y + (int)myCamera.Position.y) == true)
+            {
+                return mySelectedEnemy;
+            }
+
+            return null;
+        }
+
         private void SetTile(int aXNode, int aYNode, char aXnodeSource, char aYNodeSource)
         {
             myWorld.SetTile(aXNode, aYNode, aXnodeSource, aYNodeSource, myTilesets[Tilesets.Text]);
@@ -299,7 +347,13 @@ namespace PlatformEditor
                     mySelectedGameObject.myPosition = new Vector2(e.X + myCamera.Position.x, e.Y + myCamera.Position.y);
                 }
             }
-
+            else if (EditTab.SelectedTab.Text == "Enemies")
+            {
+                if (myMouseStatus.myLeftMousePressed && mySelectedEnemy != null)
+                {
+                    mySelectedEnemy.myPosition = new Vector2(e.X + myCamera.Position.x, e.Y + myCamera.Position.y);
+                }
+            }
             // Drag camera
             if (myMouseStatus.myRightMousePressed == true)
             {
@@ -322,6 +376,7 @@ namespace PlatformEditor
             e.Graphics.Clear(Color.Black);
             DrawTiles(e);
             DrawGameObjects(e);
+            DrawEnemies(e);
 
             if (EditTab.SelectedTab.Text == "Tileset")
             {
@@ -330,6 +385,10 @@ namespace PlatformEditor
             else if (EditTab.SelectedTab.Text == "Objects")
             {
                 DrawObjectEditGizmos(e);
+            }
+            else if (EditTab.SelectedTab.Text == "Enemies")
+            {
+                DrawEnemyEditGizmos(e);
             }
         }
 
@@ -347,17 +406,32 @@ namespace PlatformEditor
             }
         }
 
+        private void DrawEnemies(PaintEventArgs e)
+        {
+            var enemies = myWorld.GetEnemiesFromFrustum(myCamera);
+            foreach (Enemy enemy in enemies)
+            {
+                var enemyImage = myEnemyTypeImages[enemy.myEnemyType.ID];
+                int halfWidth = enemyImage.Width / 2;
+                int halfHeight = enemyImage.Height / 2;
+                Point position = new Point((int)enemy.myPosition.x - halfWidth - (int)myCamera.Position.x, (int)enemy.myPosition.y - halfHeight - (int)myCamera.Position.y);
+                int ID = enemy.myEnemyType.ID;
+                e.Graphics.DrawImage(myEnemyTypeImages[ID], new Rectangle(position,
+                    new Size(enemyImage.Width, enemyImage.Height)));
+            }
+        }
+
         private void DrawObjectEditGizmos(PaintEventArgs e)
         {
             if (myIsDraggingObject == true)
             {
-                int halfWidth = myGameObjectTypeImages[GameObjectTypesList.SelectedIndex].Width / 2;
-                int halfHeight = myGameObjectTypeImages[GameObjectTypesList.SelectedIndex].Height / 2;
+                int halfWidth = myGameObjectTypeImages[ourGameObjectTypes[GameObjectTypesList.SelectedIndex].ID].Width / 2;
+                int halfHeight = myGameObjectTypeImages[ourGameObjectTypes[GameObjectTypesList.SelectedIndex].ID].Height / 2;
 
                 Point previewPos = new Point(myOldMousePosition.X, myOldMousePosition.Y);
                 previewPos.X -= halfWidth;
                 previewPos.Y -= halfHeight;
-                e.Graphics.DrawImage(myGameObjectTypeImages[GameObjectTypesList.SelectedIndex], previewPos);
+                e.Graphics.DrawImage(myGameObjectTypeImages[ourGameObjectTypes[GameObjectTypesList.SelectedIndex].ID], previewPos);
             }
 
             if (mySelectedGameObject != null)
@@ -369,6 +443,29 @@ namespace PlatformEditor
                     halfWidth * 2, halfHeight * 2);
             }
         }
+        private void DrawEnemyEditGizmos(PaintEventArgs e)
+        {
+            if (myIsDraggingObject == true)
+            {
+                int halfWidth = myEnemyTypeImages[ourEnemyTypes[EnemyList.SelectedIndex].ID].Width / 2;
+                int halfHeight = myEnemyTypeImages[ourEnemyTypes[EnemyList.SelectedIndex].ID].Height / 2;
+
+                Point previewPos = new Point(myOldMousePosition.X, myOldMousePosition.Y);
+                previewPos.X -= halfWidth;
+                previewPos.Y -= halfHeight;
+                e.Graphics.DrawImage(myEnemyTypeImages[ourEnemyTypes[EnemyList.SelectedIndex].ID], previewPos);
+            }
+
+            if (mySelectedEnemy != null)
+            {
+                Pen greenPen = new Pen(Color.Green);
+                int halfWidth = myEnemyTypeImages[mySelectedEnemy.myEnemyType.ID].Width / 2;
+                int halfHeight = myEnemyTypeImages[mySelectedEnemy.myEnemyType.ID].Height / 2;
+                e.Graphics.DrawRectangle(greenPen, mySelectedEnemy.myPosition.x - halfWidth - myCamera.Position.x, mySelectedEnemy.myPosition.y - halfHeight - myCamera.Position.y,
+                    halfWidth * 2, halfHeight * 2);
+            }
+        }
+
         private void DrawTileEditGizmos(PaintEventArgs e)
         {
             var visibleChunks = myWorld.GetChunksInFrustum(myCamera);
@@ -459,6 +556,11 @@ namespace PlatformEditor
             else if (EditTab.SelectedTab.Text == "Objects")
             {
                 mySelectedGameObject = PickObject(mouseEvent);
+                Map.Refresh();
+            }
+            else if (EditTab.SelectedTab.Text == "Enemies")
+            {
+                mySelectedEnemy = PickEnemy(mouseEvent);
                 Map.Refresh();
             }
         }
@@ -577,6 +679,26 @@ namespace PlatformEditor
                         handled = true;
                 }
             }
+            if (EditTab.SelectedTab.Text == "Enemies")
+            {
+                if (mySelectedEnemy != null)
+                {
+                    switch (keyData)
+                    {
+                        case Keys.Delete:
+                            mySelectedEnemy.myChunk.GetEnemies().Remove(mySelectedEnemy);
+                            mySelectedEnemy = null;
+                            Map.Refresh();
+                            handled = true; break;
+                    }
+                }
+                else
+                {
+                    if (MoveMapWithKeys(keyData))
+                        handled = true;
+                }
+
+            }
             else if (EditTab.SelectedTab.Text == "Tileset")
             {
                 if (MoveMapWithKeys(keyData))
@@ -646,18 +768,26 @@ namespace PlatformEditor
         private void Map_DragDrop(object sender, DragEventArgs e)
         {
             myIsDraggingObject = false;
-            if (GameObjectTypesList.SelectedItem != null)
+
+            if (EditTab.SelectedTab.Text == "Objects" && GameObjectTypesList.SelectedItem != null)
             {
                 Vector2 position = new Vector2(Map.PointToClient(Cursor.Position).X, Map.PointToClient(Cursor.Position).Y);
                 position.x += myCamera.Position.x;
                 position.y += myCamera.Position.y;
                 mySelectedGameObject = myWorld.PlaceObject(position, ourGameObjectTypes[GameObjectTypesList.SelectedIndex]);
             }
+            else if (EditTab.SelectedTab.Text == "Enemies" && EnemyList.SelectedItem != null)
+            {
+                Vector2 position = new Vector2(Map.PointToClient(Cursor.Position).X, Map.PointToClient(Cursor.Position).Y);
+                position.x += myCamera.Position.x;
+                position.y += myCamera.Position.y;
+                mySelectedEnemy = myWorld.PlaceEnemy(position, ourEnemyTypes[EnemyList.SelectedIndex]);
+            }
         }
 
         private void GameObjectTypesList_SelectedIndexChanged(object sender, MouseEventArgs e)
         {
-            ObjectTypePrevPic.Image = Image.FromFile(ourGameObjectTypes[GameObjectTypesList.SelectedIndex].image);
+            ObjectTypePrevPic.Image = Image.FromFile(ourGameObjectTypes[ourGameObjectTypes[GameObjectTypesList.SelectedIndex].ID].image);
         }
 
         private void mapSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -696,6 +826,25 @@ namespace PlatformEditor
             EnemyEditor enemyEditor = new EnemyEditor();
             enemyEditor.Show();
             this.Enabled = false;
+        }
+
+        private void GameObjectTypesList_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EnemyList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ourEnemyTypes[EnemyList.SelectedIndex].image != null && ourEnemyTypes[EnemyList.SelectedIndex].image != "") 
+            { 
+                EnemyPreviewPic.Image = Image.FromFile(ourEnemyTypes[EnemyList.SelectedIndex].image);
+            }
+        }
+
+        private void EnemyList_MouseDown(object sender, MouseEventArgs e)
+        {
+            DragDropEffects dragDropEffect = DoDragDrop(EnemyList.SelectedIndex, DragDropEffects.Copy);
+            EnemyPreviewPic.Image = Image.FromFile(ourEnemyTypes[EnemyList.SelectedIndex].image);
         }
     }
 }

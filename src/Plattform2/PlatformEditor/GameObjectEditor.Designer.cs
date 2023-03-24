@@ -64,6 +64,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.VariableGrid = new System.Windows.Forms.DataGridView();
+            this.VariableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DefaultValueLabel = new System.Windows.Forms.Label();
             this.VariableDefaultValue = new System.Windows.Forms.NumericUpDown();
             this.VariableListBox = new System.Windows.Forms.ListBox();
@@ -71,9 +74,6 @@
             this.RemoveVariableBtn = new System.Windows.Forms.Button();
             this.AddVaribleBtn = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.VariableGrid = new System.Windows.Forms.DataGridView();
-            this.VariableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.GameObjectPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Weight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bounciness)).BeginInit();
@@ -84,9 +84,9 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.VariableGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VariableDefaultValue)).BeginInit();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.VariableGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // GameObjectTypeList
@@ -142,6 +142,7 @@
             this.GameObjectPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.GameObjectPic.TabIndex = 4;
             this.GameObjectPic.TabStop = false;
+            this.GameObjectPic.Click += new System.EventHandler(this.GameObjectPic_Click);
             // 
             // SelectPicBtn
             // 
@@ -576,6 +577,38 @@
             this.tabPage2.Text = "Variables";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // VariableGrid
+            // 
+            this.VariableGrid.AllowUserToAddRows = false;
+            this.VariableGrid.AllowUserToDeleteRows = false;
+            this.VariableGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.VariableGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.VariableName,
+            this.Value});
+            this.VariableGrid.Location = new System.Drawing.Point(19, 27);
+            this.VariableGrid.MultiSelect = false;
+            this.VariableGrid.Name = "VariableGrid";
+            this.VariableGrid.RowHeadersVisible = false;
+            this.VariableGrid.RowHeadersWidth = 62;
+            this.VariableGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.VariableGrid.RowTemplate.Height = 28;
+            this.VariableGrid.Size = new System.Drawing.Size(317, 215);
+            this.VariableGrid.TabIndex = 6;
+            // 
+            // VariableName
+            // 
+            this.VariableName.HeaderText = "Name";
+            this.VariableName.MinimumWidth = 8;
+            this.VariableName.Name = "VariableName";
+            this.VariableName.Width = 150;
+            // 
+            // Value
+            // 
+            this.Value.HeaderText = "Default";
+            this.Value.MinimumWidth = 8;
+            this.Value.Name = "Value";
+            this.Value.Width = 150;
+            // 
             // DefaultValueLabel
             // 
             this.DefaultValueLabel.AutoSize = true;
@@ -646,38 +679,6 @@
             this.tabPage3.Text = "Collision tags";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // VariableGrid
-            // 
-            this.VariableGrid.AllowUserToAddRows = false;
-            this.VariableGrid.AllowUserToDeleteRows = false;
-            this.VariableGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.VariableGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.VariableName,
-            this.Value});
-            this.VariableGrid.Location = new System.Drawing.Point(19, 27);
-            this.VariableGrid.MultiSelect = false;
-            this.VariableGrid.Name = "VariableGrid";
-            this.VariableGrid.RowHeadersVisible = false;
-            this.VariableGrid.RowHeadersWidth = 62;
-            this.VariableGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.VariableGrid.RowTemplate.Height = 28;
-            this.VariableGrid.Size = new System.Drawing.Size(317, 215);
-            this.VariableGrid.TabIndex = 6;
-            // 
-            // VariableName
-            // 
-            this.VariableName.HeaderText = "Name";
-            this.VariableName.MinimumWidth = 8;
-            this.VariableName.Name = "VariableName";
-            this.VariableName.Width = 150;
-            // 
-            // Value
-            // 
-            this.Value.HeaderText = "Default";
-            this.Value.MinimumWidth = 8;
-            this.Value.Name = "Value";
-            this.Value.Width = 150;
-            // 
             // GameObjectEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -714,10 +715,10 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.VariableGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.VariableDefaultValue)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.VariableGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -62,44 +62,44 @@ namespace PlatformEditor
         private void Weight_ValueChanged(object sender, EventArgs e)
         {
             if (GameObjectTypeList.SelectedItem != null)
-                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].weight = (float)Weight.Value;
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.weight = (float)Weight.Value;
         }
 
         private void Bounciness_ValueChanged(object sender, EventArgs e)
         {
             if (GameObjectTypeList.SelectedItem != null)
-                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].bounciness = (float)Bounciness.Value;
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.bounciness = (float)Bounciness.Value;
         }
 
         private void AirFrictionX_ValueChanged(object sender, EventArgs e)
         {
             if (GameObjectTypeList.SelectedItem != null)
-                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].airFriction.x = (float)AirFrictionX.Value;
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.airFriction.x = (float)AirFrictionX.Value;
         }
 
         private void AirFrictionY_ValueChanged(object sender, EventArgs e)
         {
             if (GameObjectTypeList.SelectedItem != null)
-                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].airFriction.y = (float)AirFrictionY.Value;
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.airFriction.y = (float)AirFrictionY.Value;
         }
 
         private void GroundFrictionX_ValueChanged(object sender, EventArgs e)
         {
             if (GameObjectTypeList.SelectedItem != null)
-                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].groundFriction.x = (float)GroundFrictionX.Value;
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.groundFriction.x = (float)GroundFrictionX.Value;
         }
 
         private void GroundFrictionY_ValueChanged(object sender, EventArgs e)
         {
             if (GameObjectTypeList.SelectedItem != null)
-                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].groundFriction.y = (float)GroundFrictionY.Value;
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.groundFriction.y = (float)GroundFrictionY.Value;
         }
 
         private void UpdateCollisionTags()
         {
             if (GameObjectTypeList.SelectedItem != null)
             {
-                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].collisionTags =
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.collisionTags =
                     (PlayerTagCheckbox.Checked ? 1 : 0) +
                     (BulletTagCheckbox.Checked ? 2 : 0) +
                     (EnemyTagCheckbox.Checked ? 4 : 0) +
@@ -110,19 +110,19 @@ namespace PlatformEditor
         private void PhysicsCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             if (GameObjectTypeList.SelectedItem != null)
-                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicsEnabled = PhysicsCheckbox.Checked;
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.physicsEnabled = PhysicsCheckbox.Checked;
         }
 
         private void GravityCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             if (GameObjectTypeList.SelectedItem != null)
-                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].gravity = GravityCheckbox.Checked;
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.gravity = GravityCheckbox.Checked;
         }
 
         private void KineticCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             if (GameObjectTypeList.SelectedItem != null)
-                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].kinetic = KineticCheckbox.Checked;
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.kinetic = KineticCheckbox.Checked;
         }
 
         private void RotationCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -136,22 +136,22 @@ namespace PlatformEditor
             if (GameObjectTypeList.SelectedItem != null)
             {
                 RotationCheckbox.Checked = MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].rotateObject;
-                KineticCheckbox.Checked = MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].kinetic;
-                GravityCheckbox.Checked = MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].gravity;
-                PhysicsCheckbox.Checked = MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicsEnabled;
-                GroundFrictionX.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].groundFriction.x;
-                GroundFrictionY.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].groundFriction.y;
-                AirFrictionX.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].airFriction.x;
-                AirFrictionY.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].airFriction.y;
+                KineticCheckbox.Checked = MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.kinetic;
+                GravityCheckbox.Checked = MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.gravity;
+                PhysicsCheckbox.Checked = MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.physicsEnabled;
+                GroundFrictionX.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.groundFriction.x;
+                GroundFrictionY.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.groundFriction.y;
+                AirFrictionX.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.airFriction.x;
+                AirFrictionY.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.airFriction.y;
                 NameText.Text = MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].name;
-                Weight.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].weight;
-                Bounciness.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].bounciness;
+                Weight.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.weight;
+                Bounciness.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.bounciness;
                 IDText.Text = MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].ID.ToString();
 
-                PlayerTagCheckbox.Checked = (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].collisionTags & 1) > 0;
-                BulletTagCheckbox.Checked = (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].collisionTags & 2) > 0;
-                EnemyTagCheckbox.Checked = (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].collisionTags & 4) > 0;
-                PickableTagCheckbox.Checked = (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].collisionTags & 8) > 0;
+                PlayerTagCheckbox.Checked = (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.collisionTags & 1) > 0;
+                BulletTagCheckbox.Checked = (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.collisionTags & 2) > 0;
+                EnemyTagCheckbox.Checked = (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.collisionTags & 4) > 0;
+                PickableTagCheckbox.Checked = (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.collisionTags & 8) > 0;
 
 
                 if (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].image != null)
@@ -301,6 +301,11 @@ namespace PlatformEditor
             {
                 MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables[VariableListBox.SelectedIndex].defaultValue = (float)VariableDefaultValue.Value;
             }
+        }
+
+        private void GameObjectPic_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

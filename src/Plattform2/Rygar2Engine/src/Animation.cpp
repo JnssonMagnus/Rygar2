@@ -50,7 +50,11 @@ void AnimationSet::PushAnimation(const eAnimationID aAnimationID)
 {
 	if (aAnimationID != myCurrentAnimationID)
 	{
-		DL_ASSERT(myAnimations.find(aAnimationID) != myAnimations.end() && "Animation not found!");
+		if (myAnimations.find(aAnimationID) == myAnimations.end())
+		{
+			myCurrentAnimationID = eAnimationID::eDefault;
+			return;
+		}
 		myCurrentAnimationID = aAnimationID;
 		myCurrentTime = 0.f;
 	}
@@ -113,4 +117,30 @@ const Color& AnimationSet::GetSpriteColor() const
 	}
 
 	return fmod(frontBlink.myBlinkLength, frontBlink.myBlinkFrequency * 2.f) <= frontBlink.myBlinkFrequency ? frontBlink.myBlinkColor : defaultColor;
+}
+
+void AnimationSet2::LoadAnimationSet(const rapidjson::GenericObject<false, rapidjson::Value>& aAnimationObject)
+{
+	mySprite = aAnimationObject.FindMember("sprite")->value.GetString();
+	myCellSize.x = aAnimationObject.FindMember("width")->value.GetInt();
+	myCellSize.y = aAnimationObject.FindMember("height")->value.GetInt();
+	auto animationArray = aAnimationObject.FindMember("myAnimations")->value.GetObject();
+	for (auto it = animationArray.MemberBegin(); it != animationArray.MemberEnd(); it++)
+	{
+		Animation2 newAnimation;
+		newAnimation.LoadAnimation(it->value.GetObject());
+		std::string animationName = it->name.GetString();
+		myAnimations[GetAnimationEnum(animationName.c_str())] = newAnimation;
+		
+	}
+}
+
+void Animation2::LoadAnimation(const rapidjson::GenericObject<false, rapidjson::Value>& aObject)
+{
+	myStartPosition.x = aObject.FindMember("startX")->value.GetFloat();
+	myStartPosition.y = aObject.FindMember("startY")->value.GetFloat();
+	myRectSize;
+	myFpsCount = aObject.FindMember("FPS")->value.GetFloat();
+	myFrameCount = aObject.FindMember("frames")->value.GetInt();
+	myLoop = true;
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Xml;
+using System.IO;
 
 namespace PlatformEditor
 {
@@ -16,6 +17,7 @@ namespace PlatformEditor
         public int myMapHeight = 25;
 
         private List<GameObject> myGameObjects = new List<GameObject>();
+        private List<Enemy> myEnemies = new List<Enemy>();
 
         private Image myTileSetImage;
         private string myFilename;
@@ -43,37 +45,16 @@ namespace PlatformEditor
                 myTileSetImage = Image.FromFile(Settings.GetDataPath() + "data/gfx/tilesets/" + myTileset.TileImage);
                 myTilesetName = myTileset.myTilesetName;
             }
-        }
-
-        public void Save()
-        {
-            myFilename = "chunk_" + myChunkId.ToString();
-            string filePath = Settings.GetDataPath() + "data/levels/";
-            System.IO.BinaryWriter binaryWriter = new System.IO.BinaryWriter(System.IO.File.Open(filePath + myFilename, System.IO.FileMode.OpenOrCreate));
-
-            // Map
-            binaryWriter.Write(myFilename + "\n");
-            binaryWriter.Write(myTileset.myTilesetName+"\n");
-            binaryWriter.Write(myMapWidth);
-            binaryWriter.Write(myMapHeight);
-            binaryWriter.Write(myTileData, 0, myMapWidth * myMapHeight);
-
-            // GameObjects on map
-            binaryWriter.Write(myGameObjects.Count);
-            foreach (GameObject gameObject in myGameObjects)
-            {
-                binaryWriter.Write(gameObject.myGameObjectType.ID);
-                binaryWriter.Write(gameObject.myPosition.x);
-                binaryWriter.Write(gameObject.myPosition.y);
-            }
-
-            binaryWriter.Close();
-        }
+        } 
 
         public List<GameObject> GetGameObjects()
         {
             return myGameObjects;
-        }   
+        }
+        public List<Enemy> GetEnemies()
+        {
+            return myEnemies;
+        }
 
         public GameObject PlaceObject(Vector2 aPosition, GameObjectType aGameObjectType)
         {
@@ -90,6 +71,15 @@ namespace PlatformEditor
             gameObject.myChunk = this;
             myGameObjects.Add(gameObject);
             return gameObject;
+        }
+        public Enemy PlaceEnemy(Vector2 aPosition, EnemyType aEnemyType)
+        {
+            Enemy enemy = new Enemy();
+            enemy.myPosition = aPosition;
+            enemy.myEnemyType = aEnemyType;
+            enemy.myChunk = this;
+            myEnemies.Add(enemy);
+            return enemy;
         }
 
         public Image GetTileSetImage()
@@ -180,9 +170,62 @@ namespace PlatformEditor
             return new GameObjectType();
         }
 
+        private EnemyType GetEnemyTypeByID(int aID)
+        {
+            foreach (EnemyType enemyType in MapEditor.ourEnemyTypes)
+            {
+                if (aID == enemyType.ID)
+                {
+                    return enemyType;
+                }
+            }
+
+            throw null;
+            return new EnemyType();
+        }
+
+        public void Save()
+        {
+            myFilename = "chunk_" + myChunkId.ToString();
+            string filePath = Settings.GetDataPath() + "data/levels/";
+            System.IO.BinaryWriter binaryWriter = new System.IO.BinaryWriter(System.IO.File.Open(filePath + myFilename, System.IO.FileMode.OpenOrCreate));
+
+            // Ver
+            binaryWriter.Write(1);
+
+            // Map
+            binaryWriter.Write(myFilename + "\n");
+            binaryWriter.Write(myTileset.myTilesetName + "\n");
+            binaryWriter.Write(myMapWidth);
+            binaryWriter.Write(myMapHeight);
+            binaryWriter.Write(myTileData, 0, myMapWidth * myMapHeight);
+
+            // GameObjects on map
+            binaryWriter.Write(myGameObjects.Count);
+            foreach (GameObject gameObject in myGameObjects)
+            {
+                binaryWriter.Write(gameObject.myGameObjectType.ID);
+                binaryWriter.Write(gameObject.myPosition.x);
+                binaryWriter.Write(gameObject.myPosition.y);
+            }
+
+            // Enemies on map
+            binaryWriter.Write(myEnemies.Count);
+            foreach (Enemy enemy in myEnemies)
+            {
+                binaryWriter.Write(enemy.myEnemyType.ID);
+                binaryWriter.Write(enemy.myPosition.x);
+                binaryWriter.Write(enemy.myPosition.y);
+            }
+            binaryWriter.Close();
+        }
+
         public void LoadFromFile(string aFilename)
         {
             System.IO.BinaryReader binaryReader = new System.IO.BinaryReader(System.IO.File.Open(aFilename, System.IO.FileMode.Open));
+
+            int ver = binaryReader.ReadInt32();
+
             myFilename = binaryReader.ReadString();
             myFilename = myFilename.Remove(myFilename.Length - 1, 1); // remove endline
 
@@ -195,6 +238,8 @@ namespace PlatformEditor
             myTileData = new char[myMapWidth * myMapHeight];
             binaryReader.Read(myTileData, 0, myMapWidth * myMapHeight);
 
+
+            // GameObjects on Map
             int gameObjectCount = binaryReader.ReadInt32();
             myGameObjects = new List<GameObject>();
             for (int gameObjectIndex = 0; gameObjectIndex < gameObjectCount; gameObjectIndex++)
@@ -206,6 +251,20 @@ namespace PlatformEditor
                 gameObject.myPosition.y = binaryReader.ReadSingle();
                 gameObject.myChunk = this;
                 myGameObjects.Add(gameObject);
+            }
+
+            // Enemies on map
+            int enemyCount = binaryReader.ReadInt32();
+            myEnemies = new List<Enemy>();
+            for (int enemyIndex = 0; enemyIndex < enemyCount; enemyIndex++)
+            {
+                Enemy enemy = new Enemy();
+                int ID = binaryReader.ReadInt32();
+                enemy.myEnemyType = GetEnemyTypeByID(ID);
+                enemy.myPosition.x = binaryReader.ReadSingle();
+                enemy.myPosition.y = binaryReader.ReadSingle();
+                enemy.myChunk = this;
+                myEnemies.Add(enemy);
             }
 
             binaryReader.Close();

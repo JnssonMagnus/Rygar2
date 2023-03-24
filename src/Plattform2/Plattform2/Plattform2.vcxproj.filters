@@ -167,6 +167,10 @@
     <ClCompile Include="PlayerAnimationController.cpp">
       <Filter>Game\GameObjects\Actors\Player</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyType.cpp">
+      <Filter>Game\GameObjects\Actors\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Rygar2Engine\include\Animation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -304,6 +308,9 @@
     </ClInclude>
     <ClInclude Include="MapCollisionData.h">
       <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyType.h">
+      <Filter>Game\GameObjects\Actors\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

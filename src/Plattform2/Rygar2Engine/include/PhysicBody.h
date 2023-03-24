@@ -1,8 +1,10 @@
 #pragma once
 #include "PhysicStates.h"
+#include "typedefs.h"
 #include <vector2.h>
 #include <StaticArray.h>
 #include <..\external\rapidJSON\document.h>
+#include <CommonMacros.h>
 
 class GameObject;
 

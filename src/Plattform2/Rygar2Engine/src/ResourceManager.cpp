@@ -66,8 +66,13 @@ Texture ResourceManager::LoadTexture(const char* aTextureName)
 {
 	std::string completePath = std::string(gDataPath) + aTextureName;
 	SDL_Surface* surface = IMG_Load(completePath.c_str());
-	DL_ASSERT(surface != nullptr && "Failed to load image!");
 	DL_ASSERT(mySDL_Renderer != nullptr && "ResourceManager isn't intiated!");
+	if (surface == nullptr)
+	{
+		const std::string errorTexturePath = std::string(gDataPath) + "data/gfx/errorTexture.png";
+		surface = IMG_Load(errorTexturePath.c_str());
+		DL_ASSERT(surface != nullptr && "Failed to load error texture image!");
+	}
 	SDL_Texture* sdl_texture = SDL_CreateTextureFromSurface(mySDL_Renderer, surface);
 	SDL_FreeSurface(surface);
 	int width = 0;

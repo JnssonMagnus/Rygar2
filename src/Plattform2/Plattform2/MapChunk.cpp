@@ -111,13 +111,19 @@ void MapChunk::LoadFromFile(const std::string_view aFilename)
 
 	char buffer[1024];
 
-	// read crap from C#
+	// version
+	loadFile.read(buffer, sizeof(int));
+	int version = *(reinterpret_cast<int*>(buffer));
+
+	// read string length
 	loadFile.read(buffer, 1);
+
 	loadFile.getline(buffer, 1024);
 	myFilename = buffer;
 
-	// read crap from C#
+	// read string length
 	loadFile.read(buffer, 1);
+
 	loadFile.getline(buffer, 1024);
 	myTilesetName = buffer;
 
@@ -155,6 +161,26 @@ void MapChunk::LoadFromFile(const std::string_view aFilename)
 
 	delete[] gameObjects;
 	gameObjects = nullptr;
+
+	// load enemies
+	struct ProxyEnemy
+	{
+		int ID;
+		float x, y;
+	};
+
+	loadFile.read(buffer, sizeof(int));
+	const int enemyCount = *(reinterpret_cast<int*>(buffer));
+	ProxyEnemy* enemies = new ProxyEnemy[enemyCount];
+	loadFile.read(reinterpret_cast<char*>(enemies), sizeof(ProxyEnemy)* enemyCount);
+	for (int enemyIndex = 0; enemyIndex < enemyCount; enemyIndex++)
+	{
+		Message newEnemyMessage(eMessageTypes::eCreateEnemy);
+		newEnemyMessage.myPosition.myX = enemies[enemyIndex].x;
+		newEnemyMessage.myPosition.myY = enemies[enemyIndex].y;
+		newEnemyMessage.myIntData = enemies[enemyIndex].ID;
+		PostMaster::GetInstance()->SendMessage(newEnemyMessage);
+	}
 
 	loadFile.close();
 }

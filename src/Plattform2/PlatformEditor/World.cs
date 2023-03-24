@@ -37,6 +37,12 @@ namespace PlatformEditor
             return mapChunk.PlaceObject(aPosition, aGameObjectType);
         }
 
+        public Enemy PlaceEnemy(Vector2 aPosition, EnemyType aEnemyType)
+        {
+            var mapChunk = GetMapChunk((int)aPosition.x, (int)aPosition.y);
+            return mapChunk.PlaceEnemy(aPosition, aEnemyType);
+        }
+
         public GameObject PlaceObject(GameObject gameObject)
         {
             var mapChunk = GetMapChunk((int)gameObject.myPosition.x, (int)gameObject.myPosition.y);
@@ -51,6 +57,16 @@ namespace PlatformEditor
                 return new List<GameObject>();
             }
             return chunk.GetGameObjects();
+        }
+
+        public List<Enemy> GeEnemiesFromChunk(int aWorldPositionX, int aWorldPositionY)
+        {
+            var chunk = GetMapChunk(aWorldPositionX, aWorldPositionY);
+            if (chunk == null)
+            {
+                return new List<Enemy>();
+            }
+            return chunk.GetEnemies();
         }
 
         public void SaveAll()
@@ -122,7 +138,18 @@ namespace PlatformEditor
 
             return visibleObjects;
         }
+        public List<Enemy> GetEnemiesFromFrustum(EditorCamera camera)
+        {
+            List<Enemy> visibleEnemies = new List<Enemy>();
+            var visibleMapChunks = GetChunksInFrustum(camera);
+            foreach (var chunk in visibleMapChunks)
+            {
+                var enemiesInChunk = chunk.GetEnemies();
+                visibleEnemies.AddRange(enemiesInChunk);
+            }
 
+            return visibleEnemies;
+        }
         public List<MapData> GetChunksInFrustum(EditorCamera camera)
         {
             List<MapData> visibleChunks = new List<MapData>();

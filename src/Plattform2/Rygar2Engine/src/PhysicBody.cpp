@@ -227,5 +227,18 @@ void PhysicBody::SetIsKinetic(const bool aIsKinetic)
 
 void PhysicBodyData::Init(const rapidjson::GenericObject<false, rapidjson::Value>& aObject)
 {
+	auto airFrictionObject = aObject.FindMember("airFriction")->value.GetObject();
+	myAirFriction = { airFrictionObject.FindMember("x")->value.GetFloat(),
+		airFrictionObject.FindMember("y")->value.GetFloat() };
 
+	auto groundFrictionObject = aObject.FindMember("groundFriction")->value.GetObject();
+	myGroundFriction = { groundFrictionObject.FindMember("x")->value.GetFloat(),
+		groundFrictionObject.FindMember("y")->value.GetFloat() };
+
+	myBounciness = aObject.FindMember("bounciness")->value.GetFloat();
+	myWeight = aObject.FindMember("weight")->value.GetFloat();
+	myDefaultPhysics = aObject.FindMember("physicsEnabled")->value.GetBool();
+	myDefaultGravity = aObject.FindMember("gravity")->value.GetBool();
+	myDefaultKinetic = aObject.FindMember("kinetic")->value.GetBool();
+	myCollisionTags = static_cast<char>(aObject.FindMember("collisionTags")->value.GetInt());
 }

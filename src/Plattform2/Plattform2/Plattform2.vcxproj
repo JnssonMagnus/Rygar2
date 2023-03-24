@@ -116,7 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>DLLEXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)Rygar2Engine/include/</AdditionalIncludeDirectories>
     </ClCompile>
@@ -152,7 +152,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>DLLEXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)Rygar2Engine/include/</AdditionalIncludeDirectories>
     </ClCompile>
@@ -164,6 +164,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Rygar2Engine\include\Animation.cpp" />
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AIBehaviour.cpp" />
     <ClCompile Include="Aim.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="DiskArmor.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
+    <ClCompile Include="EnemyType.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="FireFlower.cpp" />
     <ClCompile Include="GameOverState.cpp" />
@@ -229,6 +231,7 @@
     <ClInclude Include="DiskArmor.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemySpawner.h" />
+    <ClInclude Include="EnemyType.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="FireFlower.h" />
     <ClInclude Include="GameOverState.h" />

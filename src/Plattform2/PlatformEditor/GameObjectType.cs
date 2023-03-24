@@ -37,6 +37,18 @@ namespace PlatformEditor
         public float y;
     }
 
+    public class PhysicBody
+    {
+        public Vector2 airFriction = new Vector2(1, 1);
+        public Vector2 groundFriction = new Vector2(1, 1);
+        public float bounciness = 0.8f;
+        public float weight = 1.0f;
+        public bool physicsEnabled = true;
+        public bool gravity = true;
+        public bool kinetic = false;
+        public int collisionTags = 0;
+    }
+
     public class GameObject
     {
         public MapData myChunk;
@@ -56,17 +68,10 @@ namespace PlatformEditor
     public class GameObjectType
     {
         public string name = "unnamed object";
-        public string image;
-        public Vector2 airFriction = new Vector2(1, 1);
-        public Vector2 groundFriction = new Vector2(1, 1);
-        public float bounciness = 0.8f;
-        public float weight = 1.0f;
-        public bool physicsEnabled = true;
-        public bool gravity = true;
-        public bool kinetic = false;
-        public bool rotateObject = false;
+        public string image = "";
+        public PhysicBody physicBody = new PhysicBody();
         public int ID = -1;
-        public int collisionTags = 0;
+        public bool rotateObject = false;
         public List<VariableType> variables = new List<VariableType>();
     }
 }

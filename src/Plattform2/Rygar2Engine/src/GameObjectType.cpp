@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GameObjectType.h"
-#include "gameObject.h"
-#include "resourceManager.h"
+#include "GameObject.h"
+#include "ResourceManager.h"
 #include "PhysicBody.h"
 #include "sprite.h"
 
@@ -34,7 +34,7 @@ GameObjectType& GameObjectType::operator=(GameObjectType& aObjectToCopy)
 	return *this;
 }
 
-void GameObjectType::Init(const rapidjson::GenericObject<false, rapidjson::Value>& aObject)
+void GameObjectType::LoadTypeJSON(const rapidjson::GenericObject<false, rapidjson::Value>& aObject)
 {
 	myName = aObject.FindMember("name")->value.GetString();
 	std::string imagePath = aObject.FindMember("image")->value.GetString();
@@ -44,33 +44,18 @@ void GameObjectType::Init(const rapidjson::GenericObject<false, rapidjson::Value
 
 	auto physicBodyNode = aObject.FindMember("physicBody")->value.GetObject();
 	myPhysicBodyData.Init(physicBodyNode);
-	//auto airFrictionObject = aObject.FindMember("airFriction")->value.GetObject();
-	//myAirFriction = { airFrictionObject.FindMember("x")->value.GetFloat(),
-	//	airFrictionObject.FindMember("y")->value.GetFloat() };
-
-	//auto groundFrictionObject = aObject.FindMember("groundFriction")->value.GetObject();
-	//myGroundFriction = { groundFrictionObject.FindMember("x")->value.GetFloat(),
-	//	groundFrictionObject.FindMember("y")->value.GetFloat() };
-
-	//myBounciness = aObject.FindMember("bounciness")->value.GetFloat();
-	//myWeight = aObject.FindMember("weight")->value.GetFloat();
-	//myDefaultPhysics = aObject.FindMember("physicsEnabled")->value.GetBool();
-	//myDefaultGravity = aObject.FindMember("gravity")->value.GetBool();
-	//myDefaultKinetic = aObject.FindMember("kinetic")->value.GetBool();
-	/*myCollisionTags = static_cast<char>(aObject.FindMember("collisionTags")->value.GetInt());*/
 	myDefaultRotate = aObject.FindMember("rotateObject")->value.GetBool();
-
 }
 
 void GameObjectType::InitGameObject(GameObject& aGameObject)
 {
 	PhysicBody& body = aGameObject.GetPhysicBody();
-	body.SetBounciness(myBounciness);
-	body.SetMass(myWeight);
-	body.SetEnabled(myDefaultPhysics);
-	body.SetGravity(myDefaultGravity);
+	body.SetBounciness(myPhysicBodyData.myBounciness);
+	body.SetMass(myPhysicBodyData.myWeight);
+	body.SetEnabled(myPhysicBodyData.myDefaultPhysics);
+	body.SetGravity(myPhysicBodyData.myDefaultGravity);
+	body.SetIsKinetic(myPhysicBodyData.myDefaultKinetic);
+	body.SetFriction(myPhysicBodyData.myAirFriction, myPhysicBodyData.myGroundFriction);
+	body.SetCollisionTags(myPhysicBodyData.myCollisionTags);
 	body.SetRotation(myDefaultRotate);
-	body.SetIsKinetic(myDefaultKinetic);
-	body.SetFriction(myAirFriction, myGroundFriction);
-	body.SetCollisionTags(myCollisionTags);
 }

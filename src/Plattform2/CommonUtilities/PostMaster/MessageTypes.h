@@ -18,6 +18,7 @@ enum eMessageTypes
 	eRotated,
 	eEntityDestroyed,
 	eEntityCreated,
+	eCreateEnemy,
 	eXPChanged,
 	ePlayerStatChanged,
 	ePlayerLevelUp,
