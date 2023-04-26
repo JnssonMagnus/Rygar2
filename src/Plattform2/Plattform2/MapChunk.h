@@ -58,7 +58,7 @@ private:
 
 	Tileset*			myTileset;
 
-	CU::GrowingArray<char>	myTileData;
+	CU::GrowingArray<unsigned char>	myTileData;
 	WaterMap*			myWaterMap;
 	Vector2f			myWorldPosition;
 };

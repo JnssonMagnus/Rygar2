@@ -13,7 +13,7 @@ void PlayerCamera::Update()
 	{
 		Vector2f targetPosition = player->GetPhysicBody().GetPosition() + player->GetPhysicBody().GetVelocity() * 10 +
 			player->GetAimLocalPosition() / 10.f;
-		myPosition = myPosition * 0.9f + targetPosition * 0.1f;
+		myPosition = myPosition * 0.95f + targetPosition * 0.05f;
 		float zoomFromWalkSpeed = (ABS(player->GetPhysicBody().GetVelocity().myX) / 16.f) * 0.9f;
 		float zoomFromFalling = (ABS(player->GetPhysicBody().GetVelocity().myY) / 300.f) * 0.9f;
 		myTargetZoom = 1.f - zoomFromWalkSpeed - zoomFromFalling;

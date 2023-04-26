@@ -2,9 +2,12 @@ Prio:
 - Sammanhängande (oänlig) karta
 	- Kamera som låser sig
 	+ Map chunks
-		+ Chunk har layers med texture
+		- Chunk har layers med texture
 		+ Kolla vilka chunk något kolliderar med
 			+ Max chunks: 4
+	- Byta background layer
+		- bg editor
+	- Byta musik
 
 
 
@@ -20,7 +23,30 @@ Rygar features:
 - drops från fiender
 - ducka
 - rätt animationer när attackerar
+- Disk armor
+	- Levla:
+		- Size?
+		- Length
+		- Exploding - stannar sen exploderar
+		- Flera st?
+		- Tung med gravitation
+		- Stannar i slutet, snurrar, återvänder
 
+TODO unsorted:
+- Fixa hooken så den är bra
+- Placera ut start position
+- Modifiera metrics lättare
+- Lägg till bg tile layer
+- Utöka antalet tiles
+- Byta musik/BG
+- Avaktivera map-sections vid visst avstånd
+- Drops/pickups
+
+BUGS:
+- fiender flyger genom väggen vid attacker
+- ojämn framerate
+- Fastnar i threadpoolen ibland?
+- Lager?
 
 -------------------------------------------------------------------------
 OLD:

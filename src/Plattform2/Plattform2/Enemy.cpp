@@ -67,7 +67,6 @@ void Enemy::Update(const float aDeltaTime)
 	//		}
 	//	}
 	//}
-
 }
 
 void Enemy::Init(EnemyType& aEnemyType)

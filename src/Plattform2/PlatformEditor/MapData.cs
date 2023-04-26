@@ -21,7 +21,7 @@ namespace PlatformEditor
 
         private Image myTileSetImage;
         private string myFilename;
-        private char[] myTileData;
+        private byte[] myTileData;
         private int myChunkId;
 
         public string myTilesetName;
@@ -93,7 +93,7 @@ namespace PlatformEditor
             if (localX >= 0 && localY >= 0 && localX < myMapWidth && localY < myMapHeight)
             {
                 char tilesOnRow = (char)(myTileSetImage.Width / myTileset.TileWidth);
-                char tileID = (char)(aTileX + (char)(aTileY * tilesOnRow));
+                byte tileID = (byte)(aTileX + (byte)(aTileY * tilesOnRow));
                 myTileData[localX + localY * myMapWidth] = tileID;
             }
         }
@@ -113,7 +113,7 @@ namespace PlatformEditor
         {
             if (myTileset != null)
             {
-                char tileID = myTileData[aX + aY * myMapWidth];
+                byte tileID = myTileData[aX + aY * myMapWidth];
                 char tilesOnRow = (char)(myTileSetImage.Width / myTileset.TileWidth);
 
                 Point source = new Point(myTileset.TileWidth * (tileID % tilesOnRow), myTileset.TileHeight * (tileID / tilesOnRow));
@@ -127,7 +127,7 @@ namespace PlatformEditor
 
         public void ResizeMap(int aWidth, int aHeight)
         {
-            var newTileData = new char[aWidth * aHeight];
+            var newTileData = new byte[aWidth * aHeight];
 
             for (int y = 0; y < myMapHeight; y++)
             {
@@ -151,7 +151,7 @@ namespace PlatformEditor
 
         public void Init(int aChunkId)
         {
-            myTileData = new char[myMapWidth * myMapHeight];
+            myTileData = new byte[myMapWidth * myMapHeight];
             myChunkId = aChunkId;
             myChunkWorldPosition = GetChunkWorldPositionFromID(aChunkId);
         }
@@ -198,6 +198,7 @@ namespace PlatformEditor
             binaryWriter.Write(myTileset.myTilesetName + "\n");
             binaryWriter.Write(myMapWidth);
             binaryWriter.Write(myMapHeight);
+
             binaryWriter.Write(myTileData, 0, myMapWidth * myMapHeight);
 
             // GameObjects on map
@@ -217,7 +218,8 @@ namespace PlatformEditor
                 binaryWriter.Write(enemy.myPosition.x);
                 binaryWriter.Write(enemy.myPosition.y);
             }
-            binaryWriter.Close();
+
+
         }
 
         public void LoadFromFile(string aFilename)
@@ -235,7 +237,7 @@ namespace PlatformEditor
             myMapWidth = binaryReader.ReadInt32();
             myMapHeight = binaryReader.ReadInt32();
 
-            myTileData = new char[myMapWidth * myMapHeight];
+            myTileData = new byte[myMapWidth * myMapHeight];
             binaryReader.Read(myTileData, 0, myMapWidth * myMapHeight);
 
 

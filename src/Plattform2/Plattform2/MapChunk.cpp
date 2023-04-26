@@ -109,11 +109,11 @@ void MapChunk::LoadFromFile(const std::string_view aFilename)
 	}
 	DL_ASSERT(loadFile.is_open() == true && "Failed to open file!");
 
-	char buffer[1024];
+	char buffer[2048];
 
 	// version
-	loadFile.read(buffer, sizeof(int));
-	int version = *(reinterpret_cast<int*>(buffer));
+	loadFile.read(buffer, sizeof(int32_t));
+	int32_t version = *(reinterpret_cast<int32_t*>(buffer));
 
 	// read string length
 	loadFile.read(buffer, 1);
@@ -127,50 +127,57 @@ void MapChunk::LoadFromFile(const std::string_view aFilename)
 	loadFile.getline(buffer, 1024);
 	myTilesetName = buffer;
 
-	loadFile.read(buffer, sizeof(int));
-	myMapWidth = *(reinterpret_cast<int*>(buffer));
+	loadFile.read(buffer, sizeof(int32_t));
+	myMapWidth = *(reinterpret_cast<int32_t*>(buffer));
 
-	loadFile.read(buffer, sizeof(int));
-	myMapHeight = *(reinterpret_cast<int*>(buffer));
+	loadFile.read(buffer, sizeof(int32_t));
+	myMapHeight = *(reinterpret_cast<int32_t*>(buffer));
 
 	const int numberOfTiles = myMapWidth * myMapHeight;
+	assert(numberOfTiles <= sizeof(buffer) && "Buffer size to small! Increase size!");
+	loadFile.read(buffer, numberOfTiles);
+
 	myTileData.Resize(numberOfTiles);
-	loadFile.read(&myTileData[0], numberOfTiles);
+	memcpy(&myTileData[0], buffer, numberOfTiles);
+
+	loadFile.read(buffer, sizeof(int32_t));
+	int32_t gameObjectCount = *(reinterpret_cast<int32_t*>(buffer));
 
 	// Load game objects
 	struct ProxyGameObject
 	{
-		int ID;
+		int32_t ID;
 		float x, y;
 	};
 
-	loadFile.read(buffer, sizeof(int));
-	const int gameObjectCount = *(reinterpret_cast<int*>(buffer));
-	ProxyGameObject* gameObjects = new ProxyGameObject[gameObjectCount];
-
-	loadFile.read(reinterpret_cast<char*>(gameObjects), sizeof(ProxyGameObject) * gameObjectCount);
-
-	for (int gameObjectIndex = 0; gameObjectIndex < gameObjectCount; gameObjectIndex++)
+	if (gameObjectCount > 0) 
 	{
-		Message newObjectMessage(eMessageTypes::eCreateObject);
-		newObjectMessage.myPosition.myX = gameObjects[gameObjectIndex].x;
-		newObjectMessage.myPosition.myY = gameObjects[gameObjectIndex].y;
-		newObjectMessage.myIntData = gameObjects[gameObjectIndex].ID;
-		PostMaster::GetInstance()->SendMessage(newObjectMessage);
-	}
+		ProxyGameObject* gameObjects = new ProxyGameObject[gameObjectCount];
 
-	delete[] gameObjects;
-	gameObjects = nullptr;
+		loadFile.read(reinterpret_cast<char*>(gameObjects), sizeof(ProxyGameObject) * gameObjectCount);
+
+		for (int gameObjectIndex = 0; gameObjectIndex < gameObjectCount; gameObjectIndex++)
+		{
+			Message newObjectMessage(eMessageTypes::eCreateObject);
+			newObjectMessage.myPosition.myX = gameObjects[gameObjectIndex].x;
+			newObjectMessage.myPosition.myY = gameObjects[gameObjectIndex].y;
+			newObjectMessage.myIntData = gameObjects[gameObjectIndex].ID;
+			PostMaster::GetInstance()->SendMessage(newObjectMessage);
+		}
+
+		delete[] gameObjects;
+		gameObjects = nullptr;
+	}
 
 	// load enemies
 	struct ProxyEnemy
 	{
-		int ID;
+		int32_t ID;
 		float x, y;
 	};
 
-	loadFile.read(buffer, sizeof(int));
-	const int enemyCount = *(reinterpret_cast<int*>(buffer));
+	loadFile.read(buffer, sizeof(int32_t));
+	const int32_t enemyCount = *(reinterpret_cast<int32_t*>(buffer));
 	ProxyEnemy* enemies = new ProxyEnemy[enemyCount];
 	loadFile.read(reinterpret_cast<char*>(enemies), sizeof(ProxyEnemy)* enemyCount);
 	for (int enemyIndex = 0; enemyIndex < enemyCount; enemyIndex++)

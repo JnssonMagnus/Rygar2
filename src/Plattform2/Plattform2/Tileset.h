@@ -16,12 +16,12 @@ class Tileset
 public:
 	void							Load(std::ifstream& aStreamLoader);
 	const std::string&				GetName() const;
-	void							RenderTile(const float aX, const float aY, const char aTileIndex);
+	void							RenderTile(const float aX, const float aY, const unsigned char aTileIndex);
 	const Vector2<int>&				GetTileSize() const;
-	inline bool						IsObstacle(const char aTileIndex) const;
-	inline bool						IsDestructable(const char aTileIndex) const;
-	inline bool						IsFallout(const char aTileIndex) const;
-	const TileData&					GetTileData(const char aTileIndex) const;
+	inline bool						IsObstacle(const unsigned char aTileIndex) const;
+	inline bool						IsDestructable(const unsigned char aTileIndex) const;
+	inline bool						IsFallout(const unsigned char aTileIndex) const;
+	const TileData&					GetTileData(const unsigned char aTileIndex) const;
 
 private:
 	void							CalculateTileSourcePositions();
@@ -40,25 +40,25 @@ inline const Vector2<int>& Tileset::GetTileSize() const
 	return myTileSize;
 }
 
-inline bool Tileset::IsObstacle(const char aTileIndex) const
+inline bool Tileset::IsObstacle(const unsigned char aTileIndex) const
 {
 	DL_ASSERT(aTileIndex < myTileData.Size() && "Tile index out of bounds!");
 	return aTileIndex < 0 || myTileData[aTileIndex].myIsObstacle;
 }
 
-inline bool Tileset::IsDestructable(const char aTileIndex) const
+inline bool Tileset::IsDestructable(const unsigned char  aTileIndex) const
 {
 	DL_ASSERT(aTileIndex < myTileData.Size() && "Tile index out of bounds!");
 	return myTileData[aTileIndex].myIsDestructable;
 }
 
-inline bool Tileset::IsFallout(const char aTileIndex) const
+inline bool Tileset::IsFallout(const unsigned char aTileIndex) const
 {
 	DL_ASSERT(aTileIndex < myTileData.Size() && "Tile index out of bounds!");
 	return myTileData[aTileIndex].myIsFallout;
 }
 
-inline const TileData& Tileset::GetTileData(const char aTileIndex) const
+inline const TileData& Tileset::GetTileData(const unsigned char aTileIndex) const
 {
 	return myTileData[aTileIndex];
 }

@@ -55,7 +55,7 @@ const std::string& Tileset::GetName() const
 	return myTilesetName;
 }
 
-void Tileset::RenderTile(const float aX, const float aY, const char aTileIndex)
+void Tileset::RenderTile(const float aX, const float aY, const unsigned char aTileIndex)
 {
 	Vector2<int> tileSource((aTileIndex % myTileCount.myX) * myTileSize.myX, 
 								(aTileIndex / myTileCount.myX) * myTileSize.myY);

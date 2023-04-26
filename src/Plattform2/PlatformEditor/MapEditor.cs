@@ -377,6 +377,8 @@ namespace PlatformEditor
             DrawTiles(e);
             DrawGameObjects(e);
             DrawEnemies(e);
+            DrawMapChunkOutLines(e);
+            DrawScreenPreviewOutline(e);
 
             if (EditTab.SelectedTab.Text == "Tileset")
             {
@@ -390,6 +392,32 @@ namespace PlatformEditor
             {
                 DrawEnemyEditGizmos(e);
             }
+        }
+
+        private void DrawMapChunkOutLines(PaintEventArgs e)
+        {
+            var mapChunksVisible = myWorld.GetChunksInFrustum(myCamera);
+            Pen pen = new Pen(Color.White, 1);
+            foreach (MapData mapChunk in mapChunksVisible)
+            {
+                Vector2 chunkWorldPosition = mapChunk.GetChunkWorldPosition();
+                Point location = new Point((int)(chunkWorldPosition.x - myCamera.Position.x), (int)(chunkWorldPosition.y - myCamera.Position.y));
+                Size size = new Size(Settings.TileWidth() * mapChunk.myMapWidth, Settings.TileHeight() * mapChunk.myMapHeight);
+                Rectangle rect = new Rectangle(location, size);
+                e.Graphics.DrawRectangle(pen, rect);
+            }
+        }
+
+        private void DrawScreenPreviewOutline(PaintEventArgs e)
+        {
+            Pen pen = new Pen(Color.Pink, 1);
+            // screen size = 400x200
+
+            Point location = new Point(Map.Width / 2 - 200, Map.Height / 2 - 100);
+            Size size = new Size(400, 200);
+            Rectangle rect = new Rectangle(location, size);
+            e.Graphics.DrawRectangle(pen, rect);
+
         }
 
         private void DrawGameObjects(PaintEventArgs e)
@@ -411,13 +439,13 @@ namespace PlatformEditor
             var enemies = myWorld.GetEnemiesFromFrustum(myCamera);
             foreach (Enemy enemy in enemies)
             {
-                var enemyImage = myEnemyTypeImages[enemy.myEnemyType.ID];
-                int halfWidth = enemyImage.Width / 2;
-                int halfHeight = enemyImage.Height / 2;
+                int halfWidth =  enemy.myEnemyType.animationSet.width / 2;
+                int halfHeight = enemy.myEnemyType.animationSet.height / 2;
                 Point position = new Point((int)enemy.myPosition.x - halfWidth - (int)myCamera.Position.x, (int)enemy.myPosition.y - halfHeight - (int)myCamera.Position.y);
                 int ID = enemy.myEnemyType.ID;
                 e.Graphics.DrawImage(myEnemyTypeImages[ID], new Rectangle(position,
-                    new Size(enemyImage.Width, enemyImage.Height)));
+                    new Size(halfWidth * 2, halfHeight * 2)), new Rectangle(0, 0,
+                    halfWidth * 2, halfHeight * 2), GraphicsUnit.Pixel);
             }
         }
 
@@ -447,20 +475,26 @@ namespace PlatformEditor
         {
             if (myIsDraggingObject == true)
             {
-                int halfWidth = myEnemyTypeImages[ourEnemyTypes[EnemyList.SelectedIndex].ID].Width / 2;
-                int halfHeight = myEnemyTypeImages[ourEnemyTypes[EnemyList.SelectedIndex].ID].Height / 2;
+                var defaultAnimWidth = ourEnemyTypes[EnemyList.SelectedIndex].animationSet.width;
+                var defaultAnimHeight = ourEnemyTypes[EnemyList.SelectedIndex].animationSet.height;
 
                 Point previewPos = new Point(myOldMousePosition.X, myOldMousePosition.Y);
-                previewPos.X -= halfWidth;
-                previewPos.Y -= halfHeight;
-                e.Graphics.DrawImage(myEnemyTypeImages[ourEnemyTypes[EnemyList.SelectedIndex].ID], previewPos);
+                previewPos.X -= defaultAnimWidth / 2;
+                previewPos.Y -= defaultAnimHeight / 2;
+                Rectangle dst = new Rectangle(previewPos, new Size(defaultAnimWidth, defaultAnimHeight));
+                Rectangle src = new Rectangle(0, 0, defaultAnimWidth, defaultAnimHeight);
+
+                e.Graphics.DrawImage(myEnemyTypeImages[ourEnemyTypes[EnemyList.SelectedIndex].ID], dst, src, GraphicsUnit.Pixel);
             }
 
             if (mySelectedEnemy != null)
             {
+                var defaultAnimWidth = mySelectedEnemy.myEnemyType.animationSet.width;
+                var defaultAnimHeight = mySelectedEnemy.myEnemyType.animationSet.height;
+
                 Pen greenPen = new Pen(Color.Green);
-                int halfWidth = myEnemyTypeImages[mySelectedEnemy.myEnemyType.ID].Width / 2;
-                int halfHeight = myEnemyTypeImages[mySelectedEnemy.myEnemyType.ID].Height / 2;
+                int halfWidth = defaultAnimWidth / 2;
+                int halfHeight = defaultAnimHeight / 2;
                 e.Graphics.DrawRectangle(greenPen, mySelectedEnemy.myPosition.x - halfWidth - myCamera.Position.x, mySelectedEnemy.myPosition.y - halfHeight - myCamera.Position.y,
                     halfWidth * 2, halfHeight * 2);
             }
