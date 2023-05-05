@@ -3,29 +3,94 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.IO;
 
 namespace PlatformEditor
 {
+
+    public enum VariableTypes
+    {
+        None,
+        i,
+        d,
+        s
+    }
     public class Variable
     {
-        public string name;
-        public float value;
-    }
-    public class VariableType
-    {
-        public string name;
-        public float defaultValue = 0.0f;
-
-        public VariableType(string aName)
+        public Variable(string aName)
         {
             name = aName;
         }
 
-        public bool Equals(VariableType other)
-        {
-            return other.name == name;
+        public Variable()
+        { }
+
+        public string name;
+        public double doubleValue
+        { 
+            get 
+            {
+                return mDoubleValue; 
+            }
+            set 
+            {
+                mDoubleValue = value;
+                mType = VariableTypes.d;
+            }
         }
+
+        public string stringValue
+        {
+            get 
+            {
+                return mStringValue; 
+            }
+            set 
+            {            
+                mStringValue = value;
+                mType = VariableTypes.s;
+            }
+        }
+
+        public VariableTypes type
+        {
+            get { return mType; }
+            set { mType = value; }
+        }
+
+        public void Save(System.IO.BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write(name);
+            binaryWriter.Write(mType.ToString());
+            switch (type)
+            {
+                case VariableTypes.d:
+                    binaryWriter.Write(doubleValue); break;
+                case VariableTypes.s:
+                    binaryWriter.Write(stringValue); break;
+            }
+        }
+
+        public void Load(System.IO.BinaryReader binaryReader, int version)
+        {
+            name = binaryReader.ReadString();
+            string typeStr = binaryReader.ReadString();
+            Enum.TryParse(typeStr, out mType);
+            switch (mType)
+            {            
+                case VariableTypes.d:
+                    doubleValue = binaryReader.ReadDouble(); break;
+                case VariableTypes.s:
+                    stringValue = binaryReader.ReadString(); break;
+            }
+        }
+
+        private VariableTypes mType = VariableTypes.None;
+        private string mStringValue;
+        private double mDoubleValue;        
     }
+
     public class Vector2
     {
         public Vector2(float aX, float aY)
@@ -54,6 +119,7 @@ namespace PlatformEditor
         public MapData myChunk;
         public Vector2 myPosition = new Vector2(0, 0);
         public GameObjectType myGameObjectType = null;
+        public List<Variable> myVariables = new List<Variable>();
 
         public bool IsInside(int aX, int aY)
         {
@@ -62,8 +128,32 @@ namespace PlatformEditor
             return (aX > myPosition.x - halfWidth && aX < myPosition.x + halfWidth &&
                     aY > myPosition.y - halfHeight && aY < myPosition.y + halfHeight);
         }
+        public void Save(System.IO.BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write(myGameObjectType.ID);
+            binaryWriter.Write(myPosition.x);
+            binaryWriter.Write(myPosition.y);
+            binaryWriter.Write(myVariables.Count);
+            foreach (Variable variable in myVariables)
+            {
+                variable.Save(binaryWriter);
+            }
+        }
+        public void Load(System.IO.BinaryReader binaryReader, int version)
+        {            
+            myPosition.x = binaryReader.ReadSingle();
+            myPosition.y = binaryReader.ReadSingle();
 
-        public List<Variable> variables = new List<Variable>();
+            if (version > 1)
+            {
+                int varibleCount = binaryReader.ReadInt32();
+                for (int variableIndex = 0; variableIndex < varibleCount; variableIndex++)
+                {
+                    Variable newVar = new Variable();
+                    newVar.Load(binaryReader, version);
+                }
+            }
+        }
     }
     public class GameObjectType
     {
@@ -72,6 +162,6 @@ namespace PlatformEditor
         public PhysicBody physicBody = new PhysicBody();
         public int ID = -1;
         public bool rotateObject = false;
-        public List<VariableType> variables = new List<VariableType>();
+        public List<Variable> variables = new List<Variable>();
     }
 }

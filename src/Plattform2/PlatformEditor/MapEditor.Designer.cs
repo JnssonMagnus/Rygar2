@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Tileset = new System.Windows.Forms.PictureBox();
-            this.TilePreview = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,67 +43,41 @@
             this.enemyTypeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.specialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createFrameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
-            this.Tilesets = new System.Windows.Forms.ComboBox();
             this.MapContainer = new System.Windows.Forms.Panel();
             this.Map = new System.Windows.Forms.PictureBox();
             this.vMapScroll = new System.Windows.Forms.VScrollBar();
             this.hMapScroll = new System.Windows.Forms.HScrollBar();
-            this.EditTab = new System.Windows.Forms.TabControl();
-            this.TilesetTab = new System.Windows.Forms.TabPage();
-            this.ObjectsTab = new System.Windows.Forms.TabPage();
-            this.ObjectTypePrevPic = new System.Windows.Forms.PictureBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.GameObjectTypesList = new System.Windows.Forms.ListBox();
-            this.ObjectData = new System.Windows.Forms.TabPage();
-            this.DefaultValueLabel = new System.Windows.Forms.Label();
-            this.VariableDefaultValue = new System.Windows.Forms.NumericUpDown();
-            this.VariableListBox = new System.Windows.Forms.ListBox();
             this.Enemies = new System.Windows.Forms.TabPage();
-            this.EnemyPreviewPic = new System.Windows.Forms.PictureBox();
-            this.EnemiesLabel = new System.Windows.Forms.Label();
             this.EnemyList = new System.Windows.Forms.ListBox();
-            ((System.ComponentModel.ISupportInitialize)(this.Tileset)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TilePreview)).BeginInit();
+            this.EnemiesLabel = new System.Windows.Forms.Label();
+            this.EnemyPreviewPic = new System.Windows.Forms.PictureBox();
+            this.ObjectsTab = new System.Windows.Forms.TabPage();
+            this.GameObjectTypesList = new System.Windows.Forms.ListBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.ObjectTypePrevPic = new System.Windows.Forms.PictureBox();
+            this.VariableListBox = new System.Windows.Forms.ListBox();
+            this.VariableDefaultValue = new System.Windows.Forms.NumericUpDown();
+            this.DefaultValueLabel = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.TilesetTab = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.Tilesets = new System.Windows.Forms.ComboBox();
+            this.TilePreview = new System.Windows.Forms.PictureBox();
+            this.Tileset = new System.Windows.Forms.PictureBox();
+            this.EditTab = new System.Windows.Forms.TabControl();
             this.menuStrip1.SuspendLayout();
             this.MapContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
-            this.EditTab.SuspendLayout();
-            this.TilesetTab.SuspendLayout();
-            this.ObjectsTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ObjectTypePrevPic)).BeginInit();
-            this.ObjectData.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.VariableDefaultValue)).BeginInit();
             this.Enemies.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EnemyPreviewPic)).BeginInit();
+            this.ObjectsTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ObjectTypePrevPic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.VariableDefaultValue)).BeginInit();
+            this.TilesetTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TilePreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tileset)).BeginInit();
+            this.EditTab.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // Tileset
-            // 
-            this.Tileset.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Tileset.Enabled = false;
-            this.Tileset.Location = new System.Drawing.Point(9, 49);
-            this.Tileset.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Tileset.Name = "Tileset";
-            this.Tileset.Size = new System.Drawing.Size(88, 90);
-            this.Tileset.TabIndex = 1;
-            this.Tileset.TabStop = false;
-            this.Tileset.Click += new System.EventHandler(this.Tileset_Click);
-            this.Tileset.Paint += new System.Windows.Forms.PaintEventHandler(this.Tileset_Paint);
-            this.Tileset.MouseEnter += new System.EventHandler(this.Tileset_MouseEnter);
-            this.Tileset.MouseLeave += new System.EventHandler(this.Tileset_MouseLeave);
-            this.Tileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Tileset_MouseMove);
-            // 
-            // TilePreview
-            // 
-            this.TilePreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.TilePreview.Location = new System.Drawing.Point(9, 149);
-            this.TilePreview.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.TilePreview.Name = "TilePreview";
-            this.TilePreview.Size = new System.Drawing.Size(88, 76);
-            this.TilePreview.TabIndex = 2;
-            this.TilePreview.TabStop = false;
-            this.TilePreview.Paint += new System.Windows.Forms.PaintEventHandler(this.TilePreview_Paint);
             // 
             // menuStrip1
             // 
@@ -117,8 +89,7 @@
             this.specialToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(6, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1442, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(1442, 33);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.MenuStrip1_ItemClicked);
@@ -132,7 +103,7 @@
             this.saveAsToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 32);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // newToolStripMenuItem
@@ -177,7 +148,7 @@
             this.animationEditorToolStripMenuItem,
             this.enemyTypeEditorToolStripMenuItem});
             this.editorsToolStripMenuItem.Name = "editorsToolStripMenuItem";
-            this.editorsToolStripMenuItem.Size = new System.Drawing.Size(83, 32);
+            this.editorsToolStripMenuItem.Size = new System.Drawing.Size(83, 29);
             this.editorsToolStripMenuItem.Text = "Editors";
             // 
             // tilesetEditorToolStripMenuItem
@@ -219,7 +190,7 @@
             this.specialToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createFrameToolStripMenuItem});
             this.specialToolStripMenuItem.Name = "specialToolStripMenuItem";
-            this.specialToolStripMenuItem.Size = new System.Drawing.Size(83, 32);
+            this.specialToolStripMenuItem.Size = new System.Drawing.Size(83, 29);
             this.specialToolStripMenuItem.Text = "&Special";
             // 
             // createFrameToolStripMenuItem
@@ -229,36 +200,15 @@
             this.createFrameToolStripMenuItem.Text = "&Create frame";
             this.createFrameToolStripMenuItem.Click += new System.EventHandler(this.createFrameToolStripMenuItem_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 12);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 20);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Tileset";
-            // 
-            // Tilesets
-            // 
-            this.Tilesets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Tilesets.FormattingEnabled = true;
-            this.Tilesets.Location = new System.Drawing.Point(78, 8);
-            this.Tilesets.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Tilesets.Name = "Tilesets";
-            this.Tilesets.Size = new System.Drawing.Size(180, 28);
-            this.Tilesets.TabIndex = 5;
-            this.Tilesets.SelectedIndexChanged += new System.EventHandler(this.Tilesets_SelectedIndexChanged);
-            // 
             // MapContainer
             // 
             this.MapContainer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.MapContainer.Controls.Add(this.Map);
             this.MapContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MapContainer.Location = new System.Drawing.Point(0, 36);
+            this.MapContainer.Location = new System.Drawing.Point(0, 33);
             this.MapContainer.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MapContainer.Name = "MapContainer";
-            this.MapContainer.Size = new System.Drawing.Size(1442, 753);
+            this.MapContainer.Size = new System.Drawing.Size(1442, 756);
             this.MapContainer.TabIndex = 6;
             this.MapContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.MapContainer_Paint);
             // 
@@ -282,9 +232,9 @@
             // vMapScroll
             // 
             this.vMapScroll.Dock = System.Windows.Forms.DockStyle.Right;
-            this.vMapScroll.Location = new System.Drawing.Point(1417, 36);
+            this.vMapScroll.Location = new System.Drawing.Point(1417, 33);
             this.vMapScroll.Name = "vMapScroll";
-            this.vMapScroll.Size = new System.Drawing.Size(25, 753);
+            this.vMapScroll.Size = new System.Drawing.Size(25, 756);
             this.vMapScroll.TabIndex = 7;
             this.vMapScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.VMapScroll_Scroll);
             // 
@@ -297,37 +247,57 @@
             this.hMapScroll.TabIndex = 8;
             this.hMapScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.HMapScroll_Scroll);
             // 
-            // EditTab
+            // Enemies
             // 
-            this.EditTab.Controls.Add(this.TilesetTab);
-            this.EditTab.Controls.Add(this.ObjectsTab);
-            this.EditTab.Controls.Add(this.ObjectData);
-            this.EditTab.Controls.Add(this.Enemies);
-            this.EditTab.Dock = System.Windows.Forms.DockStyle.Left;
-            this.EditTab.Location = new System.Drawing.Point(0, 36);
-            this.EditTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.EditTab.Name = "EditTab";
-            this.EditTab.SelectedIndex = 0;
-            this.EditTab.Size = new System.Drawing.Size(310, 751);
-            this.EditTab.TabIndex = 9;
+            this.Enemies.Controls.Add(this.EnemyPreviewPic);
+            this.Enemies.Controls.Add(this.EnemiesLabel);
+            this.Enemies.Controls.Add(this.EnemyList);
+            this.Enemies.Location = new System.Drawing.Point(4, 29);
+            this.Enemies.Name = "Enemies";
+            this.Enemies.Size = new System.Drawing.Size(302, 721);
+            this.Enemies.TabIndex = 3;
+            this.Enemies.Text = "Enemies";
+            this.Enemies.UseVisualStyleBackColor = true;
             // 
-            // TilesetTab
+            // EnemyList
             // 
-            this.TilesetTab.Controls.Add(this.Tileset);
-            this.TilesetTab.Controls.Add(this.TilePreview);
-            this.TilesetTab.Controls.Add(this.Tilesets);
-            this.TilesetTab.Controls.Add(this.label1);
-            this.TilesetTab.Location = new System.Drawing.Point(4, 29);
-            this.TilesetTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.TilesetTab.Name = "TilesetTab";
-            this.TilesetTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.TilesetTab.Size = new System.Drawing.Size(302, 718);
-            this.TilesetTab.TabIndex = 0;
-            this.TilesetTab.Text = "Tileset";
-            this.TilesetTab.UseVisualStyleBackColor = true;
+            this.EnemyList.FormattingEnabled = true;
+            this.EnemyList.ItemHeight = 20;
+            this.EnemyList.Location = new System.Drawing.Point(9, 36);
+            this.EnemyList.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.EnemyList.Name = "EnemyList";
+            this.EnemyList.Size = new System.Drawing.Size(274, 144);
+            this.EnemyList.TabIndex = 3;
+            this.EnemyList.SelectedIndexChanged += new System.EventHandler(this.EnemyList_SelectedIndexChanged);
+            this.EnemyList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EnemyList_MouseDown);
+            // 
+            // EnemiesLabel
+            // 
+            this.EnemiesLabel.AutoSize = true;
+            this.EnemiesLabel.Location = new System.Drawing.Point(10, 10);
+            this.EnemiesLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.EnemiesLabel.Name = "EnemiesLabel";
+            this.EnemiesLabel.Size = new System.Drawing.Size(71, 20);
+            this.EnemiesLabel.TabIndex = 4;
+            this.EnemiesLabel.Text = "Enemies";
+            // 
+            // EnemyPreviewPic
+            // 
+            this.EnemyPreviewPic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.EnemyPreviewPic.Location = new System.Drawing.Point(9, 191);
+            this.EnemyPreviewPic.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.EnemyPreviewPic.Name = "EnemyPreviewPic";
+            this.EnemyPreviewPic.Size = new System.Drawing.Size(184, 92);
+            this.EnemyPreviewPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.EnemyPreviewPic.TabIndex = 5;
+            this.EnemyPreviewPic.TabStop = false;
             // 
             // ObjectsTab
             // 
+            this.ObjectsTab.Controls.Add(this.label3);
+            this.ObjectsTab.Controls.Add(this.DefaultValueLabel);
+            this.ObjectsTab.Controls.Add(this.VariableDefaultValue);
+            this.ObjectsTab.Controls.Add(this.VariableListBox);
             this.ObjectsTab.Controls.Add(this.ObjectTypePrevPic);
             this.ObjectsTab.Controls.Add(this.label2);
             this.ObjectsTab.Controls.Add(this.GameObjectTypesList);
@@ -335,31 +305,10 @@
             this.ObjectsTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ObjectsTab.Name = "ObjectsTab";
             this.ObjectsTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ObjectsTab.Size = new System.Drawing.Size(302, 716);
+            this.ObjectsTab.Size = new System.Drawing.Size(302, 721);
             this.ObjectsTab.TabIndex = 1;
             this.ObjectsTab.Text = "Objects";
             this.ObjectsTab.UseVisualStyleBackColor = true;
-            // 
-            // ObjectTypePrevPic
-            // 
-            this.ObjectTypePrevPic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ObjectTypePrevPic.Location = new System.Drawing.Point(9, 192);
-            this.ObjectTypePrevPic.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ObjectTypePrevPic.Name = "ObjectTypePrevPic";
-            this.ObjectTypePrevPic.Size = new System.Drawing.Size(184, 92);
-            this.ObjectTypePrevPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.ObjectTypePrevPic.TabIndex = 2;
-            this.ObjectTypePrevPic.TabStop = false;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 11);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(51, 20);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Types";
             // 
             // GameObjectTypesList
             // 
@@ -373,88 +322,138 @@
             this.GameObjectTypesList.SelectedIndexChanged += new System.EventHandler(this.GameObjectTypesList_SelectedIndexChanged_1);
             this.GameObjectTypesList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GameObjectTypesList_MouseDown);
             // 
-            // ObjectData
+            // label2
             // 
-            this.ObjectData.Controls.Add(this.DefaultValueLabel);
-            this.ObjectData.Controls.Add(this.VariableDefaultValue);
-            this.ObjectData.Controls.Add(this.VariableListBox);
-            this.ObjectData.Location = new System.Drawing.Point(4, 29);
-            this.ObjectData.Name = "ObjectData";
-            this.ObjectData.Size = new System.Drawing.Size(302, 716);
-            this.ObjectData.TabIndex = 2;
-            this.ObjectData.Text = "Object Data";
-            this.ObjectData.UseVisualStyleBackColor = true;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 11);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 20);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Types";
             // 
-            // DefaultValueLabel
+            // ObjectTypePrevPic
             // 
-            this.DefaultValueLabel.AutoSize = true;
-            this.DefaultValueLabel.Location = new System.Drawing.Point(16, 182);
-            this.DefaultValueLabel.Name = "DefaultValueLabel";
-            this.DefaultValueLabel.Size = new System.Drawing.Size(102, 20);
-            this.DefaultValueLabel.TabIndex = 8;
-            this.DefaultValueLabel.Text = "Default value";
-            // 
-            // VariableDefaultValue
-            // 
-            this.VariableDefaultValue.DecimalPlaces = 2;
-            this.VariableDefaultValue.Location = new System.Drawing.Point(20, 214);
-            this.VariableDefaultValue.Name = "VariableDefaultValue";
-            this.VariableDefaultValue.Size = new System.Drawing.Size(120, 26);
-            this.VariableDefaultValue.TabIndex = 7;
+            this.ObjectTypePrevPic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ObjectTypePrevPic.Location = new System.Drawing.Point(9, 192);
+            this.ObjectTypePrevPic.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ObjectTypePrevPic.Name = "ObjectTypePrevPic";
+            this.ObjectTypePrevPic.Size = new System.Drawing.Size(184, 92);
+            this.ObjectTypePrevPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.ObjectTypePrevPic.TabIndex = 2;
+            this.ObjectTypePrevPic.TabStop = false;
             // 
             // VariableListBox
             // 
             this.VariableListBox.FormattingEnabled = true;
             this.VariableListBox.ItemHeight = 20;
-            this.VariableListBox.Location = new System.Drawing.Point(20, 24);
+            this.VariableListBox.Location = new System.Drawing.Point(9, 346);
             this.VariableListBox.Name = "VariableListBox";
             this.VariableListBox.Size = new System.Drawing.Size(227, 144);
-            this.VariableListBox.TabIndex = 6;
+            this.VariableListBox.TabIndex = 9;
             // 
-            // Enemies
+            // VariableDefaultValue
             // 
-            this.Enemies.Controls.Add(this.EnemyPreviewPic);
-            this.Enemies.Controls.Add(this.EnemiesLabel);
-            this.Enemies.Controls.Add(this.EnemyList);
-            this.Enemies.Location = new System.Drawing.Point(4, 29);
-            this.Enemies.Name = "Enemies";
-            this.Enemies.Size = new System.Drawing.Size(302, 716);
-            this.Enemies.TabIndex = 3;
-            this.Enemies.Text = "Enemies";
-            this.Enemies.UseVisualStyleBackColor = true;
+            this.VariableDefaultValue.DecimalPlaces = 2;
+            this.VariableDefaultValue.Location = new System.Drawing.Point(9, 536);
+            this.VariableDefaultValue.Name = "VariableDefaultValue";
+            this.VariableDefaultValue.Size = new System.Drawing.Size(120, 26);
+            this.VariableDefaultValue.TabIndex = 10;
             // 
-            // EnemyPreviewPic
+            // DefaultValueLabel
             // 
-            this.EnemyPreviewPic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.EnemyPreviewPic.Location = new System.Drawing.Point(9, 191);
-            this.EnemyPreviewPic.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.EnemyPreviewPic.Name = "EnemyPreviewPic";
-            this.EnemyPreviewPic.Size = new System.Drawing.Size(184, 92);
-            this.EnemyPreviewPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.EnemyPreviewPic.TabIndex = 5;
-            this.EnemyPreviewPic.TabStop = false;
+            this.DefaultValueLabel.AutoSize = true;
+            this.DefaultValueLabel.Location = new System.Drawing.Point(5, 504);
+            this.DefaultValueLabel.Name = "DefaultValueLabel";
+            this.DefaultValueLabel.Size = new System.Drawing.Size(102, 20);
+            this.DefaultValueLabel.TabIndex = 11;
+            this.DefaultValueLabel.Text = "Default value";
             // 
-            // EnemiesLabel
+            // label3
             // 
-            this.EnemiesLabel.AutoSize = true;
-            this.EnemiesLabel.Location = new System.Drawing.Point(10, 10);
-            this.EnemiesLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.EnemiesLabel.Name = "EnemiesLabel";
-            this.EnemiesLabel.Size = new System.Drawing.Size(71, 20);
-            this.EnemiesLabel.TabIndex = 4;
-            this.EnemiesLabel.Text = "Enemies";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(10, 323);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(75, 20);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Variables";
             // 
-            // EnemyList
+            // TilesetTab
             // 
-            this.EnemyList.FormattingEnabled = true;
-            this.EnemyList.ItemHeight = 20;
-            this.EnemyList.Location = new System.Drawing.Point(9, 36);
-            this.EnemyList.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.EnemyList.Name = "EnemyList";
-            this.EnemyList.Size = new System.Drawing.Size(274, 144);
-            this.EnemyList.TabIndex = 3;
-            this.EnemyList.SelectedIndexChanged += new System.EventHandler(this.EnemyList_SelectedIndexChanged);
-            this.EnemyList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EnemyList_MouseDown);
+            this.TilesetTab.Controls.Add(this.Tileset);
+            this.TilesetTab.Controls.Add(this.TilePreview);
+            this.TilesetTab.Controls.Add(this.Tilesets);
+            this.TilesetTab.Controls.Add(this.label1);
+            this.TilesetTab.Location = new System.Drawing.Point(4, 29);
+            this.TilesetTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TilesetTab.Name = "TilesetTab";
+            this.TilesetTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TilesetTab.Size = new System.Drawing.Size(302, 721);
+            this.TilesetTab.TabIndex = 0;
+            this.TilesetTab.Text = "Tileset";
+            this.TilesetTab.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(10, 12);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(55, 20);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Tileset";
+            // 
+            // Tilesets
+            // 
+            this.Tilesets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Tilesets.FormattingEnabled = true;
+            this.Tilesets.Location = new System.Drawing.Point(78, 8);
+            this.Tilesets.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Tilesets.Name = "Tilesets";
+            this.Tilesets.Size = new System.Drawing.Size(180, 28);
+            this.Tilesets.TabIndex = 5;
+            this.Tilesets.SelectedIndexChanged += new System.EventHandler(this.Tilesets_SelectedIndexChanged);
+            // 
+            // TilePreview
+            // 
+            this.TilePreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.TilePreview.Location = new System.Drawing.Point(9, 149);
+            this.TilePreview.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TilePreview.Name = "TilePreview";
+            this.TilePreview.Size = new System.Drawing.Size(88, 76);
+            this.TilePreview.TabIndex = 2;
+            this.TilePreview.TabStop = false;
+            this.TilePreview.Paint += new System.Windows.Forms.PaintEventHandler(this.TilePreview_Paint);
+            // 
+            // Tileset
+            // 
+            this.Tileset.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Tileset.Enabled = false;
+            this.Tileset.Location = new System.Drawing.Point(9, 49);
+            this.Tileset.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Tileset.Name = "Tileset";
+            this.Tileset.Size = new System.Drawing.Size(88, 90);
+            this.Tileset.TabIndex = 1;
+            this.Tileset.TabStop = false;
+            this.Tileset.Click += new System.EventHandler(this.Tileset_Click);
+            this.Tileset.Paint += new System.Windows.Forms.PaintEventHandler(this.Tileset_Paint);
+            this.Tileset.MouseEnter += new System.EventHandler(this.Tileset_MouseEnter);
+            this.Tileset.MouseLeave += new System.EventHandler(this.Tileset_MouseLeave);
+            this.Tileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Tileset_MouseMove);
+            // 
+            // EditTab
+            // 
+            this.EditTab.Controls.Add(this.TilesetTab);
+            this.EditTab.Controls.Add(this.ObjectsTab);
+            this.EditTab.Controls.Add(this.Enemies);
+            this.EditTab.Dock = System.Windows.Forms.DockStyle.Left;
+            this.EditTab.Location = new System.Drawing.Point(0, 33);
+            this.EditTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.EditTab.Name = "EditTab";
+            this.EditTab.SelectedIndex = 0;
+            this.EditTab.Size = new System.Drawing.Size(310, 754);
+            this.EditTab.TabIndex = 9;
             // 
             // MapEditor
             // 
@@ -472,32 +471,28 @@
             this.Name = "MapEditor";
             this.Text = "Platform Editor";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.Tileset)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TilePreview)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.MapContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Map)).EndInit();
-            this.EditTab.ResumeLayout(false);
-            this.TilesetTab.ResumeLayout(false);
-            this.TilesetTab.PerformLayout();
-            this.ObjectsTab.ResumeLayout(false);
-            this.ObjectsTab.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ObjectTypePrevPic)).EndInit();
-            this.ObjectData.ResumeLayout(false);
-            this.ObjectData.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.VariableDefaultValue)).EndInit();
             this.Enemies.ResumeLayout(false);
             this.Enemies.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EnemyPreviewPic)).EndInit();
+            this.ObjectsTab.ResumeLayout(false);
+            this.ObjectsTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ObjectTypePrevPic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.VariableDefaultValue)).EndInit();
+            this.TilesetTab.ResumeLayout(false);
+            this.TilesetTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TilePreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tileset)).EndInit();
+            this.EditTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.PictureBox Tileset;
-        private System.Windows.Forms.PictureBox TilePreview;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -507,32 +502,34 @@
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editorsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tilesetEditorToolStripMenuItem;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel MapContainer;
         private System.Windows.Forms.PictureBox Map;
-        private System.Windows.Forms.ComboBox Tilesets;
         private System.Windows.Forms.VScrollBar vMapScroll;
         private System.Windows.Forms.HScrollBar hMapScroll;
         private System.Windows.Forms.ToolStripMenuItem gameObjectTypeEditorToolStripMenuItem;
-        private System.Windows.Forms.TabControl EditTab;
-        private System.Windows.Forms.TabPage TilesetTab;
-        private System.Windows.Forms.TabPage ObjectsTab;
-        private System.Windows.Forms.PictureBox ObjectTypePrevPic;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListBox GameObjectTypesList;
         private System.Windows.Forms.ToolStripMenuItem mapSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem specialToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createFrameToolStripMenuItem;
-        private System.Windows.Forms.TabPage ObjectData;
-        private System.Windows.Forms.Label DefaultValueLabel;
-        private System.Windows.Forms.NumericUpDown VariableDefaultValue;
-        private System.Windows.Forms.ListBox VariableListBox;
         private System.Windows.Forms.ToolStripMenuItem animationEditorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enemyTypeEditorToolStripMenuItem;
         private System.Windows.Forms.TabPage Enemies;
         private System.Windows.Forms.PictureBox EnemyPreviewPic;
         private System.Windows.Forms.Label EnemiesLabel;
         private System.Windows.Forms.ListBox EnemyList;
+        private System.Windows.Forms.TabPage ObjectsTab;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label DefaultValueLabel;
+        private System.Windows.Forms.NumericUpDown VariableDefaultValue;
+        private System.Windows.Forms.ListBox VariableListBox;
+        private System.Windows.Forms.PictureBox ObjectTypePrevPic;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ListBox GameObjectTypesList;
+        private System.Windows.Forms.TabPage TilesetTab;
+        private System.Windows.Forms.PictureBox Tileset;
+        private System.Windows.Forms.PictureBox TilePreview;
+        private System.Windows.Forms.ComboBox Tilesets;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TabControl EditTab;
     }
 }
 

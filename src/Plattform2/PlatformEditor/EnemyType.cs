@@ -21,6 +21,13 @@ namespace PlatformEditor
         public Vector2 myPosition = new Vector2(0, 0);
         public EnemyType myEnemyType = null;
 
+        public void Save(System.IO.BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write(myEnemyType.ID);
+            binaryWriter.Write(myPosition.x);
+            binaryWriter.Write(myPosition.y);
+        }
+
         public bool IsInside(int aX, int aY)
         {
             int halfWidth = MapEditor.ourInstance.myEnemyTypeImages[myEnemyType.ID].Width / 2;

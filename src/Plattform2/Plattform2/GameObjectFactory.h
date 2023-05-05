@@ -14,6 +14,7 @@ public:
 	std::unique_ptr<GameObject>	CreateObject(const eGameObjectTypes aGameObjectType);
 	std::unique_ptr<GameObject>	CreateObject(const int aGameObjectTypeID);
 	std::unique_ptr<GameObject> CreateEnemy(const int aGameObjectTypeID);
+	std::unique_ptr<GameObject> CreateEnemy(const std::string_view aEnemyName);
 private:
 	GameObjectType&			GetGameObjectType(const eGameObjectTypes aGameObjectType);		
 

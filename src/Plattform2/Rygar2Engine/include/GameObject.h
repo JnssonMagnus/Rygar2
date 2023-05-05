@@ -1,6 +1,8 @@
 #pragma once
 #include "sprite.h"
 #include "CollisionPoint.h"
+#include "Variable.h"
+#include "GameObjectType.h"
 #include <OpaqueDictionary.h>
 #include <set>
 
@@ -48,6 +50,9 @@ public:
 	const bool				HasProperty(const PropertyKey aPropertyKey) const;
 
 	template<class T>
+	T						GetGameObjectTypeVariable(const std::string& key) const;
+
+	template<class T>
 	T&						ChangeProperty(const PropertyKey aPropertyKey);
 
 	const std::string&		GetTypeName() const;
@@ -61,12 +66,25 @@ protected:
 
 	CU::OpaqueDictionary<PropertyKey>
 							myProperties;
+	VariableContainer		myOverrideTypeValues;
 };
 
 template<class T>
 inline const T& GameObject::GetProperty(const PropertyKey aPropertyKey) const
 {
 	return myProperties.GetValue<T>(aPropertyKey);
+}
+
+template<class T>
+inline T GameObject::GetGameObjectTypeVariable(const std::string& key) const
+{
+	T value;
+	if (myOverrideTypeValues.GetValue<T>(key, value)) {
+		return value;
+	}
+	else {
+		return myGameObjectType->GetVariables().GetValue<T>(key);
+	}
 }
 
 template<class T>

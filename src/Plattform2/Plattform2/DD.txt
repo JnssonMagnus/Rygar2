@@ -10,6 +10,8 @@ Prio:
 	- Byta musik
 
 
+Metrics:
+	- Hopphöjd: 3tiles + 2pixels
 
 Rygar features:
 - crossbow

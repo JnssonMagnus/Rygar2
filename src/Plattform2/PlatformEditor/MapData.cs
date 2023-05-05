@@ -191,7 +191,7 @@ namespace PlatformEditor
             System.IO.BinaryWriter binaryWriter = new System.IO.BinaryWriter(System.IO.File.Open(filePath + myFilename, System.IO.FileMode.OpenOrCreate));
 
             // Ver
-            binaryWriter.Write(1);
+            binaryWriter.Write(2);
 
             // Map
             binaryWriter.Write(myFilename + "\n");
@@ -205,18 +205,14 @@ namespace PlatformEditor
             binaryWriter.Write(myGameObjects.Count);
             foreach (GameObject gameObject in myGameObjects)
             {
-                binaryWriter.Write(gameObject.myGameObjectType.ID);
-                binaryWriter.Write(gameObject.myPosition.x);
-                binaryWriter.Write(gameObject.myPosition.y);
+                gameObject.Save(binaryWriter);
             }
 
             // Enemies on map
             binaryWriter.Write(myEnemies.Count);
             foreach (Enemy enemy in myEnemies)
             {
-                binaryWriter.Write(enemy.myEnemyType.ID);
-                binaryWriter.Write(enemy.myPosition.x);
-                binaryWriter.Write(enemy.myPosition.y);
+                enemy.Save(binaryWriter);
             }
 
 
@@ -246,11 +242,12 @@ namespace PlatformEditor
             myGameObjects = new List<GameObject>();
             for (int gameObjectIndex = 0; gameObjectIndex < gameObjectCount; gameObjectIndex++)
             {
-                GameObject gameObject = new GameObject();
                 int ID = binaryReader.ReadInt32();
+                GameObject gameObject = new GameObject();
+
+                gameObject.Load(binaryReader, ver);
+
                 gameObject.myGameObjectType = GetGameObjectTypeByID(ID);
-                gameObject.myPosition.x = binaryReader.ReadSingle();
-                gameObject.myPosition.y = binaryReader.ReadSingle();
                 gameObject.myChunk = this;
                 myGameObjects.Add(gameObject);
             }

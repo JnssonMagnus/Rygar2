@@ -163,6 +163,20 @@ std::unique_ptr<GameObject> GameObjectFactory::CreateEnemy(const int aGameObject
 	return std::make_unique<Enemy>(myEnemyTypes[aGameObjectTypeID]);
 }
 
+std::unique_ptr<GameObject> GameObjectFactory::CreateEnemy(const std::string_view aEnemyName)
+{
+	for (auto& enemyType : myEnemyTypes)
+	{
+		if (enemyType.second.GetName() == aEnemyName)
+		{
+			return std::move(CreateEnemy(enemyType.first));
+		}
+	}
+
+	RESOURCE_LOG("Enemy &s does not exist!", aEnemyName.data());
+	return nullptr;
+}
+
 void GameObjectFactory::LoadGameObjectTypes()
 {
 	std::ifstream file(std::string(gDataPath) + "data/json/gameObjects.json");

@@ -28,6 +28,7 @@ GameObjectType& GameObjectType::operator=(GameObjectType& aObjectToCopy)
 	mySprite = aObjectToCopy.mySprite;
 	myPhysicBodyData = aObjectToCopy.myPhysicBodyData;
 	myDefaultRotate = aObjectToCopy.myDefaultRotate;
+	myVariables = aObjectToCopy.myVariables;
 		
 	aObjectToCopy.mySprite = nullptr;
 
@@ -45,9 +46,12 @@ void GameObjectType::LoadTypeJSON(const rapidjson::GenericObject<false, rapidjso
 	auto physicBodyNode = aObject.FindMember("physicBody")->value.GetObject();
 	myPhysicBodyData.Init(physicBodyNode);
 	myDefaultRotate = aObject.FindMember("rotateObject")->value.GetBool();
+
+	auto variables = aObject.FindMember("variables")->value.GetArray();
+	myVariables.LoadJSON(variables);
 }
 
-void GameObjectType::InitGameObject(GameObject& aGameObject)
+void GameObjectType::InitGameObject(GameObject& aGameObject) const
 {
 	PhysicBody& body = aGameObject.GetPhysicBody();
 	body.SetBounciness(myPhysicBodyData.myBounciness);

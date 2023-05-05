@@ -79,7 +79,7 @@ void Player::Init(GameObjectType& aGameObjectType)
 	myAnimationSet.Init("data/gfx/player.png");
 
 	const Vector2<int> frameSize(24, 32);
-	myAnimationSet.AddAnimation(eAnimationID::eWalk, 6, frameSize, 7);
+	myAnimationSet.AddAnimation(eAnimationID::eWalk, 6, frameSize, 9);
 	myAnimationSet.AddAnimation(eAnimationID::eIdle, 1, frameSize, 5, { frameSize.myX * 2, frameSize.myY * 2 });
 	myAnimationSet.AddAnimation(eAnimationID::eFall, 1, frameSize, 5, { 0, frameSize.myY * 3 });
 	myAnimationSet.AddAnimation(eAnimationID::eJump, 1, frameSize, 5, { 0, frameSize.myY * 3 });

@@ -135,7 +135,13 @@ void GameState::RecieveMessage(const Message& aMessage)
 	}
 	case eMessageTypes::eCreateEnemy:
 	{
-		GameObject* newObject = myGameObjectFactory.CreateEnemy(aMessage.myIntData).release();
+		GameObject* newObject;
+		
+		if (aMessage.myText.empty())
+			newObject = myGameObjectFactory.CreateEnemy(aMessage.myIntData).release();
+		else
+			newObject = myGameObjectFactory.CreateEnemy(aMessage.myText).release();
+
 		newObject->GetPhysicBody().SetStartPosition(aMessage.myPosition);
 		newObject->GetPhysicBody().SetVelocity(aMessage.myDirection);
 		GameObjectManager::GetInstance()->AddGameObject(newObject);

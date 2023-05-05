@@ -153,6 +153,19 @@ namespace PlatformEditor
                 EnemyTagCheckbox.Checked = (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.collisionTags & 4) > 0;
                 PickableTagCheckbox.Checked = (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].physicBody.collisionTags & 8) > 0;
 
+                VariableGrid.Rows.Clear();
+                foreach (var variable in MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables)
+                {
+                    int index = VariableGrid.Rows.Add(variable.name);
+
+                    switch (variable.type)
+                    {
+                        case VariableTypes.d:
+                            VariableGrid.Rows[index].Cells["value"].Value = variable.doubleValue; break;
+                        case VariableTypes.s:
+                            VariableGrid.Rows[index].Cells["value"].Value = variable.stringValue; break;
+                    }
+                }
 
                 if (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].image != null)
                 {
@@ -259,53 +272,60 @@ namespace PlatformEditor
             DialogResult result = Utilities.InputBox("New custom variable", "Choose a unique variable name", ref name);
             if (result == DialogResult.OK)
             {
-                if (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables.Contains(new VariableType(name)) == true)
+                if (MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables.Contains(new Variable(name)) == true)
                 {
                     MessageBox.Show("Error! A variable with that name already exists!", "Error!", MessageBoxButtons.OK);
                     return;
                 }
 
-                VariableType variableType = new VariableType(name);
-                variableType.defaultValue = 0.0f;
+                Variable variableType = new Variable(name);
+                variableType.doubleValue = 0.0;
                 MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables.Add(variableType);
 
                 int index = VariableGrid.Rows.Add(variableType.name);
-                VariableGrid.Rows[index].Cells["value"].Value = variableType.defaultValue;
-
-                //VariableListBox.Items.Add(name);
-                //VariableDefaultValue.Value = 0;
+                VariableGrid.Rows[index].Cells["value"].Value = variableType.doubleValue;
             }
         }
 
         private void RemoveVariableBtn_Click(object sender, EventArgs e)
-        {
-            if (VariableListBox.SelectedItem != null)
+        {            
+            if (VariableGrid.SelectedRows.Count == 1)
             {
-                int index = VariableListBox.SelectedIndex;
+                int index = VariableGrid.SelectedRows[0].Index;
                 MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables.RemoveAt(index);
-                VariableListBox.Items.RemoveAt(index);
-            }
-        }
-
-        private void VariableListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (VariableListBox.SelectedItem != null)
-            {
-                VariableDefaultValue.Value = (decimal)MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables[VariableListBox.SelectedIndex].defaultValue;
-            }
-        }
-
-        private void VariableDefaultValue_ValueChanged(object sender, EventArgs e)
-        {
-            if (VariableListBox.SelectedItem != null)
-            {
-                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables[VariableListBox.SelectedIndex].defaultValue = (float)VariableDefaultValue.Value;
+                VariableGrid.Rows.RemoveAt(index);
             }
         }
 
         private void GameObjectPic_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void VariableGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (VariableGrid.Rows.Count == 0)
+            {
+                return;
+            }
+
+            if (e.ColumnIndex == 0) 
+            {
+                string newName = VariableGrid[e.ColumnIndex, e.RowIndex].Value.ToString();
+                MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables[e.RowIndex].name = newName;
+            } else if (e.ColumnIndex == 1)
+            {
+                string newValue = VariableGrid[e.ColumnIndex, e.RowIndex].Value.ToString();
+                double newDoubleValue;
+                if (double.TryParse(newValue, out newDoubleValue))
+                {
+                    MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables[e.RowIndex].doubleValue = newDoubleValue;
+                } 
+                else
+                {
+                    MapEditor.ourGameObjectTypes[GameObjectTypeList.SelectedIndex].variables[e.RowIndex].stringValue = newValue;
+                }
+            }
         }
     }
 }

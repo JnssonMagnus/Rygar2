@@ -65,15 +65,12 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.VariableGrid = new System.Windows.Forms.DataGridView();
-            this.VariableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DefaultValueLabel = new System.Windows.Forms.Label();
-            this.VariableDefaultValue = new System.Windows.Forms.NumericUpDown();
-            this.VariableListBox = new System.Windows.Forms.ListBox();
             this.RenameVaribleBtn = new System.Windows.Forms.Button();
             this.RemoveVariableBtn = new System.Windows.Forms.Button();
             this.AddVaribleBtn = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.VariableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.GameObjectPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Weight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bounciness)).BeginInit();
@@ -85,7 +82,6 @@
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VariableGrid)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.VariableDefaultValue)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -563,9 +559,6 @@
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.VariableGrid);
-            this.tabPage2.Controls.Add(this.DefaultValueLabel);
-            this.tabPage2.Controls.Add(this.VariableDefaultValue);
-            this.tabPage2.Controls.Add(this.VariableListBox);
             this.tabPage2.Controls.Add(this.RenameVaribleBtn);
             this.tabPage2.Controls.Add(this.RemoveVariableBtn);
             this.tabPage2.Controls.Add(this.AddVaribleBtn);
@@ -592,50 +585,9 @@
             this.VariableGrid.RowHeadersWidth = 62;
             this.VariableGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.VariableGrid.RowTemplate.Height = 28;
-            this.VariableGrid.Size = new System.Drawing.Size(317, 215);
+            this.VariableGrid.Size = new System.Drawing.Size(381, 215);
             this.VariableGrid.TabIndex = 6;
-            // 
-            // VariableName
-            // 
-            this.VariableName.HeaderText = "Name";
-            this.VariableName.MinimumWidth = 8;
-            this.VariableName.Name = "VariableName";
-            this.VariableName.Width = 150;
-            // 
-            // Value
-            // 
-            this.Value.HeaderText = "Default";
-            this.Value.MinimumWidth = 8;
-            this.Value.Name = "Value";
-            this.Value.Width = 150;
-            // 
-            // DefaultValueLabel
-            // 
-            this.DefaultValueLabel.AutoSize = true;
-            this.DefaultValueLabel.Location = new System.Drawing.Point(269, 27);
-            this.DefaultValueLabel.Name = "DefaultValueLabel";
-            this.DefaultValueLabel.Size = new System.Drawing.Size(102, 20);
-            this.DefaultValueLabel.TabIndex = 5;
-            this.DefaultValueLabel.Text = "Default value";
-            // 
-            // VariableDefaultValue
-            // 
-            this.VariableDefaultValue.DecimalPlaces = 2;
-            this.VariableDefaultValue.Location = new System.Drawing.Point(273, 50);
-            this.VariableDefaultValue.Name = "VariableDefaultValue";
-            this.VariableDefaultValue.Size = new System.Drawing.Size(120, 26);
-            this.VariableDefaultValue.TabIndex = 4;
-            this.VariableDefaultValue.ValueChanged += new System.EventHandler(this.VariableDefaultValue_ValueChanged);
-            // 
-            // VariableListBox
-            // 
-            this.VariableListBox.FormattingEnabled = true;
-            this.VariableListBox.ItemHeight = 20;
-            this.VariableListBox.Location = new System.Drawing.Point(318, -20);
-            this.VariableListBox.Name = "VariableListBox";
-            this.VariableListBox.Size = new System.Drawing.Size(227, 144);
-            this.VariableListBox.TabIndex = 3;
-            this.VariableListBox.SelectedIndexChanged += new System.EventHandler(this.VariableListBox_SelectedIndexChanged);
+            this.VariableGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.VariableGrid_CellValueChanged);
             // 
             // RenameVaribleBtn
             // 
@@ -648,7 +600,7 @@
             // 
             // RemoveVariableBtn
             // 
-            this.RemoveVariableBtn.Location = new System.Drawing.Point(121, 286);
+            this.RemoveVariableBtn.Location = new System.Drawing.Point(129, 286);
             this.RemoveVariableBtn.Name = "RemoveVariableBtn";
             this.RemoveVariableBtn.Size = new System.Drawing.Size(92, 35);
             this.RemoveVariableBtn.TabIndex = 1;
@@ -678,6 +630,20 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Collision tags";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // VariableName
+            // 
+            this.VariableName.HeaderText = "Name";
+            this.VariableName.MinimumWidth = 8;
+            this.VariableName.Name = "VariableName";
+            this.VariableName.Width = 150;
+            // 
+            // Value
+            // 
+            this.Value.HeaderText = "Value";
+            this.Value.MinimumWidth = 8;
+            this.Value.Name = "Value";
+            this.Value.Width = 150;
             // 
             // GameObjectEditor
             // 
@@ -714,9 +680,7 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VariableGrid)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.VariableDefaultValue)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
@@ -763,14 +727,11 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.Label DefaultValueLabel;
-        private System.Windows.Forms.NumericUpDown VariableDefaultValue;
-        private System.Windows.Forms.ListBox VariableListBox;
         private System.Windows.Forms.Button RenameVaribleBtn;
         private System.Windows.Forms.Button RemoveVariableBtn;
         private System.Windows.Forms.Button AddVaribleBtn;
+        private System.Windows.Forms.DataGridView VariableGrid;
         private System.Windows.Forms.DataGridViewTextBoxColumn VariableName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
-        private System.Windows.Forms.DataGridView VariableGrid;
     }
 }
