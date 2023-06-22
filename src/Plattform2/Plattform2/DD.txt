@@ -8,6 +8,7 @@ Prio:
 	- Byta background layer
 		- bg editor
 	- Byta musik
+	- Placera start position för spelare + respawn
 
 
 Metrics:

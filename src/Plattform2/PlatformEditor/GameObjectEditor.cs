@@ -327,5 +327,10 @@ namespace PlatformEditor
                 }
             }
         }
+
+        private void VariableGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

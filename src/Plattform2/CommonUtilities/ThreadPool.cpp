@@ -6,10 +6,11 @@ ThreadPool* ThreadPool::myInstance = nullptr;
 
 ThreadPool::ThreadPool()
 {
+	constexpr int WORKERS = 4;
 	myIsDoingAllWork = false;
 	myIsDoingAllSubTasks = false;
-	myWorkers.Reserve(3);
-	for (unsigned int i = 0; i < 3; ++i)
+	myWorkers.Reserve(WORKERS);
+	for (unsigned int i = 0; i < WORKERS; ++i)
 	{
 		myWorkers.Add(Worker());
 		myWorkers[i].Init();

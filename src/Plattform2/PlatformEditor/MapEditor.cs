@@ -590,6 +590,32 @@ namespace PlatformEditor
             else if (EditTab.SelectedTab.Text == "Objects")
             {
                 mySelectedGameObject = PickObject(mouseEvent);
+                VariableGrid.Rows.Clear();
+
+                if (mySelectedGameObject != null)
+                {
+                    foreach (var variable in mySelectedGameObject.myGameObjectType.variables)
+                    {
+                        int index = VariableGrid.Rows.Add(variable.name);
+
+                        switch (variable.type)
+                        {
+                            case VariableTypes.d:
+                                if (mySelectedGameObject.HasKeyValue(variable.name))
+                                    VariableGrid.Rows[index].Cells["value"].Value = mySelectedGameObject.GetDoubleValue(variable.name);
+                                else
+                                    VariableGrid.Rows[index].Cells["value"].Value = variable.doubleValue;                                 
+                                break;
+                            case VariableTypes.s:
+                                if (mySelectedGameObject.HasKeyValue(variable.name))
+                                    VariableGrid.Rows[index].Cells["value"].Value = mySelectedGameObject.GetStringValue(variable.name);
+                                else
+                                    VariableGrid.Rows[index].Cells["value"].Value = variable.stringValue; 
+                                break;
+                        }
+                    }
+                }
+
                 Map.Refresh();
             }
             else if (EditTab.SelectedTab.Text == "Enemies")
@@ -879,6 +905,26 @@ namespace PlatformEditor
         {
             DragDropEffects dragDropEffect = DoDragDrop(EnemyList.SelectedIndex, DragDropEffects.Copy);
             EnemyPreviewPic.Image = Image.FromFile(ourEnemyTypes[EnemyList.SelectedIndex].image);
+        }
+
+        private void VariableGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (VariableGrid.Rows.Count == 0)
+            {
+                return;
+            }
+
+            Variable newVarValue = new Variable();
+            newVarValue.name = VariableGrid[0, e.RowIndex].Value.ToString();
+
+            newVarValue.stringValue = VariableGrid[e.ColumnIndex, e.RowIndex].Value.ToString();
+            double newDoubleValue;
+            if (double.TryParse(newVarValue.stringValue, out newDoubleValue))
+            {
+                newVarValue.doubleValue = newDoubleValue;
+            }
+
+            mySelectedGameObject.InsertOrChangeVar(newVarValue);
         }
     }
 }

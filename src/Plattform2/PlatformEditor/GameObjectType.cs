@@ -121,6 +121,66 @@ namespace PlatformEditor
         public GameObjectType myGameObjectType = null;
         public List<Variable> myVariables = new List<Variable>();
 
+        public string GetStringValue(string aKey)
+        {
+            foreach (Variable variable in myVariables)
+            {
+                if (variable.name == aKey)
+                {
+                    return variable.stringValue;
+                }
+            }
+
+            return "error";
+        }
+        public double GetDoubleValue(string aKey)
+        {
+            foreach (Variable variable in myVariables)
+            {
+                if (variable.name == aKey)
+                {
+                    return variable.doubleValue;
+                }
+            }
+
+            return 0.0;
+        }
+        public bool HasKeyValue(string aKey)
+        {
+            foreach (Variable variable in myVariables)
+            {
+                if (variable.name == aKey)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+            public bool InsertOrChangeVar(Variable aVariable)
+        {
+            for (int varIndex = 0; varIndex < myVariables.Count; varIndex++)
+            {
+                if (myVariables[varIndex].name == aVariable.name)
+                {
+                    if (myVariables[varIndex].type == aVariable.type)
+                    {
+                        myVariables[varIndex] = aVariable;
+                        return true;
+                    } 
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            myVariables.Add(aVariable);
+
+            return true;
+        }
+
         public bool IsInside(int aX, int aY)
         {
             int halfWidth = MapEditor.ourInstance.myGameObjectTypeImages[myGameObjectType.ID].Width / 2;
@@ -151,6 +211,7 @@ namespace PlatformEditor
                 {
                     Variable newVar = new Variable();
                     newVar.Load(binaryReader, version);
+                    myVariables.Add(newVar);
                 }
             }
         }

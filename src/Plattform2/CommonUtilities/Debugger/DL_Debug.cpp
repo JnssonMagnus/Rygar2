@@ -96,19 +96,20 @@ namespace DL_Debug
 
 	void Debug::WriteLog(const char* aLogType, const char* aFormat, ...)
 	{
+		char buffer[1024];
+		va_list args;
+		va_start(args, aFormat);
+		vsprintf_s(buffer, aFormat, args);
+		va_end(args);
+
+		std::stringstream message;
+		message << "[" << GetClock() << "][" << aLogType << "] - " << buffer << std::endl;
+
+		std::cout << message.str();
+
 		auto it = myLogStreams.find(aLogType);
 		if (it != myLogStreams.end())
 		{
-			char buffer[1024];
-			va_list args;
-			va_start(args, aFormat);
-			vsprintf_s(buffer, aFormat, args);
-			va_end(args);
-
-			std::stringstream message;
-			message << "[" << GetClock() << "][" << aLogType << "] - " << buffer << std::endl;
-
-			std::cout << message.str();
 			it->second << message.str();
 			it->second.flush();
 		}

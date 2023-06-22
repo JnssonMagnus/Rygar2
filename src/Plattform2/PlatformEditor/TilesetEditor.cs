@@ -117,6 +117,7 @@ namespace PlatformEditor
             ObstacleCheckbox.Checked = myTilesets[Tilesets.Text].GetIsObstacle(GetTileID());
             DestructableCheckbox.Checked = myTilesets[Tilesets.Text].GetIsDestructable(GetTileID());
             FalloutCheckBox.Checked = myTilesets[Tilesets.Text].GetIsFallout(GetTileID());
+            plattformCheckBox.Checked = myTilesets[Tilesets.Text].GetIsPlattform(GetTileID());
         }
 
         private void TilesetImage_Paint(object sender, PaintEventArgs e)
@@ -300,6 +301,14 @@ namespace PlatformEditor
             if (TileSetIsChosen() == true)
             {
                 myTilesets[Tilesets.Text].SetIsFallout(GetTileID(), FalloutCheckBox.Checked);
+            }
+        }
+
+        private void plattformCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TileSetIsChosen() == true)
+            {
+                myTilesets[Tilesets.Text].SetIsPlattform(GetTileID(), plattformCheckBox.Checked);
             }
         }
     }

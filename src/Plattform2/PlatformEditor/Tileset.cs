@@ -13,13 +13,14 @@ namespace PlatformEditor
         public bool myIsObstacle;
         public bool myIsDestructable;
         public bool myIsFallout;
+        public bool myIsPlattform;
     }
     public class Tileset
     {
         public List<int>[] myAutoTiles = null;
         private int myTileHeight = 32;
         private int myTileWidth = 32;
-        private int myVersion = 1;
+        private int myVersion = 2;
         private Image myImage = null;
         private Random myRandomTile = new Random();
 
@@ -135,7 +136,13 @@ namespace PlatformEditor
                 myTileData = new TileData[GetTileRows() * GetTileCols()];
             }
         }
-
+        public void SetIsPlattform(int aTileID, bool aIsObstacle)
+        {
+            if (myTileData != null && aTileID < myTileData.Length)
+            {
+                myTileData[aTileID].myIsPlattform = aIsObstacle;
+            }
+        }
         public void SetIsObstacle(int aTileID, bool aIsObstacle)
         {
             if (myTileData != null && aTileID < myTileData.Length)
@@ -156,6 +163,10 @@ namespace PlatformEditor
             {
                 myTileData[aTileID].myIsFallout = aIsFallout;
             }
+        }
+        public bool GetIsPlattform(int aTileID)
+        {
+            return myTileData[aTileID].myIsPlattform;
         }
         public bool GetIsObstacle(int aTileID)
         {
@@ -180,6 +191,7 @@ namespace PlatformEditor
             aBinaryWriter.Write(myTileData.Length);
             foreach (TileData tileData in myTileData)
             {
+                aBinaryWriter.Write(tileData.myIsPlattform);
                 aBinaryWriter.Write(tileData.myIsObstacle);
                 aBinaryWriter.Write(tileData.myIsDestructable);
                 aBinaryWriter.Write(tileData.myIsFallout);
@@ -209,6 +221,7 @@ namespace PlatformEditor
             
             for (int tileIndex = 0; tileIndex < tileCount; tileIndex++)
             {
+                myTileData[tileIndex].myIsPlattform = aBinaryReader.ReadBoolean();
                 myTileData[tileIndex].myIsObstacle = aBinaryReader.ReadBoolean();
                 myTileData[tileIndex].myIsDestructable = aBinaryReader.ReadBoolean();
                 myTileData[tileIndex].myIsFallout = aBinaryReader.ReadBoolean();

@@ -5,6 +5,17 @@
 #include "Tileset.h"
 #include <fstream>
 
+std::string ReadCSString(std::ifstream& loadFile)
+{
+	char stringLength = 0;
+	loadFile.read(&stringLength, 1);
+	char str[255];
+	DL_ASSERT(sizeof(str) >= stringLength + 1 && "String to read to long!");
+	loadFile.read(str, stringLength);
+	str[stringLength] = 0;
+	return str;
+}
+
 MapChunk::MapChunk()
 {
 	myTileset = nullptr;
@@ -148,26 +159,58 @@ void MapChunk::LoadFromFile(const std::string_view aFilename)
 	{
 		int32_t ID;
 		float x, y;
+		int varCount = -1;
 	};
 
-	if (gameObjectCount > 0) 
+	struct ProxyVar
 	{
-		ProxyGameObject* gameObjects = new ProxyGameObject[gameObjectCount];
-
-		loadFile.read(reinterpret_cast<char*>(gameObjects), sizeof(ProxyGameObject) * gameObjectCount);
-
-		for (int gameObjectIndex = 0; gameObjectIndex < gameObjectCount; gameObjectIndex++)
+		void Load(std::ifstream& loadFile)
 		{
-			Message newObjectMessage(eMessageTypes::eCreateObject);
-			newObjectMessage.myPosition.myX = gameObjects[gameObjectIndex].x;
-			newObjectMessage.myPosition.myY = gameObjects[gameObjectIndex].y;
-			newObjectMessage.myIntData = gameObjects[gameObjectIndex].ID;
-			PostMaster::GetInstance()->SendMessage(newObjectMessage);
+
 		}
 
-		delete[] gameObjects;
-		gameObjects = nullptr;
+		std::string myName;
+		std::string myType;
+		std::string myStringData;
+		union
+		{
+			float myFloatData;
+			int myIntData;
+		};
+	};
+
+	std::vector<ProxyGameObject> gameObjects;
+	gameObjects.resize(gameObjectCount);
+
+	for (int gameObjectIndex = 0; gameObjectIndex < gameObjectCount; gameObjectIndex++)
+	{
+		loadFile.read(reinterpret_cast<char*>(&gameObjects[gameObjectIndex]), sizeof(ProxyGameObject));
+		for (int varIndex = 0; varIndex < gameObjects[gameObjectIndex].varCount; varIndex++)
+		{
+			auto name = ReadCSString(loadFile);
+			auto type = ReadCSString(loadFile);
+			if (type == "i") {
+				int32_t value = 0;
+				loadFile.read(reinterpret_cast<char*>(&value), sizeof(int32_t));
+			}
+			else if (type == "d") {
+				double value = 0;
+				loadFile.read(reinterpret_cast<char*>(&value), sizeof(double));
+			}
+			else if (type == "s") {
+				auto stringValue = ReadCSString(loadFile);
+			}
+
+		}
+
+		Message newObjectMessage(eMessageTypes::eCreateObject);
+		newObjectMessage.myPosition.myX = gameObjects[gameObjectIndex].x;
+		newObjectMessage.myPosition.myY = gameObjects[gameObjectIndex].y;
+		newObjectMessage.myIntData = gameObjects[gameObjectIndex].ID;
+
+		PostMaster::GetInstance()->SendMessage(newObjectMessage);
 	}
+
 
 	// load enemies
 	struct ProxyEnemy
@@ -390,8 +433,18 @@ bool MapChunk::Collided(const Vector2f& aStartPosition, const Vector2f& aEndPosi
 
 bool MapChunk::Collided(const int aNodeIndex, PhysicBody& aPhysicBody, const PhysicBody::eLocator aLocator) const
 {
-	
-	if (IsValidTileIndex(aNodeIndex) && myTileset->IsObstacle(myTileData[aNodeIndex]) == true)
+	if (!IsValidTileIndex(aNodeIndex)) {
+		return false;
+	}
+
+
+	if (myTileset->IsObstacle(myTileData[aNodeIndex]) == true)
+	{
+		aPhysicBody.AddPhysicState(ePhysicStates::eOnGround, aLocator);
+		return true;
+	}
+
+	if (myTileset->IsPlattform(myTileData[aNodeIndex]) == true && aPhysicBody.GetVelocity().myY >= 0.0f)
 	{
 		aPhysicBody.AddPhysicState(ePhysicStates::eOnGround, aLocator);
 		return true;

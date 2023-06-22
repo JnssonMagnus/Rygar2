@@ -65,12 +65,12 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.VariableGrid = new System.Windows.Forms.DataGridView();
+            this.VariableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RenameVaribleBtn = new System.Windows.Forms.Button();
             this.RemoveVariableBtn = new System.Windows.Forms.Button();
             this.AddVaribleBtn = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.VariableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.GameObjectPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Weight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bounciness)).BeginInit();
@@ -587,7 +587,22 @@
             this.VariableGrid.RowTemplate.Height = 28;
             this.VariableGrid.Size = new System.Drawing.Size(381, 215);
             this.VariableGrid.TabIndex = 6;
+            this.VariableGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.VariableGrid_CellContentClick);
             this.VariableGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.VariableGrid_CellValueChanged);
+            // 
+            // VariableName
+            // 
+            this.VariableName.HeaderText = "Name";
+            this.VariableName.MinimumWidth = 8;
+            this.VariableName.Name = "VariableName";
+            this.VariableName.Width = 150;
+            // 
+            // Value
+            // 
+            this.Value.HeaderText = "Value";
+            this.Value.MinimumWidth = 8;
+            this.Value.Name = "Value";
+            this.Value.Width = 150;
             // 
             // RenameVaribleBtn
             // 
@@ -630,20 +645,6 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Collision tags";
             this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // VariableName
-            // 
-            this.VariableName.HeaderText = "Name";
-            this.VariableName.MinimumWidth = 8;
-            this.VariableName.Name = "VariableName";
-            this.VariableName.Width = 150;
-            // 
-            // Value
-            // 
-            this.Value.HeaderText = "Value";
-            this.Value.MinimumWidth = 8;
-            this.Value.Name = "Value";
-            this.Value.Width = 150;
             // 
             // GameObjectEditor
             // 

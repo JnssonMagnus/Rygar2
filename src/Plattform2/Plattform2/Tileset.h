@@ -6,6 +6,7 @@ class Tile;
 
 struct TileData
 {
+	bool	myIsPlattform;
 	bool	myIsObstacle;
 	bool	myIsDestructable;
 	bool	myIsFallout;
@@ -19,6 +20,7 @@ public:
 	void							RenderTile(const float aX, const float aY, const unsigned char aTileIndex);
 	const Vector2<int>&				GetTileSize() const;
 	inline bool						IsObstacle(const unsigned char aTileIndex) const;
+	inline bool						IsPlattform(const unsigned char aTileIndex) const;
 	inline bool						IsDestructable(const unsigned char aTileIndex) const;
 	inline bool						IsFallout(const unsigned char aTileIndex) const;
 	const TileData&					GetTileData(const unsigned char aTileIndex) const;
@@ -44,6 +46,12 @@ inline bool Tileset::IsObstacle(const unsigned char aTileIndex) const
 {
 	DL_ASSERT(aTileIndex < myTileData.Size() && "Tile index out of bounds!");
 	return aTileIndex < 0 || myTileData[aTileIndex].myIsObstacle;
+}
+
+inline bool Tileset::IsPlattform(const unsigned char aTileIndex) const
+{
+	DL_ASSERT(aTileIndex < myTileData.Size() && "Tile index out of bounds!");
+	return aTileIndex < 0 || myTileData[aTileIndex].myIsPlattform;
 }
 
 inline bool Tileset::IsDestructable(const unsigned char  aTileIndex) const
